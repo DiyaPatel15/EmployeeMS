@@ -1,0 +1,195 @@
+{% extends 'account/base.html' %}
+
+{% block main-content %}
+<style>
+    .container-xxl {
+        width: 1200px;
+        margin-top: -250px;
+        padding: 0 15px;
+        margin-left: 150px;
+    }
+
+    .error {
+        color: #FF0000;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .table {
+        background-color: #f8f9fa;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        background-color: #ffffff;
+        padding: 0.75rem;
+        border: none; / Remove borders from table cells /
+    }
+
+    / Add bottom border to table rows /
+    .table tbody tr {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .pagination {
+        margin: 0;
+        padding: 0;
+    }
+
+    .pagination li {
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+
+    .pagination li:last-child {
+        margin-right: 0;
+    }
+
+    .pagination li.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .pagination li a.page-link {
+        color: #0d6efd;
+        border: 1px solid #0d6efd;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+    }
+
+    .pagination li.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa;
+    }
+</style>
+<div class="post d-flex flex-column-fluid" >
+    <div class="container-xxl">
+        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div class="post d-flex flex-column-fluid" id="kt_post">
+                <div class="container-xxl">
+                    <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light p-3">
+                        <!-- Left Section: Add Button -->
+<!--                        <button class="btn btn-primary">Add</button>-->
+                        <a href="{% url 'holiday_add' %}"  class= "button" class="button:hover" class="btn btn-primary">Add</a>
+
+
+                        <!-- Center Section: Search Bar -->
+                        <div class="search-bar-wrapper">
+                            <div class="search-bar d-flex align-items-center position-relative">
+                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                    <!-- Your SVG icon code -->
+                                </span>
+                                <input type="text" id="searchInput" class="form-control form-control-solid" style="width: 200px; padding-left: 40px;" placeholder="Search Holiday">
+                                <button   class= "button" class="button:hover" id="searchButton">Search</button>
+                            </div>
+                        </div>
+
+                        <!-- Right Section: Holiday List Text -->
+                        <h1 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0">Holiday List</h1>
+                    </div>
+
+                    <!-- Table Body -->
+                    <div class="card-body pt-0">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="holidayTable">
+                            <thead>
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Sr no</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Holiday</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Date</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Day</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-bold text-gray-600" id="holidayTableBody">
+                                <!-- Table rows will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table Body -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fetch data from API
+    fetch('http://127.0.0.1:8000/holidays/')
+        .then(response => response.json())
+        .then(data => {
+            const holidayTableBody = document.getElementById('holidayTableBody');
+
+            // Clear existing table rows
+            holidayTableBody.innerHTML = '';
+
+            // Populate table rows with data
+            data.forEach((holiday, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index+1}</td>
+                    <td>${holiday.holiday_name}</td>
+                    <td>${holiday.holiday_date}</td>
+                    <td>${holiday.holiday_day}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="updateHoliday(${holiday.id})">Update</button>
+                        <button class="btn btn-danger"  onclick="deleteHoliday(${holiday.id})">Delete</button>
+                    </td>
+                `;
+                holidayTableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching holidays:', error));
+
+    // Add event listener to search button
+    document.getElementById('searchButton').addEventListener('click', () => {
+        const searchTerm = document.getElementById('searchInput').value;
+        // Perform search logic here
+    });
+
+    // Function to update a holiday
+// Function to update a holiday
+function updateHoliday(id) {
+    // Create an anchor element
+    var anchor = document.createElement('a');
+    // Set the href attribute to the update page URL
+    anchor.href = `http://127.0.0.1:8000/update_holiday/${id}/`;
+    // Simulate a click event on the anchor
+    anchor.click();
+}
+
+
+// Function to delete a holiday
+function deleteHoliday(id) {
+    // Assuming you have an endpoint like '/holidays/:id/' for deleting a holiday
+    fetch(`http://127.0.0.1:8000/holidays/${id}/`, {
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            // Handle successful deletion
+            console.log('Holiday deleted successfully');
+            // Remove the corresponding row from the table
+            document.getElementById(`holidayRow-${id}`).remove();
+        } else {
+            // Handle error
+            console.error('Failed to delete holiday');
+        }
+    })
+    .catch(error => console.error('Error deleting holiday:', error));
+}
+
+
+
+</script>
+
+{% endblock main-content %}

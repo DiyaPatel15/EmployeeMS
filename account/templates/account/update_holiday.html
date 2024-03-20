@@ -1,0 +1,35 @@
+{% extends 'account/base.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Holiday</title>
+</head>
+<body>
+{% block main-content %}
+
+<h1>Update Holiday</h1>
+<form action="{% url 'update_holiday'%}" method="POST">
+    {% csrf_token %}
+
+
+    <p>The holiday ID is: {{ pk }}</p>
+
+
+    <label for="holiday_date">Holiday Date:</label>
+    <input type="date" id="holiday_date" name="holiday_date" value="{{ holiday.holiday_date }}" required><br><br>
+
+    <label for="holiday_name">Holiday Name:</label>
+    <input type="text" id="holiday_name" name="holiday_name" value="{{ holiday.holiday_name }}" required><br><br>
+
+    <label for="holiday_day">Holiday Day:</label>
+    <input type="text" id="holiday_day" name="holiday_day" value="{{ holiday.holiday_day }}" required><br><br>
+
+    <button type="submit">Update</button>
+</form>
+
+{% endblock %}
+
+</body>
+</html>

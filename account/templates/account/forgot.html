@@ -1,0 +1,161 @@
+{% load static  %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'account/css/forgot.css' %}" type="text/css">
+    <title>{% block title %}Forgot Password{% endblock %}</title>
+
+
+        <style>
+    body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    border: 1px solid #ccc;
+
+}
+
+.form.forgot-password {
+    padding: 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background-color: #f9f9f9;
+    width: 330px;
+    text-align: center;
+    box-shadow: 0 5px 10px rgb(248, 84, 172);
+
+}
+
+.form.forgot-password .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+
+
+}
+
+.form.forgot-password .input-field {
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.form.forgot-password input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form.forgot-password .input-field.button {
+    text-align: center;
+}
+
+.form.forgot-password .input-field.button input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    border: none;
+    outline: none;
+}
+
+.form.forgot-password .input-field.button input[type="submit"]:hover {
+    background-color: #0056b3;
+    font-size: 16px;
+}
+
+.form.forgot-password .login-signup {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.form.forgot-password .login-signup a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form.forgot-password .login-signup a:hover {
+    text-decoration: underline;
+}
+
+
+</style>
+</head>
+
+
+
+
+<body>
+<div class="form forgot-password">
+    <span class="title">Forgot Password</span>
+
+    <form action="#" method="POST" id="forgotPasswordForm">
+        <div class="input-field">
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            <i class="uil uil-envelope icon"></i>
+        </div>
+
+        <!-- Add more fields as needed (e.g., security question, etc.) -->
+
+        <!-- Forgot Password Form Submit Button -->
+        <div class="input-field button">
+            <input type="submit" value="Reset Password" onclick="resetPassword()">
+        </div>
+    </form>
+   <div id="message"></div>
+    <div class="login-signup">
+        <!-- Optional: Add link to go back to login page -->
+        <a href="{% url 'home' %}" class="login-link" id="backToLogin">Back to Login</a>
+    </div>
+
+</div>
+ <script src="{% static 'account/js/forgot.js' %}"></script>
+
+<script>
+    // JavaScript
+document.getElementById('forgotPasswordForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var email = document.getElementById('email').value;
+
+    // Send the email to the backend API endpoint
+    fetch('http://127.0.0.1:8000/send-password-reset-email/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('message').textContent = 'Password reset instructions sent to your email.';
+        } else {
+            document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+    });
+});
+
+</script>
+</body>
+</html>

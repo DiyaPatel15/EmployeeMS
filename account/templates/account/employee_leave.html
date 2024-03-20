@@ -1,0 +1,190 @@
+{% extends 'account/base.html' %}
+{% block main-content %}
+{% load static %}
+    <style>
+        .error {
+            color: #FF0000;
+        }
+        #div1 {
+            display: none;
+        }
+    .container-xxl{
+      margin-left:265px;
+    }
+    .label-container {
+        display: flex;
+        align-items: center;
+        white-space:nowrap;
+        margin-left: 30px;
+        margin-bottom: 5px; / Adjust as needed /
+    }
+
+    .label-container label {
+        margin-right: 10px; / Adjust as needed /
+        margin-left: -28px;
+    }
+    </style>
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="row mt-5 mb-2 ml-1">
+                <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0">Employee Leave list</h3>
+            </div>
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+    <div class="d-flex justify-content-between align-items-center">
+        <form action="https://upbeat-hertz.165-22-65-20.plesk.page/employeeleave" method="GET"
+              class="d-flex align-items-center">
+
+            <div class="label-container">
+                <label for="month" class="visually-hidden">Search Employee date</label>
+<!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
+<!--                       placeholder="Search Employee date">-->
+                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"
+                   placeholder="Search Employee date" style="margin-right:120px ; margin-left:1px" >
+            </div>
+
+<!--            <label for="month" class="visually-hidden" style="margin-left:30px;">Search Employee date</label>-->
+<!--            <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
+<!--                   placeholder="Search Employee date" style="margin-right:250px ; margin-left:50px" >-->
+            <select class="form-select me-2 ml-5"  id="leavetypesearch" name="leavetypesearch"
+                    aria-label="Select Leave type">
+                <option value="">Select a Leave type...</option>
+                <option value="1">Paid Leave</option>
+                <option value="2">Sick Leave</option>
+            </select>
+            <button class="btn btn-primary ml-1"  class= "button" class="button:hover" type="submit" name="submit" id="submit">Search</button>
+        </form>
+        <div class="card-toolbar">
+            <button type="button"  class= "button" class="button:hover" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#kt_modal_add_customer">Add Employee leave
+            </button>
+        </div>
+    </div>
+                </div>
+
+                <div class="new" id="leavesearch">
+                    <div class="card-body pt-0">
+                        <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="table-responsive">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
+                                    <thead>
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Sr no</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Leave-Type</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Date-From</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Date-To</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Leave-Days</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Leave-Reason</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Approvel-Status</th>
+                                            <th class="text-end min-w-70px sorting_disabled" style="width: 133.062px;">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-bold text-gray-600">
+                                        <tr>
+                                            <td colspan="10">There are no Record found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+                    <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                        <div class="dataTables_paginate paging_simple_numbers" id="kt_customers_table_paginate">
+                            <ul class="pagination">
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal - Add Employee Leave -->
+    <div class="modal fade" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-650px">
+            <div class="modal-content">
+                <form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="form" action="https://upbeat-hertz.165-22-65-20.plesk.page/employeeleave" method="POST" enctype="multipart/form-data" data-kt-redirect="../../demo1/dist/apps/customers/list.html">
+                    <input type="hidden" name="_token" value="3UBP1sotW7eOTSk2OUTBVMF8yPE1cHe3JQJoIVTg">
+                    <div class="modal-header" id="kt_modal_add_customer_header">
+                                                <!-- Modal title -->
+                        <h2 class="fw-bolder">Add Employee leave</h2>
+                        <!-- Close button -->
+                        <button id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="modal-body py-10 px-lg-17">
+                        <input type="hidden" name="employee_id" value="60">
+                        <!-- Scroll -->
+                        <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px" style="max-height: 300px;">
+                            <!-- Input group -->
+                            <div class="d-flex flex-column mb-7 fv-row fv-plugins-icon-container" data-select2-id="select2-data-128-oqed">
+                                <!-- Label -->
+                                <label class="fs-6 fw-bold mb-2">
+                                    <span class="required">Leave type</span>
+                                </label>
+                                <!-- Input -->
+                                <select class="form-select" name="leave_type" aria-label="Select example">
+                                    <option value="">Select a Leave type...</option>
+                                    <option value="1">Paid Leave</option>
+                                    <option value="2">Sick Leave</option>
+                                </select>
+                            </div>
+                            <!-- Radio buttons -->
+                            <div data-kt-buttons="true">
+                                <label class="btn btn-outline flex-stack text-start">
+                                    <!-- Radio option -->
+                                </label>
+                                <label class="btn btn-outline btn-border flex-stack text-start">
+                                    <!-- Radio option -->
+                                </label>
+                            </div>
+                            <!-- Date input -->
+                            <div class="fv-row mb-7">
+                                <label class="required fs-6 fw-bold mb-2">Date from</label>
+                                <input type="text" id="leavedaterange" class="form-control form-control-solid" name="leave_date" value="">
+                            </div>
+                            <!-- Reason input -->
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Reason</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Enter any additional notes about the contact (optional)." aria-label="Enter any additional notes about the contact (optional)."></i>
+                                </label>
+                                <textarea class="form-control" id="summary" onkeyup="validate()" maxlength="300" name="reason" placeholder="Enter Reason" data-kt-autosize="true" required="" style="overflow: hidden; overflow-wrap: break-word; resize: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer flex-center">
+                        <!-- Close button -->
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                        <!-- Submit button -->
+                        <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
+                            <span class="indicator-label">Submit</span>
+                            <span class="indicator-progress">Please wait...<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+    <script>
+        // JavaScript code can be placed here
+    </script>
+{% endblock main-content %}

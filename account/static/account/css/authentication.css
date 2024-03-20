@@ -1,0 +1,317 @@
+/* ===== Google Font Import - Poformsins ===== */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    height:auto;
+    margin-top:20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.container {
+    position: relative;
+    max-width: 430px;
+    width: 400px;
+    background: #fff;
+    border-radius:50px;
+    box-shadow: 0 5px 10px rgb(248, 84, 172);
+    overflow: hidden;
+    margin: 0 20px;
+}
+
+
+.container .forms {
+    display: flex;
+    align-items: center;
+    /* Remove negative height */
+    height: 500px;
+    width: 200%;
+    transition: height 0.2s ease;
+}
+
+.container .form {
+    width: 50%;
+    /* Remove negative height */
+    height: auto;
+    padding: 30px;
+    background-color: #fff;
+    transition: margin-left 0.18s ease;
+}
+
+.container.active .login {
+    margin-left: -50%;
+    opacity: 0;
+    transition: margin-left 0.18s ease, opacity 0.15s ease;
+}
+
+.container .signup {
+    opacity: 0;
+    transition: opacity 0.09s ease;
+}
+
+.container.active .signup {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+.container.active .forms {
+    /* Remove negative height */
+    height: auto;
+}
+
+.container .form .title {
+    position: relative;
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.form .title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 3px;
+    width: 30px;
+    background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+    border-radius: 25px;
+}
+
+.form .input-field {
+    position: relative;
+    height: 50px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.input-field input {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.input-field input:is(:focus, :valid) {
+    border-bottom-color: rgb(254, 82, 173);
+}
+
+.input-field i {
+    position: absolute;
+    top: 30%;
+    height: 20px;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 23px;
+    transition: all 0.2s ease;
+}
+
+.input-field input:is(:focus, :valid) ~ i {
+    color: rgb(52, 52, 52);
+}
+
+.input-field i.icon {
+    left: 0;
+}
+
+.input-field i.showHidePw {
+    right: 0;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.form .checkbox-text {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.checkbox-text .checkbox-content {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-content input {
+    margin-right: 10px;
+    accent-color: rgb(254, 82, 173);
+}
+
+.form .text {
+    color: #333;
+    font-size: 14px;
+}
+
+.form a.text {
+    color: rgb(52, 52, 52);
+    text-decoration: none;
+}
+
+.form a:hover {
+    text-decoration: underline;
+}
+
+.form .button {
+    margin-top: 35px;
+}
+
+.form .button input {
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.button input:hover {
+    background-color: black;
+}
+
+.form .login-signup {
+    margin-top: 30px;
+    text-align: center;
+}
+
+
+
+/* Style for select dropdown */
+.input-field select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    border-color: rgb(155, 153, 153);
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+    font-size:15px;
+    color:#706f6f;
+}
+
+/* Style for select icon */
+.input-field select ~ i {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    color: #aaa;
+}
+
+/* Style for select icon on focus */
+.input-field select:focus + i {
+    color: #007bff;
+}
+
+/* Style for select icon on hover */
+.input-field select:hover + i {
+    color: #007bff;
+}
+
+/* Style for select label */
+.input-field select ~ label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 45px;
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+/* Style for select label when select is focused */
+.input-field select:focus ~ label,
+.input-field select:valid ~ label {
+    top: -10px;
+    font-size: 23px;
+    color: #007bff;
+}
+
+/* Style for select label when select has value */
+.input-field select[disabled]:not([disabled="disabled"]) ~ label {
+    top: -10px;
+    font-size:23px;
+    color: #007bff;
+}
+
+/* Style for select label on hover */
+.input-field select:hover ~ label {
+    color: #007bff;
+}
+
+/* CSS for Forgot Password Form */
+.form.forgot-password {
+    display: none; /* Hide the forgot password form by default */
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.form.forgot-password .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form.forgot-password .input-field {
+    margin-bottom: 15px;
+}
+
+.form.forgot-password input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form.forgot-password .input-field.button {
+    text-align: center;
+}
+
+.form.forgot-password .input-field.button input[type="button"] {
+    width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form.forgot-password .input-field.button input[type="button"]:hover {
+    background-color: #0056b3;
+}
+
+.form.forgot-password .login-signup {
+    text-align: center;
+}
+
+.form.forgot-password .login-signup a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form.forgot-password .login-signup a:hover {
+    text-decoration: underline;
+}
+

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Holiday</title>
+
+    <!-- Include any necessary CSS files -->
+</head>
+<body>
+    <div class="container">
+        <h1>Add Holiday</h1>
+        <form id="addHolidayForm">
+            <div>
+                <label for="holidayName">Holiday Name:</label>
+                <input type="text" id="holidayName" name="holidayName" required>
+            </div>
+            <div>
+                <label for="holidayDate">Date:</label>
+                <input type="date" id="holidayDate" name="holidayDate" required>
+            </div>
+            <div>
+                <label for="holidayDay">Day:</label>
+                <input type="text" id="holidayDay" name="holidayDay" required>
+            </div>
+            <button type="button"  class= "button" class="button:hover" onclick="addHoliday()">Add Holiday</button>
+        </form>
+    </div>
+
+    <!-- Include any necessary JavaScript files -->
+<script>
+    // Function to handle adding a holiday
+function addHoliday() {
+    // Get the values from the input fields
+    const holidayName = document.getElementById('holidayName').value;
+    const holidayDate = document.getElementById('holidayDate').value;
+    const holidayDay = document.getElementById('holidayDay').value;
+
+    // Create a new holiday object
+    const newHoliday = {
+        holiday_name: holidayName,
+        holiday_date: holidayDate,
+        holiday_day: holidayDay
+    };
+
+    // Perform POST request to add holiday
+    fetch('http://127.0.0.1:8000/holidays/', {
+        method: 'POST',
+        body: JSON.stringify(newHoliday),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Holiday added successfully
+            // You may want to refresh the table or perform any other actions
+            console.log('Holiday added successfully.');
+        } else {
+            // Error adding holiday
+            console.error('Failed to add holiday.');
+        }
+    })
+    .catch(error => console.error('Error adding holiday:', error));
+}
+
+</script>
+</body>
+</html>

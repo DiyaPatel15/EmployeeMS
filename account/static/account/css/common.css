@@ -1,0 +1,30 @@
+
+            /* Common button styling */
+            .button {
+                display: inline-block;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+                box-shadow: 0 5px 10px rgba(255, 255, 255, 0.5);
+                color: #fff;
+                text-align: center;
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #0056b3;
+
+            }
+
+            /* Common text styling */
+            .text {
+                font-size: 16px;
+                color: #333;
+                line-height: 1.5;
+            }
+
+

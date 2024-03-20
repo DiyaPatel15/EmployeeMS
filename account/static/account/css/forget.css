@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    border: 1px solid #ccc;
+
+}
+
+.form.forgot-password {
+    padding: 35px;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background-color: #f9f9f9;
+    width: 330px;
+    text-align: center;
+    box-shadow: 0 5px 10px rgb(248, 84, 172);
+
+}
+
+.form.forgot-password .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+
+
+}
+
+.form.forgot-password .input-field {
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+.form.forgot-password input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.form.forgot-password .input-field.button {
+    text-align: center;
+}
+
+.form.forgot-password .input-field.button input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+    border: none;
+    outline: none;
+}
+
+.form.forgot-password .input-field.button input[type="submit"]:hover {
+    background-color: #0056b3;
+    font-size: 16px;
+}
+
+.form.forgot-password .login-signup {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.form.forgot-password .login-signup a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.form.forgot-password .login-signup a:hover {
+    text-decoration: underline;
+}

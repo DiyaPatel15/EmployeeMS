@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ===== CSS ===== -->
+    <link rel="stylesheet" href="{% static 'account/css/authentication.css' %}" type="text/css">
+
+    <title>Login & Registration Form</title>
+</head>
+<body>
+    <div class="container">
+        <div class="forms">
+            <div class="form login">
+                <span class="title">Login</span>
+
+                <form action="#">
+                    <div class="input-field">
+                        <input type="text" id="email" name="email" placeholder="Enter your email" required>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" id="login_password" name="login_password" class="password" placeholder="Enter your password" required>
+                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-eye-slash showHidePw"></i>
+                    </div>
+
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="logCheck">
+                            <label for="logCheck" class="text">Remember me</label>
+                        </div>
+
+                        <a href = "{% url 'forgot_pass' %}" class="text">Forgot password?</a>
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="button" value="Login" onclick="submitForm()">
+                    </div>
+                </form>
+
+                <div class="login-signup">
+                    <span class="text">Not a member?
+                        <a href="#" class="signup-link">Signup Now</a>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="form signup">
+                <span class="title">Registration</span>
+
+                <form action="#" class="signup">
+                    <div class="input-field">
+                        <input type="text" id="emp_id" name="emp_id" placeholder="Enter your id" required>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="emp_name" name="emp_name" placeholder="Enter your name" required>
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="emp_email" name="emp_email" placeholder="Enter your email" required>
+                        <i class="uil uil-envelope icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="number" id="emp_contact" name="emp_contact" placeholder="Enter your contact number" required>
+                        <i class="uil uil-phone-alt icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="emp_address" name="emp_address" placeholder="Enter your address" required>
+                        <i class="uil uil-location-point icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="file" id="emp_profile" name="emp_profile" placeholder="Enter your profile" required>
+                        <i class="uil uil-image-upload icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <select id="emp_designation" name="emp_designation" required>
+                            <option value="" disabled selected>Select your designation</option>
+                            <option value="CEO">CEO</option>
+                            <option value="COO">COO</option>
+                            <option value="Project Manager">Project Manager</option>
+                            <option value="Jr. PHP Laravel Developer">Jr. PHP Laravel Developer</option>
+                            <option value="Sr. Developer">Sr. Developer</option>
+                            <option value="UI/UX Designer">UI/UX Designer</option>
+                            <option value="Product Manager">Product Manager</option>
+                            <option value="Quality Engineer">Quality Engineer</option>
+                            <option value="Quality Engineer Lead">Quality Engineer Lead</option>
+                            <option value="Web Designer">Web Designer</option>
+                            <option value="Sr. Developer">Sr. Developer</option>
+                            <option value="SEO Executive">SEO Executive</option>
+                            <option value="Jr. HR Executive">Jr. HR Executive</option>
+                            <option value="Jr. PHP Laravel Developer">Jr. PHP Laravel Developer</option>
+                            <option value="Sr. HR Executive">Sr. HR Executive</option>
+                            <option value="Sr. SEO Executive">Sr. SEO Executive</option>
+                            <option value="Content Writer">Content Writer</option>
+                            <option value="Python Developer">Python Developer</option>
+                            <option value="Jr. Web Designer">Jr. Web Designer</option>
+                            <option value="Intern">Intern</option>
+                            <option value="Lead Generation Executive">Lead Generation Executive</option>
+                            <option value="Trainee">Trainee</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                        <i class="uil uil-briefcase-alt icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <select id="emp_role" name="emp_role" required>
+                            <option value="" disabled selected>Select your role</option>
+                            <option value="Admin">Admin</option>
+                            <option value="HR">HR</option>
+                            <option value="Employee">Employee</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                        <i class="uil uil-shield-check icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <select id="emp_company" name="emp_company" required>
+                            <option value="" disabled selected>Select your company name</option>
+                            <option value="PranshTech Solutions">PranshTech Solutions</option>
+                            <option value="Textdrip">Textdrip</option>
+
+                            <!-- Add more options as needed -->
+                        </select>
+                        <i class="uil uil-building icon"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="password"id="emp_password" name="emp_password" class="password" placeholder="Create a password" required>
+                        <i class="uil uil-lock icon"></i>
+                    </div>
+                    <div class="checkbox-text">
+                        <div class="checkbox-content">
+                            <input type="checkbox" id="termCon">
+                            <label for="termCon" class="text">I accepted all terms and conditions</label>
+                        </div>
+                    </div>
+
+                    <div class="input-field button">
+                        <input type="submit" value="Signup" name="submit" id="submit">
+                    </div>
+                </form>
+
+                <div class="login-signup">
+                    <span class="text">Already a member?
+                        <a href="{% url 'home' %}" class="login-link">Login Now</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <script src="{% static 'account/js/authentication.js' %}"></script>
+
+
+<script>
+      document.addEventListener("DOMContentLoaded", () => {
+            const registrationForm = document.querySelector("form.signup");
+            registrationForm.addEventListener("submit", async (event) => {
+              event.preventDefault();
+
+            const empId = document.getElementById("emp_id").value;
+            const empName = document.getElementById("emp_name").value;
+            const empEmail = document.getElementById("emp_email").value;
+            const empAddress = document.getElementById("emp_address").value;
+            const empContact = document.getElementById("emp_contact").value;
+            const empProfile = document.getElementById("emp_profile").files[0];// File input
+            const empDesignation = document.getElementById("emp_designation").value;
+            const empRole = document.getElementById("emp_role").value;
+            const empCompany = document.getElementById("emp_company").value;
+            const password = document.getElementById("emp_password").value;
+
+
+
+            const formData = new FormData();
+            formData.append("emp_id", empId);
+            formData.append("emp_name", empName);
+            formData.append("emp_email", empEmail);
+            formData.append("emp_address", empAddress);
+            formData.append("emp_contact", empContact);
+            formData.append("emp_profile", empProfile);
+            formData.append("emp_designation", empDesignation);
+            formData.append("emp_role", empRole);
+            formData.append("is_active", true);
+            formData.append("emp_company", empCompany);
+            formData.append("password", password);
+
+            try {
+              const response = fetch("http://127.0.0.1:8000/register/", {
+                method: "POST",
+                body: formData,
+              });
+
+              if (response.ok) {
+                console.log("Registration successful!", response.status);
+              } else {
+                console.log("Registration successful!", response.status);
+                //console.error("Registration failed:", response.statusText);
+              }
+            } catch (error) {
+              console.error("Error:", error);
+              // Display error message to user
+            }
+          });
+        });
+
+    // Here Login Code Begins
+
+
+    function submitForm() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('login_password').value;
+
+        const data = {
+            email: email,
+            password: password
+        };
+
+        fetch('http://127.0.0.1:8000/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.Error || "Invalid Credentials");
+                });
+            }
+            return response.json();
+        })
+        .then(result => {
+            const dynamicAccessToken = result.access;
+            localStorage.setItem('accessToken', dynamicAccessToken);
+            localStorage.setItem('refreshToken', result.refresh);
+            localStorage.setItem('id', result.id);
+            console.log(dynamicAccessToken)
+            console.log(result.status)
+
+            console.log("print", result.status)
+            window.location.href = '/dashboard';
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert(error.message);
+        });
+    }
+
+</script>
+
+
+</body>
+</html>

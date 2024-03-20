@@ -1,0 +1,140 @@
+{% extends 'account/base.html' %}
+{% block main-content %}
+{% load static %}
+<style>
+    .error {
+        color: #FF0000;
+    }
+
+    / Custom Styles /
+    .search-form {
+        display: flex;
+        align-items: center;
+
+    }
+
+    .search-input {
+        width: 150px; / Adjust size as needed /
+    }
+    .container-xxl
+    {
+    margin-left:280px;
+    margin-top:-530px;
+    width:1100px;
+    }
+</style>
+<div class="container-xxl">
+    <div class="card"  style="position:fixed;">
+       <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center">
+    <form class="search-form" action="http://127.0.0.1:8000/in-out/" method="get">
+        <div class="input-group">
+            <input type="text" data-kt-customer-table-filter="search" id="serching" value="" name="search" style="max-width:150px"  class="form-control form-control-solid search-input"  placeholder="Search Employee" fdprocessedid="3pql1a">
+        </div>
+        <div style="margin-top:-39px;">
+        <button class= "button" class="button:hover" type="submit" name="submit" id="submit" fdprocessedid="48081" style="height:40px;margin-left:152px;">Search</button>
+        </div>
+    </form>
+    <div class="card-title">
+        <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0">Employee Request list</h3>
+    </div>
+    <div class="card-toolbar">
+        <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true" id="kt-toolbar-filter"></div>
+        <button type="button"  class= "button" class="button:hover" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_add_customer" fdprocessedid="hrjq6j">Add Request</button>
+    </div>
+</div>
+
+        <div class="new" id="salarysearch">
+            <div class="card-body pt-0">
+                <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                    <div class="table-responsive">
+                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
+                            <thead>
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Sr no</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Date</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Type</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Reason</th>
+                                    <th class="min-w-125px sorting" style="width: 171.516px;">Approvel-Status</th>
+                                    <th class="text-end min-w-70px sorting_disabled" style="width: 133.062px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="fw-bold text-gray-600">
+                                <tr>
+                                    <td colspan="6">There are no Record found</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js" integrity="sha512-gIQwP4/Kf6XJOhVfgPWcHvQLihsjyBFRczY3R9jOP3eeVDYyjIF4oCEVWfLCd4bEoJNv1wVapcG8dbtq5jTehw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Function to fetch data from API and populate the table
+    function fetchDataAndPopulateTable() {
+        fetch('http://127.0.0.1:8000/in-out/')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.querySelector('#kt_customers_table tbody');
+
+                // Clear existing table rows
+                tableBody.innerHTML = '';
+
+                // Populate table rows with data
+                data.forEach((record, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${record.date}</td>
+                        <td>${record.type}</td>
+                        <td>${record.reason}</td>
+                        <td>${record.approvel_status}</td>
+                        <td style="display:inline-flex; align-items:center; margin-right:10px">
+                            <button class="btn btn-primary" onclick="updateRecord(${record.id})">Update</button>
+                            <button class="btn btn-danger" onclick="deleteRecord(${record.id})">Delete</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            })
+            .catch(error => console.error('Error fetching records:', error));
+    }
+
+    // Call the function to fetch data and populate the table when the document is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        fetchDataAndPopulateTable();
+    });
+
+    // Function to handle updating a record
+    function updateRecord(id) {
+        // Redirect or perform other actions as needed
+    }
+
+    // Function to handle deleting a record
+    function deleteRecord(id) {
+        // Send DELETE request to your API endpoint
+        // Example:
+        // fetch(`http://127.0.0.1:8000/in-out/${id}`, {
+        //     method: 'DELETE',
+        // })
+        // .then(response => {
+        //     if (response.ok) {
+        //         // Record deleted successfully, you may want to update the table or perform other actions
+        //     } else {
+        //         throw new Error('Failed to delete record');
+        //     }
+        // })
+        // .catch(error => console.error('Error deleting record:', error));
+    }
+</script>
+{% endblock main-content %}
