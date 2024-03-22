@@ -78,6 +78,7 @@ class Employee_Task(models.Model):
     E_Priority = models.CharField(max_length=100, choices=E_PRIORITY)
 
 class In_Out(models.Model):
+    name = models.CharField(max_length=100)
     date = models.DateField()
     type = models.CharField(max_length=50,choices=IN_OUT)
     reason = models.CharField(max_length=1000)

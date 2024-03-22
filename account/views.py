@@ -248,7 +248,7 @@ def holidayView(request):
 
 
 def update_holidayView(request, pk):
-    return render(request, 'account/holiday_update.html', {'pk': pk})
+    return render(request, 'account/update_holiday.html', {'pk': pk})
 
 
 def holiday_add_view(request):
@@ -259,4 +259,12 @@ def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
 def inout_view(request):
-    return render(request,'account/in-out.html')
+    form = In_Out.objects.all()
+    print(form)
+    return render(request, 'account/in-out.html', {'form': form})
+
+
+
+
+def add_inout_view(request):
+    return render(request,'account/add-in-out-request.html')

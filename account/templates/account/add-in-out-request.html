@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add In-Out Request</title>
+<!--    <link rel="stylesheet" href="styles.css">-->
+    <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f8f9fa;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .container {
+                    max-width: 550px;
+                    margin: 50px auto;
+                    padding: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 5px 10px rgb(248, 84, 172);
+                    border-bottom: 2px solid #ccc;
+                    border-top: 2px solid transparent;
+                    border: none;
+                    outline: none;
+                    border: 1px solid #ccc;
+                    border-radius: 25px;
+                }
+
+                h1 {
+                    text-align: center;
+                }
+
+                form {
+                    margin-top: 20px;
+                }
+
+                label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: bold;
+                    color: #666;
+                }
+
+                input[type="text"],
+                input[type="date"],
+                select,
+                textarea {
+                    width: calc(100% - 16px);
+                    padding: 8px;
+                    margin-bottom: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                }
+
+                button {
+                    background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+                    color: #fff;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    display: block;
+                    margin: 0 auto;
+                }
+
+                button:hover {
+                    background-color: #0056b3;
+                }
+
+                @media only screen and (max-width: 768px) {
+                    .container {
+                        max-width: 80%;
+                    }
+
+                    input[type="text"],
+                    input[type="date"],
+                    select,
+                    textarea {
+                        width: calc(100% - 16px);
+                    }
+                }
+                a:hover {
+                        text-decoration: none;
+                        color: white; / Change to the desired color     /
+                }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Add In-Out Request</h1>
+        <form id="addInOutRequestForm">
+            <div>
+                <label for="requestName">Name:</label>
+                <input type="text" id="requestName" name="requestName" required>
+            </div>
+            <div>
+                <label for="requestDate">Request Date:</label>
+                <input type="date" id="requestDate" name="requestDate" required>
+            </div>
+            <div>
+                <label for="requestType">Request Type:</label>
+                <select id="requestType" name="requestType" style="width:100%;" required>
+                    <option value="" >Select Type...</option>
+                    <option value="In">In</option>
+                    <option value="Out">Out</option>
+                </select>
+            </div>
+            <div>
+                <label for="requestapprovel_status">Approvel Status:</label>
+                <select id="requestapprovel_status" name="requestapprovel_status" style="width:100%;" required>
+                    <option value="" >Select Type...</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Rejected">Rejected</option>
+                    <option value="Pending">Pending</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="requestReason">Reason:</label>
+                <textarea id="requestReason" name="requestReason" rows="4" required></textarea>
+            </div>
+            <button type="button" onclick="addInOutRequest()">
+                Submit
+            </button>
+        </form>
+        <div id="responseMessage"></div> <!-- Container for displaying response message -->
+    </div>
+
+
+<script>
+        // Function to handle adding a holiday
+    function addInOutRequest() {
+        // Get the values from the input fields
+        const requestName = document.getElementById('requestName').value;
+        const requestDate = document.getElementById('requestDate').value;
+        const requestType = document.getElementById('requestType').value;
+        const requestReason = document.getElementById('requestReason').value;
+        const requestapprovel_Status = document.getElementById('requestapprovel_status').value;
+
+
+
+        // Create a new holiday object
+        const newRequest = {
+            name: requestName,
+            date: requestDate,
+            type: requestType,
+            reason: requestReason,
+            approvel_status: requestapprovel_Status
+        };
+
+        // Perform POST request to add holiday
+        fetch('http://127.0.0.1:8000/in-out/', {
+            method: 'POST',
+            body: JSON.stringify(newRequest),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Request added successfully
+                // You may want to refresh the table or perform any other actions
+                console.log('Request added successfully.');
+                window.location.href = "http://127.0.0.1:8000/inout/";
+
+            } else {
+                // Error adding holiday
+                console.error('Failed to add request.');
+            }
+        })
+        .catch(error => console.error('Error adding request:', error));
+    }
+
+</script>
+</body>
+</html>

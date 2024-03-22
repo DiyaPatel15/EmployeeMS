@@ -13,6 +13,8 @@
                 cursor: pointer;
                 font-size: 16px;
                 transition: background-color 0.3s ease;
+                height:40px;
+
             }
 
             .button:hover {
@@ -26,5 +28,58 @@
                 color: #333;
                 line-height: 1.5;
             }
+
+            /* Common styles for all screen sizes */
+            .container-fluid {
+                    padding: 20px;
+            }
+
+            /* Styles for screens smaller than 576px (e.g., mobile phones) */
+            @media (max-width: 575.98px) {
+                    .sidebar {
+                        display: none; /* Hide the sidebar on small screens */
+                    }
+            }
+
+            /* Styles for screens between 576px and 991.98px (e.g., tablets) */
+            @media (min-width: 576px) and (max-width: 991.98px) {
+                    .container-fluid {
+                        padding: 10px; /* Reduce padding on tablets */
+                    }
+            }
+
+            /* Styles for screens larger than 992px (e.g., laptops and desktops) */
+            @media (min-width: 992px) {
+                    .sidebar {
+                        display: block; /* Show the sidebar on larger screens */
+                    }
+            }
+
+            /* Default styles */
+            .col {
+                width: 100%;
+            }
+
+            /* Media query for screens larger than 768px (e.g., tablets and desktops) */
+            @media (min-width: 768px) {
+                .col {
+                    width: 50%; /* Adjust the width as needed */
+                }
+            }
+
+            /* Media query for screens larger than 992px (e.g., larger desktops) */
+            @media (min-width: 992px) {
+                .col {
+                    width: 33.33%; /* Adjust the width as needed */
+                }
+            }
+
+            /* Media query for screens larger than 1200px (e.g., extra-large desktops) */
+            @media (min-width: 1200px) {
+                .col {
+                    width: 25%; /* Adjust the width as needed */
+                }
+            }
+
 
 

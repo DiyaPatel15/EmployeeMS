@@ -7,13 +7,16 @@
     .card-header {
             display: flex;
             align-items: center;
-        }
-        .container-xxl {
+    }
+    .container-xxl {
             margin-left: 230px; / Adjust the left margin as needed /
             margin-top:50px;
-        }
+    }
+    .hidden {
+          display: none;
+    }
 
-        .container-xxl{
+    .container-xxl{
             margin-top:-600px;
     }
 </style>
@@ -36,14 +39,14 @@
                                 </div>
                             </div>
                             <select class="form-select ml-5" id="priority_search" null="" name="priority_search"
-                                    aria-label="Select example" fdprocessedid="3iv7sq" style="display: inline-block;">
+                                    aria-label="Select example" fdprocessedid="3iv7sq" style="display: inline-block;height:40px;border-radius:7px;max-width:200px;border:1px solid #ccc;">
                                 <option value="">Select a Priority Search...</option>
                                 <option value="1">Low</option>
                                 <option value="2">Medium</option>
                                 <option value="3">High</option>
                                 <option value="4">Urgent</option>
                             </select>
-                            <button   class= "button" class="button:hover" type="submit" name="submit" id="submit"
+                            <button style="height:40px;margin-left:1px"  class= "button" class="button:hover" type="submit" name="submit" id="submit"
                                     fdprocessedid="n1txyw">Search
                             </button>
                         </div>
@@ -127,10 +130,12 @@ function fetchDataAndPopulateTable() {
                     <td>${task.E_Assign_Date}</td>
                     <td>${task.E_Mentor}</td>
                     <td>${task.E_Priority}</td>
-                    <td style="display:inline-flex; align-items:center; margin-right:10px"x>
-                        <button class="btn btn-primary" onclick="updateTask(${task.id})">Update</button>
-                        <button class="btn btn-danger" onclick="deleteTask(${task.id})">Delete</button>
+                    <td style="display:inline-flex; align-items:center; margin-right:10px;">
+                            <button class="btn btn-primary text-primary . bg-light" style=" margin-right:8px;" onclick="updateTask(${task.id})">Update</button>
+                            <button class="btn btn-danger text-danger . bg-light" onclick="deleteTask(${task.id})">Delete</button>
+
                     </td>
+
                 `;
                 tableBody.appendChild(row);
             });

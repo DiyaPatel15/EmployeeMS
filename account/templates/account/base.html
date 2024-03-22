@@ -41,6 +41,7 @@
         .sidebar ul.navbar-nav li.nav-item a.nav-link:hover {
           color: #007bff;
         }
+
   </style>
 
 </head>
@@ -57,9 +58,9 @@
 
         </div>
         <div>
-            <nav class="navbar navbar-expand-lg navbar-light" style="margin-right:-1132px;margin-left:250px;margin-top:-89px ; height:90px;background-color:#fff">
+            <nav class="navbar navbar-expand-lg navbar-light " style="margin-right:-1132px;margin-left:250px;margin-top:-89px ; height:90px;box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);">
                 <div class="container-fluid">
-                    <a class="navbar-brand" style="color:black" href="#">Navbar</a>
+<!--                    <a class="navbar-brand" style="color:black;margin-top:-42px;margin-left:20px" href="#">Navbar</a>-->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -68,33 +69,36 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" style="color:black" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" style="color:black;margin-top:-32px" aria-current="page" href="#">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" style="color:blue" href="#">Link</a>
+                                <a class="nav-link" style="color:blue;margin-top:-32px" href="#">Link</a>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" style="color:black" href="#" id="navbarDropdown" role="button"
+                            <li class="nav-item dropdown" style="margin-top:-19px">
+                                <a class="nav-link dropdown-toggle" style="color:black;margin-top:-12px" href="#" id="navbarDropdown" role="button"
                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     Dropdown
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a class="dropdown-item" href="#">Action</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <ul class="dropdown-menu"  aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item"  href="#">Action</a></li>
+                                    <li><a class="dropdown-item"  href="#">Another action</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    <li><a class="dropdown-item"  href="#">Something else here</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link disabled" style="color:black"  href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <li class="nav-item" style="margin-top:-10px">
+                                <a class="nav-link disabled" style="color:black;margin-top:-19px"  href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                             </li>
                         </ul>
-                        <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
+<!--                        <form class="d-flex">-->
+<!--&lt;!&ndash;                            <input class="form-control me-2" style="margin-top:-19px;" type="search" placeholder="Search" aria-label="Search">&ndash;&gt;-->
+<!--                            <button class="btn btn-outline-success" style="margin-top:-19px;" type="submit">Logout</button>-->
+<!--                        </form>-->
+                            <form class="d-flex justify-content-end">
+                              <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>
+                            </form>
                     </div>
                 </div>
             </nav>
@@ -175,6 +179,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 

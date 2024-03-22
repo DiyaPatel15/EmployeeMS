@@ -1,35 +1,74 @@
 {% extends 'account/base.html' %}
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Holiday</title>
-</head>
-<body>
 {% block main-content %}
+{% load static %}
+    <div class="container">
+        <h1 class="mt-4">Update Holiday</h1>
+        <form id="updateHolidayForm">
+            <div class="form-group">
+                <label for="holidayName">Holiday Name</label>
+                <input type="text" class="form-control" id="holidayName" name="holidayName" placeholder="Enter holiday name">
+            </div>
+            <div class="form-group">
+                <label for="holidayDate">Holiday Date</label>
+                <input type="date" class="form-control" id="holidayDate" name="holidayDate">
+            </div>
+            <div class="form-group">
+                <label for="holidayDay">Holiday Day</label>
+                <input type="text" class="form-control" id="holidayDay" name="holidayDay" placeholder="Enter holiday day">
+            </div>
+            <button type="submit" class="btn btn-primary">Update Holiday</button>
+        </form>
+    </div>
 
-<h1>Update Holiday</h1>
-<form action="{% url 'update_holiday'%}" method="POST">
-    {% csrf_token %}
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Function to fetch and populate holiday data for update
+        function fetchAndPopulateHolidayData(holidayId) {
+            fetch(`http://127.0.0.1:8000/holidays/${holidayId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('holidayName').value = data.holiday_name;
+                    document.getElementById('holidayDate').value = data.holiday_date;
+                    document.getElementById('holidayDay').value = data.holiday_day;
+                })
+                .catch(error => console.error('Error fetching holiday data:', error));
+        }
+
+        // Function to handle form submission (update)
+        function handleUpdateFormSubmit(event) {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const holidayId = formData.get('id');
+
+            fetch(`http://127.0.0.1:8000/holidays/${holidayId}/`, {
+                method: 'PUT',
+                body: formData
+            })
+            .then(response => {
+                // Handle response
+                console.log('Holiday updated successfully');
+            })
+            .catch(error => console.error('Error updating holiday:', error));
+        }
+
+        // Add event listener to update form submit
+        document.getElementById('updateHolidayForm').addEventListener('submit', handleUpdateFormSubmit);
+
+        // Fetch and populate holiday data when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get the holiday ID from the URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const holidayId = urlParams.get('id');
+
+            // Fetch and populate the holiday data
+            fetchAndPopulateHolidayData(holidayId);
+        });
+    </script>
 
 
-    <p>The holiday ID is: {{ pk }}</p>
 
-
-    <label for="holiday_date">Holiday Date:</label>
-    <input type="date" id="holiday_date" name="holiday_date" value="{{ holiday.holiday_date }}" required><br><br>
-
-    <label for="holiday_name">Holiday Name:</label>
-    <input type="text" id="holiday_name" name="holiday_name" value="{{ holiday.holiday_name }}" required><br><br>
-
-    <label for="holiday_day">Holiday Day:</label>
-    <input type="text" id="holiday_day" name="holiday_day" value="{{ holiday.holiday_day }}" required><br><br>
-
-    <button type="submit">Update</button>
-</form>
-
-{% endblock %}
-
-</body>
-</html>
+{% endblock main-content%}
