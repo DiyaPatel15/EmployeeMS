@@ -264,7 +264,8 @@ def inout_view(request):
     return render(request, 'account/in-out.html', {'form': form})
 
 
-
-
 def add_inout_view(request):
     return render(request,'account/add-in-out-request.html')
+
+def add_emptask_view(request):
+    return render(request,'account/add-emp-task.html')

@@ -141,7 +141,7 @@ class HolidaySerializer(ModelSerializer):
 class EmployeeTaskSerializer(ModelSerializer):
     class Meta:
         model = Employee_Task
-        fields = ['E_name', 'E_Card_Link', 'E_Assign_Date', 'E_Mentor', 'E_Priority']
+        fields = '__all__'
 
 
 class In_Out_serializer(ModelSerializer):

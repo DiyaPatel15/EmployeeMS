@@ -83,7 +83,7 @@
                         color: white; / Change to the desired color     /
     }
 </style>
-<div class="post d-flex flex-column-fluid" >
+<div class="post d-flex flex-column-fluid">
     <div class="container-xxl" >
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="post d-flex flex-column-fluid" id="kt_post">
@@ -130,6 +130,39 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Holiday</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Update form fields go here -->
+        <form id="updateForm">
+          <div class="mb-3">
+            <label for="holidayName" class="form-label">Holiday Name</label>
+            <input type="text" class="form-control" id="holidayName" required>
+          </div>
+          <div class="mb-3">
+            <label for="holidayDate" class="form-label">Holiday Date</label>
+            <input type="date" class="form-control" id="holidayDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="holidayDay" class="form-label">Holiday Day</label>
+            <input type="text" class="form-control" id="holidayDay" required>
+          </div>
+          <input type="hidden" id="holidayId">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Include jQuery and Bootstrap JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
@@ -190,12 +223,7 @@
                     }
              }
 
-             function updateHoliday(holidayId) {
-                    // Navigate to the update page
-                  const updatePageUrl = `http://127.0.0.1:8000/update-holiday/${holidayId}/`; // Adjust the URL as per your application's routes
 
-                    window.location.href = updatePageUrl ;
-             }
             // Function to delete a holiday
             function deleteHoliday(holidayId) {
                 // Send delete request using AJAX
@@ -247,6 +275,54 @@
 
             // Add event listener to search button
             document.getElementById('searchButton').addEventListener('click', searchHoliday);
+
+
+
+    function updateHoliday(holidayId) {
+    // Fetch the holiday data
+    fetch(`http://127.0.0.1:8000/holidays/${holidayId}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate the form fields with holiday data
+            document.getElementById('holidayId').value = data.id;
+            document.getElementById('holidayName').value = data.holiday_name;
+            document.getElementById('holidayDate').value = data.holiday_date;
+            document.getElementById('holidayDay').value = data.holiday_day;
+
+            // Show the update modal
+            $('#updateModal').modal('show');
+        })
+        .catch(error => console.error('Error fetching holiday:', error));
+}
+
+// Function to submit the update form data via AJAX
+function submitUpdateForm() {
+    const holidayId = $('#holidayId').val();
+    const holidayName = $('#holidayName').val();
+    const holidayDate = $('#holidayDate').val();
+    const holidayDay = $('#holidayDay').val();
+
+    $.ajax({
+        url: `http://127.0.0.1:8000/holidays/${holidayId}/`,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            holiday_name: holidayName,
+            holiday_date: holidayDate,
+            holiday_day: holidayDay
+        }),
+        success: function(response) {
+            console.log('Holiday updated successfully:', response);
+            // Close the update modal
+            $('#updateModal').modal('hide');
+            // Refresh holiday data in the table
+            fetchAndDisplayHolidays();
+        },
+        error: function(xhr, status, error) {
+            console.error('Error updating holiday:', error);
+        }
+    });
+}
 
 
 </script>

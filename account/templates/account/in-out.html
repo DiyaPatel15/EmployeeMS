@@ -75,12 +75,59 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateModalLabel">Update Record</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="updateForm">
+                    <input type="hidden" id="recordId" name="recordId">
+                    <div class="form-group">
+                        <label for="updateDate">NAME:</label>
+                        <input type="text" class="form-control" id="updateName" name="updateName">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateDate">DATE:</label>
+                        <input type="date" class="form-control" id="updateDate" name="updateDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateType">TYPE:</label>
+                        <select class="form-control" id="updateType" name="updateType">
+                            <option value="In">In</option>
+                            <option value="Out">Out</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updateReason">REASON:</label>
+                        <input type="text" class="form-control" id="updateReason" name="updateReason">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateStatus">APPROVAL STATUS:</label>
+                        <select class="form-control" id="updateStatus" name="updateStatus">
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-left:180px;" onclick="submitForm()">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap Bundle with Popper -->
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/js/all.min.js" integrity="sha512-gIQwP4/Kf6XJOhVfgPWcHvQLihsjyBFRczY3R9jOP3eeVDYyjIF4oCEVWfLCd4bEoJNv1wVapcG8dbtq5jTehw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 
 <script>
 
@@ -109,9 +156,12 @@
                     <td>${record.type}</td>
                     <td>${record.reason}</td>
                     <td>${record.approvel_status}</td>
-                    <td style="display:inline-flex; align-items:center; margin-right:10px">
-                        <button class="btn btn-primary" onclick="updateRecord(${record.id})">Update</button>
-                        <button class="btn btn-danger" onclick="deleteRecord(${record.id})">Delete</button>
+                    <td>
+                        <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${record.id})">...</button>
+                        <div id="actionMenu_${record.id}" class="action-menu hidden mt-2">
+                            <button class="btn btn-primary text-primary . bg-light"  onclick="updateRecord(${record.id})">Update</button>
+                            <button class="btn btn-danger text-danger . bg-light" style="margin-right:-200px" onclick="deleteRecord(${record.id})">Delete</button>
+                        </div>
                     </td>
                 `;
                 tableBody.appendChild(row);
@@ -120,10 +170,26 @@
         .catch(error => console.error('Error fetching records:', error));
 }
 
-    // Call the function to fetch data and populate the table when the document is ready
-    document.addEventListener('DOMContentLoaded', function() {
-        fetchDataAndPopulateTable();
-    });
+             function toggleActionMenu(recordId) {
+                                const actionMenu = document.getElementById(`actionMenu_${recordId}`);
+                                if (actionMenu.classList.contains('hidden')) {
+                                    actionMenu.classList.remove('hidden');
+                                } else {
+                                    actionMenu.classList.add('hidden');
+                                }
+             }
+
+             function clickOutsideHandler(e) {
+                    if (!actionMenu.contains(e.target) && !actionButton.contains(e.target)) {
+                         actionMenu.classList.add('hidden');
+                            // Remove event listener after closing action menu
+                         document.removeEventListener('click', clickOutsideHandler);
+                    }
+             }
+             // Call the function to fetch data and populate the table when the document is ready
+             document.addEventListener('DOMContentLoaded', function() {
+                    fetchDataAndPopulateTable();
+             });
 
      function deleteRecord(requestId) {
     // Send delete request using AJAX
@@ -170,6 +236,7 @@ function searchInOut() {
                         <td>${record.type}</td>
                         <td>${record.reason}</td>
                         <td>${record.approvel_status}</td>
+
                         <td style="display:inline-flex; align-items:center; margin-right:10px">
                             <button class="btn btn-primary" onclick="updateRecord(${record.id})">Update</button>
                             <button class="btn btn-danger" onclick="deleteRecord(${record.id})">Delete</button>
@@ -186,5 +253,62 @@ function searchInOut() {
         event.preventDefault();
         searchInOut();
     });
+
+
+     function updateRecord(recordId) {
+        console.log('Update button clicked for record ID:', recordId);
+        // Fetch the record data
+        fetch(`http://127.0.0.1:8000/in-out/${recordId}/`)
+            .then(response => response.json())
+            .then(data => {
+                // Populate the form fields with record data
+                document.getElementById('recordId').value = data.id;
+                document.getElementById('updateName').value = data.name;
+                document.getElementById('updateDate').value = data.date;
+                document.getElementById('updateType').value = data.type;
+                document.getElementById('updateReason').value = data.reason;
+                document.getElementById('updateStatus').value = data.approvel_status;
+
+                // Show the update modal
+                $('#updateModal').modal('show');
+            })
+            .catch(error => console.error('Error fetching record:', error));
+    }
+
+    // Function to submit the update form data via AJAX
+    function submitForm() {
+        event.preventDefault();
+        const recordId = $('#recordId').val();
+        const updatedName = $('#updateName').val();
+        const updatedDate = $('#updateDate').val();
+        const updatedType = $('#updateType').val();
+        const updatedReason = $('#updateReason').val();
+        const updatedStatus = $('#updateStatus').val();
+
+        fetch(`http://127.0.0.1:8000/in-out/${recordId}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: updatedName,
+                date: updatedDate,
+                type: updatedType,
+                reason: updatedReason,
+                approvel_status: updatedStatus // Corrected spelling here
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update record');
+                }
+                console.log('Record updated successfully');
+                // Close the update modal
+                $('#updateModal').modal('hide');
+                // Refresh record data in the table
+                fetchDataAndPopulateTable(); // You need to define this function to fetch and populate records
+            })
+            .catch(error => console.error('Error updating record:', error));
+    }
 </script>
 {% endblock main-content %}
