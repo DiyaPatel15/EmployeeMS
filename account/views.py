@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Employee, Issue_Ticket, Holiday, Employee_Task,In_Out
-from .serializers import (EmployeeSerializer, EmployeeRegistrationSerializer, EmployeeLoginSerializer,In_Out_serializer,
+from .models import Employee, Issue_Ticket, Holiday, Employee_Task, In_Out,Events
+from .serializers import (EmployeeSerializer, EmployeeRegistrationSerializer, EmployeeLoginSerializer,
+                          In_Out_serializer,
                           EmployeeProfileSerializer, EmployeeChangePasswordSerializer, UserPasswordResetSerializer,
                           SendPasswordResetSerializer, IssueTicketSerializer, HolidaySerializer, EmployeeTaskSerializer)
 from rest_framework.viewsets import ModelViewSet
@@ -28,6 +29,7 @@ def get_tokens_for_user(user):
 
 
 class EmployeeViewSet(ModelViewSet):
+    # permission_classes = [IsAuthenticated]
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
 
@@ -210,12 +212,16 @@ class IssueTicketViewSet(ModelViewSet):
 
 
 class holidayViewSet(ModelViewSet):
+    # permission_classes = [IsAuthenticated]
     serializer_class = HolidaySerializer
     queryset = Holiday.objects.all()
 
+
 class inoutViewSet(ModelViewSet):
+    # permission_classes = [IsAuthenticated]
     serializer_class = In_Out_serializer
     queryset = In_Out.objects.all()
+
 
 def home(request):
     return render(request, 'account/authentication.html')
@@ -258,6 +264,7 @@ def holiday_add_view(request):
 def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
+
 def inout_view(request):
     form = In_Out.objects.all()
     print(form)
@@ -265,7 +272,63 @@ def inout_view(request):
 
 
 def add_inout_view(request):
-    return render(request,'account/add-in-out-request.html')
+    return render(request, 'account/add-in-out-request.html')
+
 
 def add_emptask_view(request):
-    return render(request,'account/add-emp-task.html')
+    return render(request, 'account/add-emp-task.html')
+
+
+def index(request):
+    all_events = Events.objects.all()
+    context = {
+        "events": all_events,
+    }
+    return render(request, 'account/index.html', context)
+
+
+def all_events(request):
+    all_events = Events.objects.all()
+    out = []
+    for event in all_events:
+        out.append({
+            'title': event.name,
+            'id': event.id,
+            'start': event.start.strftime("%m/%d/%Y, %H:%M:%S"),
+            'end': event.end.strftime("%m/%d/%Y, %H:%M:%S"),
+        })
+
+    return JsonResponse(out, safe=False)
+
+
+def add_event(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    event = Events(name=str(title), start=start, end=end)
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def update(request):
+    start = request.GET.get("start", None)
+    end = request.GET.get("end", None)
+    title = request.GET.get("title", None)
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.start = start
+    event.end = end
+    event.name = title
+    event.save()
+    data = {}
+    return JsonResponse(data)
+
+
+def remove(request):
+    id = request.GET.get("id", None)
+    event = Events.objects.get(id=id)
+    event.delete()
+    data = {}
+    return JsonResponse(data)
+

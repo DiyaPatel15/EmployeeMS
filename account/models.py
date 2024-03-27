@@ -9,6 +9,7 @@ from .managers import UserBaseManager
 class Employee(AbstractBaseUser):
     emp_id = models.CharField(max_length=10, help_text="Employee ID")
     emp_name = models.CharField(max_length=30, help_text="Employee Name")
+    emp_birthday = models.DateField(null=True)
     emp_email = models.EmailField(max_length=255, unique=True, verbose_name="email")
     emp_contact = models.CharField(max_length=15)
     emp_address = models.TextField(null=False)
@@ -26,7 +27,7 @@ class Employee(AbstractBaseUser):
     objects = UserBaseManager()
 
     USERNAME_FIELD = "emp_email"
-    REQUIRED_FIELDS = ["emp_id", "emp_name", "emp_contact", "emp_address", "emp_profile", "emp_company", "is_active",
+    REQUIRED_FIELDS = ["emp_id", "emp_name", "emp_contact","emp_birthday", "emp_address", "emp_profile", "emp_company", "is_active",
                        "status", "emp_role",
                        "emp_designation"]
 
@@ -83,3 +84,13 @@ class In_Out(models.Model):
     type = models.CharField(max_length=50,choices=IN_OUT)
     reason = models.CharField(max_length=1000)
     approvel_status = models.CharField(max_length=50,choices=APPROVEL_STATUS)
+
+
+class Events(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    start = models.DateTimeField(null=True, blank=True)
+    end = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "tblevents"

@@ -41,6 +41,11 @@ urlpatterns = [
                   path('employeetask/', employee_task_View, name='employeetask'),
                   path('inout/', inout_view, name='inout'),
                   path('add-in-out/',add_inout_view,name='add-in-out'),
-                  path('add-emp-task/',add_emptask_view,name='add-emp-task')
+                  path('add-emp-task/',add_emptask_view,name='add-emp-task'),
+                  path('index/', views.index, name='index'),
+                  path('all_events/', views.all_events, name='all_events'),
+                  path('add_event/', views.add_event, name='add_event'),
+                  path('update/', views.update, name='update'),
+                  path('remove/', views.remove, name='remove'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

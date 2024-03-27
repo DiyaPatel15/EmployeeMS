@@ -69,7 +69,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" style="color:black;margin-top:-32px" aria-current="page" href="#">Home</a>
+                                <a class="nav-link active" style="color:black;margin-top:-32px" aria-current="page" href="{% url 'dashboard'  %}">Home</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" style="color:blue;margin-top:-32px" href="#">Link</a>
@@ -96,9 +96,16 @@
 <!--&lt;!&ndash;                            <input class="form-control me-2" style="margin-top:-19px;" type="search" placeholder="Search" aria-label="Search">&ndash;&gt;-->
 <!--                            <button class="btn btn-outline-success" style="margin-top:-19px;" type="submit">Logout</button>-->
 <!--                        </form>-->
-                            <form class="d-flex justify-content-end">
-                              <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>
-                            </form>
+<!--                            <form class="d-flex justify-content-end">-->
+
+<!--                              <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>-->
+
+<!--                            </form>-->
+
+                        <div>
+                            <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>
+
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -116,7 +123,7 @@
                 <a class="nav-link" href="#"><i class="fas fa-user-clock"></i> Employee Leave</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Calendar</a>
+                <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-calendar-alt"></i> Calendar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'holidayView'%}"><i class="fas fa-calendar-day"></i> Holiday</a>

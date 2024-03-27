@@ -6,6 +6,7 @@
         .button-container {
             text-align: left;
             width:1100px;
+
         }
         .staff-item {
             border: 1px solid #ccc;
@@ -34,39 +35,39 @@
         }
 
         .button:hover {
-            background-color: #0056b3; /* Change color on hover if desired */
+            background-color: #0056b3; / Change color on hover if desired /
         }
 
         .edit-button {
-            background-color: transparent; /* Choose your desired background color */
+            background-color: transparent; / Choose your desired background color /
             border: none;
             padding: 0;
             cursor: pointer;
         }
 
         .edit-button img {
-            width: 20px; /* Adjust the width of the icon as needed */
-            height: 20px; /* Adjust the height of the icon as needed */
+            width: 20px; / Adjust the width of the icon as needed /
+            height: 20px; / Adjust the height of the icon as needed /
         }
 
         .edit-button:hover {
-            background-color: transparent; /* Change color on hover if desired */
+            background-color: transparent; / Change color on hover if desired /
         }
 
         .make-inactive-button {
-            background-color: transparent; /* Choose your desired background color */
+            background-color: transparent; / Choose your desired background color /
             border: none;
             padding: 0;
             cursor: pointer;
         }
 
         .make-inactive-button img {
-            width: 20px; /* Adjust the width of the icon as needed */
-            height: 20px; /* Adjust the height of the icon as needed */
+            width: 20px; / Adjust the width of the icon as needed /
+            height: 20px; / Adjust the height of the icon as needed /
         }
 
         .make-inactive-button:hover {
-            background-color: transparent; /* Change color on hover if desired */
+            background-color: transparent; / Change color on hover if desired /
         }
 
         .button2 {
@@ -74,7 +75,7 @@
 
         }
 
-        /* Style for the dialog */
+        / Style for the dialog /
         .modal {
             display: none;
             position: fixed;
@@ -93,6 +94,9 @@
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            border-radius:25px;
+                        overflow: auto;
+
         }
 
         #updateForm {
@@ -100,6 +104,8 @@
             flex-direction: column;
             max-width: 400px;
             margin: auto;
+                        overflow: auto;
+
         }
 
         #updateForm div {
@@ -137,9 +143,9 @@
             padding: 10px;
             width: 100%;
             box-sizing: border-box;
-            border: 1px solid #ccc; /* Add a border to input fields */
-            border-radius: 5px; /* Add rounded corners to input fields */
-            margin-top: 5px; /* Add some space between input fields */
+            border: 1px solid #ccc; / Add a border to input fields /
+            border-radius: 5px; / Add rounded corners to input fields /
+            margin-top: 5px; / Add some space between input fields /
         }
 
         #createUserForm button {
@@ -148,10 +154,10 @@
             border: none;
             padding: 12px;
             cursor: pointer;
-            border-radius: 5px; /* Add rounded corners to buttons */
+            border-radius: 5px; / Add rounded corners to buttons /
         }
 
-        /* Close button style */
+        / Close button style /
         .close {
             color: #aaa;
             float: right;
@@ -175,7 +181,7 @@
             margin-top: 5px;
         }
 
-        /* Style for labels of dropdowns */
+        / Style for labels of dropdowns /
         label {
             font-weight: bold;
             margin-bottom: 5px;
@@ -206,19 +212,18 @@
 
 
 
-
 </style>
 <br>
 <div class="flex-container" >
-    <div class="button-container">
-        <div style="margin-top:50px;">
-           <h2>Active Employee List</h2>
-        </div>
-        <div style="margin-top:-50px;">
-        <button class="button button2"  class= "button" class="button:hover" style="margin-left:900px; height:50px" onclick="openCreateUserDialog()">Add Employee</button>
-        </div>
+    <div class="button-container" style="overflow: auto;">
+        <h2 style="margin-top:60px">Active Employee List</h2>
+
     </div>
-    <table class="staff-table">
+    <div style="clear:both;"></div> <!-- Clear floating elements -->
+    <div>
+        <button class="button button2"  class= "button" class="button:hover" onclick="openCreateUserDialog()"  style="display: block;margin-left:940px;height:50px;margin-top:-40px;text-decoration:none;">Add Employee</button>
+    </div>
+    <table class="staff-table" style="margin-top:10px;">
         <thead>
             <tr>
                 <th>Employee Id</th>
@@ -273,8 +278,8 @@
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer '+ storedAccessToken,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
+                //'Content-Type': 'application/json',
+                //'Accept': 'application/json',
             },
             mode: 'cors',
         })
@@ -649,7 +654,7 @@
 
             updateForm.innerHTML = '';
 
-            const userListUrl = baseURL + '/get-store-list/';
+            const userListUrl = baseURL + '/emp-list/';
 
             fetch(userListUrl, {
                 method: 'GET',
@@ -670,40 +675,40 @@
                 return response.json();
             })
             .then(users => {
-                // Update the global userList variable
                 userList = users;
-                console.log("=====", userList.map(user => user.email))
-                // Create dropdown and other form elements
-                const userListDropdown = createDropdownElement('userLists', 'Restaurant', userList.map(user => user.email));
-                const nameInput = createInputElement('text', 'name', 'Name', `${data.first_name} ${data.last_name}`);
-                const emailInput = createInputElement('text', 'email', 'Email', data.email);
-                const contactInput = createNumericInputElement('contact', 'Contact', data.contact);
-                const genderInput = createDropdownElement('gender', 'Gender', ['Male', 'Female']);
-                genderInput.querySelector('select').value = data.gender || '';
+                const idInput = createInputElement('text', 'id', 'Id', `${data.emp_id}`);
+                const nameInput = createInputElement('text', 'name', 'Name', `${data.emp_name}`);
+                const emailInput = createInputElement('text', 'email', 'Email', data.emp_email);
 
-                const activeInput = createDropdownElement('active', 'Active', ['Yes', 'No']);
-                activeInput.querySelector('select').value = data.is_active || '';
-
-                const vehicleInput = createInputElement('text', 'vehicle', 'Vehicle', data.vehicle_number || '');
 
                 const profilePictureInput = document.createElement('input');
                 profilePictureInput.type = 'file';
                 profilePictureInput.id = 'newProfilePicture';
                 profilePictureInput.accept = 'image/*';
 
+                const addressInput = createInputElement('text', 'address', 'Address', data.emp_address);
+                const contactInput = createNumericInputElement('contact', 'Contact', data.emp_contact);
+		        const userDesignationDropdown = createDropdownElement('userDesignations', 'userDesignation', userList.map(user => user.emp_designation));
+
+                const roleInput = createDropdownElement('role', 'Role', ['Admin', 'HR', 'Employee']);
+                roleInput .querySelector('select').value = data.emp_role || '';
+
+                const companyInput = createDropdownElement('company', 'Company', ['PranshTech Solutions', 'Textdrip']);
+                companyInput.querySelector('select').value = data.emp_company || '';
+
                 const updateButton = document.createElement('button');
                 updateButton.textContent = 'Update';
                 updateButton.addEventListener('click', () => onUpdateButtonClick(data.id));
 
-                updateForm.appendChild(userListDropdown)
+                updateForm.appendChild(idInput)
                 updateForm.appendChild(nameInput);
                 updateForm.appendChild(emailInput);
-                updateForm.appendChild(contactInput);
-                updateForm.appendChild(genderInput);
-                updateForm.appendChild(activeInput);
-                updateForm.appendChild(vehicleInput);
                 updateForm.appendChild(profilePictureInput);
-                updateForm.appendChild(updateButton);
+                updateForm.appendChild(addressInput);
+                updateForm.appendChild(contactInput);
+                updateForm.appendChild(userDesignationDropdown);
+                updateForm.appendChild(roleInput);
+                updateForm.appendChild(companyInput);
 
                 updateModal.style.display = 'block';
             })
@@ -719,22 +724,15 @@
         input.id = id;
         input.value = value || '';
 
-        // Add an event listener to allow only numeric input and limit to 10 characters
         input.addEventListener('input', function (event) {
             let inputValue = event.target.value;
-
-            // Remove non-numeric characters
             inputValue = inputValue.replace(/[^0-9]/g, '');
-
-            // Limit to exactly 10 characters
             inputValue = inputValue.substring(0, 10);
 
             event.target.value = inputValue;
             console.log(inputValue.length)
             if (!/^\d+$/.test(inputValue)) {
                 alert("Only numeric characters are allowed.")
-                //errorDiv.textContent = 'Only numeric characters are allowed.';
-                //errorDiv.style.color = 'red';
             } else if (inputValue.length !== 10) {
                 errorDiv.textContent = 'Contact must be exactly 10 characters.';
                 errorDiv.style.color = 'red';
@@ -794,23 +792,22 @@
 
 
     function onUpdateButtonClick(userId) {
-        const selectedUserEmail  = document.getElementById('userLists').value;
-        const selectedUser = userList.find(user => user.email === selectedUserEmail);
+        const selectedUserDesignation  = document.getElementById('userDesignations').value;
+        const selectedUser = userList.find(user => user.email === selectedUserDesignation);
 
         if (!selectedUser) {
-            console.error('Invalid user selected or user not found:', selectedUserEmail);
+            console.error('Invalid user selected or user not found:', selectedUserDesignation);
             alert('Invalid user selected.');
             return;
         }
 
         const selectedUserId = selectedUser.id;
+        const emp_id = document.getElementById('id').value;
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const contact = document.getElementById('contact').value;
-        const gender = document.getElementById('gender').value;
-        const active = document.getElementById('active').value;
-        const vehicle = document.getElementById('vehicle').value;
-
+        const role = document.getElementById('role').value;
+        const company = document.getElementById('company').value;
         const profilePictureInput = document.getElementById('newProfilePicture');
         const profilePicture = profilePictureInput.files[0];
         console.log(profilePicture)
@@ -831,18 +828,15 @@
             alert('Please enter a valid 10-digit contact number.');
             return;
         }
-        if (!gender) {
-            alert('Please Select the Gender.');
+        if (!role) {
+            alert('Please Select the Role.');
             return;
         }
-        if (!active) {
-            alert('Please Select the Active Status.');
+        if (!company) {
+            alert('Please Select the Company.');
             return;
         }
-        if (!vehicle) {
-            alert('Please Fill the Vehicle Number.');
-            return;
-        }
+
 
         function isValidEmail(email) {
             // Regular expression for a simple email validation
@@ -852,15 +846,14 @@
 
         const updatedData = {
             store: selectedUserId,
-            first_name: name,
-            email: email,
-            contact: contact,
-            gender: gender,
-            is_active: active,
-            vehicle_number: vehicle
+            emp_name: name,
+            emp_email: email,
+            emp_contact: contact,
+            emp_role: role,
+            emp_company: company
         };
 
-        const updateUrl = baseURL + `/restaurant-staff/${userId}/`;
+        const updateUrl = baseURL + `/emp-list/${userId}/`;
 
         const formData = new FormData();
         for (const key in updatedData) {
@@ -913,31 +906,46 @@
     }
 
     function onDeleteButtonClick(userId) {
-        const deleteUrl = baseURL + `/emp-list/${userId}/`;
+    const deleteUrl = baseURL + `/emp-list/${userId}/`;
 
-        fetch(deleteUrl, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': 'Bearer ' + storedAccessToken,
-            },
-            mode: 'cors',
-        })
-        .then(response => {
-            if (!response.ok) {
-                if(response.status == 401){
-                    showTokenExpiredAlert();
-                }
-                throw new Error('Network response was not ok');
+    // Create a new XMLHttpRequest object
+    var xhr = new XMLHttpRequest();
+
+    // Configure the request
+    xhr.open('DELETE', deleteUrl, true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + storedAccessToken);
+
+    // Set up a function to handle the response
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            // Request was successful
+            console.log('User deleted successfully:', xhr.responseText);
+
+            // If you want to remove the deleted element from the DOM without refreshing
+            const elementToDelete = document.getElementById('element_' + userId);
+            if (elementToDelete) {
+                elementToDelete.remove();
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('User deleted successfully:', data);
+
+            // If you want to fetch updated data after deletion and update the UI
             fetchData(); // Fetch updated data after deletion
-            location.reload();
-        })
-        .catch(error => console.error('Error deleting user:', error));
-    }
+        } else {
+            // Request failed
+            console.error('Error deleting user:', xhr.statusText);
+            if (xhr.status == 401) {
+                showTokenExpiredAlert();
+            }
+        }
+    };
+
+    // Set up a function to handle errors
+    xhr.onerror = function() {
+        console.error('Error deleting user:', xhr.statusText);
+    };
+
+    // Send the request
+    xhr.send();
+}
 
     function onMakeInactive(userId) {
 
@@ -975,3 +983,4 @@
     <script src="{% static 'account/js/dashboard.js' %}"></script>
 </div>
 {% endblock %}
+

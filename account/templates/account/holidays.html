@@ -130,12 +130,50 @@
         </div>
     </div>
 </div>
+<!--<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--  <div class="modal-dialog">-->
+<!--    <div class="modal-content">-->
+<!--      <div class="modal-header">-->
+<!--        <h5 class="modal-title" id="exampleModalLabel">Update Holiday</h5>-->
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--          <span aria-hidden="true">&times;</span>-->
+<!--      </div>-->
+<!--      <div class="modal-body">-->
+<!--        &lt;!&ndash; Update form fields go here &ndash;&gt;-->
+<!--        <form id="updateForm">-->
+<!--          <div class="mb-3">-->
+<!--            <label for="holidayName" class="form-label">Holiday Name</label>-->
+<!--            <input type="text" class="form-control" id="holidayName" required>-->
+<!--          </div>-->
+<!--          <div class="mb-3">-->
+<!--            <label for="holidayDate" class="form-label">Holiday Date</label>-->
+<!--            <input type="date" class="form-control" id="holidayDate" required>-->
+<!--          </div>-->
+<!--          <div class="mb-3">-->
+<!--            <label for="holidayDay" class="form-label">Holiday Day</label>-->
+<!--            <input type="text" class="form-control" id="holidayDay" required>-->
+<!--          </div>-->
+<!--          <input type="hidden" id="holidayId">-->
+<!--        </form>-->
+<!--      </div>-->
+<!--      <div class="modal-footer">-->
+<!--        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">-->
+<!--            <span aria-hidden="true">Close</span>-->
+<!--        </button>-->
+<!--        <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Save changes</button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Update Holiday</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">&times;</button>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+         </button>
+<!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
       </div>
       <div class="modal-body">
         <!-- Update form fields go here -->
@@ -156,7 +194,9 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">Close</span>
+        </button>
         <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Save changes</button>
       </div>
     </div>

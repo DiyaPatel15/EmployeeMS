@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- ===== CSS ===== -->
     <link rel="stylesheet" href="{% static 'account/css/authentication.css' %}" type="text/css">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
 
     <title>Login & Registration Form</title>
 </head>
@@ -20,11 +24,11 @@
                 <form action="#">
                     <div class="input-field">
                         <input type="text" id="email" name="email" placeholder="Enter your email" required>
-                        <i class="uil uil-envelope icon"></i>
+                        <i class="uil uil-envelope icon" style="margin-top:5px;"></i>
                     </div>
                     <div class="input-field">
                         <input type="password" id="login_password" name="login_password" class="password" placeholder="Enter your password" required>
-                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-lock icon" style="margin-top:4px;"></i>
                         <i class="uil uil-eye-slash showHidePw"></i>
                     </div>
 
@@ -63,24 +67,31 @@
                         <i class="uil uil-user"></i>
                     </div>
                     <div class="input-field">
+                        <input type="text" id="emp_birthday" name="emp_birthday" placeholder="Enter your birthday date" required>
+                        <i class="fa fa-birthday-cake" style="margin-top:5px;"></i>
+                    </div>
+                    <div class="input-field">
                         <input type="text" id="emp_email" name="emp_email" placeholder="Enter your email" required>
-                        <i class="uil uil-envelope icon"></i>
+                        <i class="uil uil-envelope icon" style="margin-top:4px;"></i>
                     </div>
                     <div class="input-field">
                         <input type="number" id="emp_contact" name="emp_contact" placeholder="Enter your contact number" required>
-                        <i class="uil uil-phone-alt icon"></i>
+                        <i class="uil uil-phone-alt icon" style="margin-top:5px;"></i>
                     </div>
                     <div class="input-field">
                         <input type="text" id="emp_address" name="emp_address" placeholder="Enter your address" required>
-                        <i class="uil uil-location-point icon"></i>
+                        <i class="uil uil-location-point icon" style="margin-top:5px;"></i>
                     </div>
                     <div class="input-field">
                         <input type="file" id="emp_profile" name="emp_profile" placeholder="Enter your profile" required>
-                        <i class="uil uil-image-upload icon"></i>
+                        <i class="uil uil-image-upload icon" style="margin-top:-8px;"></i>
                     </div>
+
+
                     <div class="input-field">
-                        <select id="emp_designation" name="emp_designation" required>
-                            <option value="" disabled selected>Select your designation</option>
+                        <i class="uil uil-briefcase-alt icon" style="margin-left:2px;margin-top:11px;" ></i>
+                        <select id="emp_designation" name="emp_designation"  required>
+                            <option  value="" disabled selected>Select your designation</option>
                             <option value="CEO">CEO</option>
                             <option value="COO">COO</option>
                             <option value="Project Manager">Project Manager</option>
@@ -105,7 +116,7 @@
                             <option value="Trainee">Trainee</option>
                             <!-- Add more options as needed -->
                         </select>
-                        <i class="uil uil-briefcase-alt icon"></i>
+
                     </div>
                     <div class="input-field">
                         <select id="emp_role" name="emp_role" required>
@@ -163,6 +174,7 @@
 
             const empId = document.getElementById("emp_id").value;
             const empName = document.getElementById("emp_name").value;
+            const empBirthday = document.getElementById("emp_birthday").value;
             const empEmail = document.getElementById("emp_email").value;
             const empAddress = document.getElementById("emp_address").value;
             const empContact = document.getElementById("emp_contact").value;
@@ -177,6 +189,7 @@
             const formData = new FormData();
             formData.append("emp_id", empId);
             formData.append("emp_name", empName);
+            formData.append("emp_birthday", empBirthday);
             formData.append("emp_email", empEmail);
             formData.append("emp_address", empAddress);
             formData.append("emp_contact", empContact);
