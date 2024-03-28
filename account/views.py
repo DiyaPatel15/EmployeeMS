@@ -264,6 +264,10 @@ def holiday_add_view(request):
 def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
+def emp_leave(request):
+    return render(request, 'account/employee_leave.html')
+
+
 
 def inout_view(request):
     form = In_Out.objects.all()

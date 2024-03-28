@@ -39,6 +39,7 @@ urlpatterns = [
                   path('holidayView/', holidayView, name="holidayView"),
                   path('holiday/add/', holiday_add_view, name='holiday_add'),
                   path('employeetask/', employee_task_View, name='employeetask'),
+                  path('emp-leave/', views.emp_leave, name="emp-leave"),
                   path('inout/', inout_view, name='inout'),
                   path('add-in-out/',add_inout_view,name='add-in-out'),
                   path('add-emp-task/',add_emptask_view,name='add-emp-task'),

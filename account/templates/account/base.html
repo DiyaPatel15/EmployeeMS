@@ -109,7 +109,9 @@
 <!--                            </form>-->
 
                         <div>
-                            <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>
+<!--                            <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>-->
+
+                                <a href="{% url 'home' %}"  onclick="logoutForm()">Logout</a>
 
                         </div>
                     </div>
@@ -126,7 +128,7 @@
                 <a class="nav-link" href="{% url 'emplistdata' %}"><i class="fas fa-users"></i> Employee</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#"><i class="fas fa-user-clock"></i> Employee Leave</a>
+                <a class="nav-link" href="{% url 'emp-leave' %}"><i class="fas fa-user-clock"></i> Employee Leave</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'calendar' %}"><i class="fas fa-calendar-alt"></i> Calendar</a>

@@ -10,6 +10,7 @@
         }
     .container-xxl{
       margin-left:265px;
+      margin-top:-520px;
     }
     .label-container {
         display: flex;
@@ -23,6 +24,10 @@
         margin-right: 10px; / Adjust as needed /
         margin-left: -28px;
     }
+
+        .post{
+        margin-top:-40px;
+        }
     </style>
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <div id="kt_content_container" class="container-xxl">
@@ -35,7 +40,7 @@
         <form action="https://upbeat-hertz.165-22-65-20.plesk.page/employeeleave" method="GET"
               class="d-flex align-items-center">
 
-            <div class="label-container">
+            <div class="label-container ml-1">
                 <label for="month" class="visually-hidden">Search Employee date</label>
 <!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
 <!--                       placeholder="Search Employee date">-->
@@ -46,17 +51,17 @@
 <!--            <label for="month" class="visually-hidden" style="margin-left:30px;">Search Employee date</label>-->
 <!--            <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
 <!--                   placeholder="Search Employee date" style="margin-right:250px ; margin-left:50px" >-->
-            <select class="form-select me-2 ml-5"  id="leavetypesearch" name="leavetypesearch"
-                    aria-label="Select Leave type">
+            <select class="form-select me-2"  id="leavetypesearch" name="leavetypesearch"
+                    aria-label="Select Leave type" style="height:39px;width:190px;border-radius:5px;">
                 <option value="">Select a Leave type...</option>
                 <option value="1">Paid Leave</option>
                 <option value="2">Sick Leave</option>
             </select>
-            <button class="btn btn-primary ml-1"  class= "button" class="button:hover" type="submit" name="submit" id="submit">Search</button>
+            <button  class="button" class="button:hover" type="submit" name="submit" id="submit" style="margin-left:2px;">Search</button>
         </form>
         <div class="card-toolbar">
-            <button type="button"  class= "button" class="button:hover" class="btn btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#kt_modal_add_customer">Add Employee leave
+            <button type="button" class="button" class="button:hover" data-bs-toggle="modal"
+                   data-bs-target="#kt_modal_add_customer" id="addEmployeeLeaveBtn">Add Employee Leave
             </button>
         </div>
     </div>
@@ -122,7 +127,7 @@
                         </button>
                     </div>
                     <!-- Modal body -->
-                    <div class="modal-body py-10 px-lg-17">
+                    <div class="container-fluid modal-body py-10 px-lg-17">
                         <input type="hidden" name="employee_id" value="60">
                         <!-- Scroll -->
                         <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px" style="max-height: 300px;">
@@ -138,6 +143,30 @@
                                     <option value="1">Paid Leave</option>
                                     <option value="2">Sick Leave</option>
                                 </select>
+                            </div>
+                            <div class="mt-4">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="leave_duration" id="fullDay"
+                                           value="fullDay">
+                                    <label class="form-check-label" for="fullDay">Full-day</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="leave_duration" id="halfDay"
+                                           value="halfDay">
+                                    <label class="form-check-label" for="halfDay">Half-day</label>
+                                </div>
+                            </div>
+                            <div id="halfDayOptions" style="display: none;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="half_day_option" id="firstHalf"
+                                           value="firstHalf">
+                                    <label class="form-check-label" for="firstHalf">First-half</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="half_day_option" id="secondHalf"
+                                           value="secondHalf">
+                                    <label class="form-check-label" for="secondHalf">Second-half</label>
+                                </div>
                             </div>
                             <!-- Radio buttons -->
                             <div data-kt-buttons="true">
@@ -170,7 +199,6 @@
                         <!-- Submit button -->
                         <button type="submit" id="kt_modal_add_customer_submit" class="btn btn-primary">
                             <span class="indicator-label">Submit</span>
-                            <span class="indicator-progress">Please wait...<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
                         </button>
                     </div>
                 </form>
@@ -178,13 +206,59 @@
         </div>
     </div>
 
+
     <!-- Scripts -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap Bundle with Popper -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
     <script>
-        // JavaScript code can be placed here
+const addEmployeeLeaveBtn = document.getElementById('addEmployeeLeaveBtn');
+
+        // Get the modal element
+        const modal = document.getElementById('kt_modal_add_customer');
+
+        // Add event listener to the button to toggle modal visibility
+        addEmployeeLeaveBtn.addEventListener('click', function () {
+            // Toggle modal visibility
+            const modalToggle = new bootstrap.Modal(modal);
+            modalToggle.toggle();
+        });
+
+        var leaveDurationRadios = document.querySelectorAll('input[name="leave_duration"]');
+leaveDurationRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        if (this.value === 'halfDay') {
+            document.getElementById('halfDayOptions').style.display = 'block';
+        } else {
+            document.getElementById('halfDayOptions').style.display = 'none';
+        }
+    });
+});
+
+        function validate() {
+    // Get the value of the date input
+    var dateInputValue = document.getElementById('leavedaterange').value;
+
+    // Check if the date input is empty
+    if (!dateInputValue) {
+        document.getElementById('dateError').innerText = 'Please enter a date';
+        return false;
+    }
+
+    // You can add additional validation logic here based on your requirements
+
+    // If validation passes, clear any previous error message
+    document.getElementById('dateError').innerText = '';
+
+    // Return true to indicate validation success
+    return true;
+}
     </script>
 {% endblock main-content %}
