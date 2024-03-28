@@ -264,6 +264,10 @@ def holiday_add_view(request):
 def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
+def emp_leave(request):
+    return render(request, 'account/employee_leave.html')
+
+
 
 def inout_view(request):
     form = In_Out.objects.all()
@@ -279,12 +283,12 @@ def add_emptask_view(request):
     return render(request, 'account/add-emp-task.html')
 
 
-def index(request):
+def Calendar(request):
     all_events = Events.objects.all()
     context = {
         "events": all_events,
     }
-    return render(request, 'account/index.html', context)
+    return render(request, 'account/calendar.html', context)
 
 
 def all_events(request):

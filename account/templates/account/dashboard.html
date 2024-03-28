@@ -121,9 +121,22 @@
                             <h3 class="card-title fw-bolder text-dark" >Today Birthday</h3>
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-2" >
-                            <div class="flex-grow-1">There are no records found</div>
-                        </div>
+                         <div class="card-body pt-2">
+                                    <div class="flex-grow-1" id="today-birthday-details">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sr. No</th>
+                                                    <th>Name</th>
+                                                    <th>Date of Birth</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="today-birthday-details-table">
+                                                <!-- Table rows will be dynamically added here -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                     </div>
                 </div>
                 <!-- Right Column -->
@@ -228,11 +241,6 @@
         </div>
     </div>
 </div>
-
-
-
-
-
     <!-- Bootstrap JS (Optional) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -275,9 +283,6 @@
 
       }
     </script>
-
-
-
     <script>
        <!-- JavaScript to set the src attribute of the QR code image -->
 
@@ -302,6 +307,88 @@
             dateElement.textContent = formattedDate;
         }
     });
+   </script>
+   <script>
+
+       function displayTodayBirthdayDetails() {
+    // URL to fetch today's birthday details from the JavaScript API
+    const todayBirthdayURL = 'http://127.0.0.1:8000/emp-list/'; // Replace with your actual endpoint
+
+    // Get the current date
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based month
+    const currentDay = currentDate.getDate();
+    const currentYear = currentDate.getFullYear();
+
+    // Make a request to fetch today's birthday details
+    fetch(todayBirthdayURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch birthday details');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const tableBody = document.getElementById('today-birthday-details-table');
+
+            // Clear any existing rows
+            tableBody.innerHTML = '';
+
+            // Check if there are any records found for today's birthday
+            const matchingBirthdays = data.filter(person => {
+                // Check if emp_birthday is not null or undefined
+                if (person.emp_birthday) {
+                    const [year, month, day] = person.emp_birthday.split('-');
+                    return parseInt(year) === currentYear && parseInt(month) === currentMonth && parseInt(day) === currentDay;
+                }
+                return false;
+            });
+
+            if (matchingBirthdays.length > 0) {
+                matchingBirthdays.forEach((birthdayPerson, index) => {
+                    // Create a new row in the table
+                    const row = document.createElement('tr');
+
+                    const serialNumberCell = document.createElement('td');
+                    serialNumberCell.textContent = index + 1;
+                    row.appendChild(serialNumberCell);
+
+                    // Populate the row with name and date of birth
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = birthdayPerson.emp_name;
+                    row.appendChild(nameCell);
+
+                    const dobCell = document.createElement('td');
+                    dobCell.textContent = birthdayPerson.emp_birthday;
+                    row.appendChild(dobCell);
+
+                    // Append the row to the table body
+                    tableBody.appendChild(row);
+                });
+            } else {
+                // If no records found, display a message
+                const noRecordsRow = document.createElement('tr');
+                const noRecordsCell = document.createElement('td');
+                noRecordsCell.setAttribute('colspan', '2');
+                noRecordsCell.textContent = 'No birthday records found for today.';
+                noRecordsRow.appendChild(noRecordsCell);
+                tableBody.appendChild(noRecordsRow);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching birthday details:', error);
+        });
+}
+
+// Call the function when the DOM content is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    displayTodayBirthdayDetails();
+});
+
+
+
+
+
    </script>
 
 <!--   <script>-->
