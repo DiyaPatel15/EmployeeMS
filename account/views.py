@@ -279,12 +279,12 @@ def add_emptask_view(request):
     return render(request, 'account/add-emp-task.html')
 
 
-def index(request):
+def Calendar(request):
     all_events = Events.objects.all()
     context = {
         "events": all_events,
     }
-    return render(request, 'account/index.html', context)
+    return render(request, 'account/calendar.html', context)
 
 
 def all_events(request):
