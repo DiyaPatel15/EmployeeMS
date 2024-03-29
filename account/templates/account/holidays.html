@@ -5,9 +5,10 @@
 
     .container-xxl {
         width: 1200px;
-        margin-top: -250px;
+        margin-top: 50px;
         padding: 0 15px;
-        margin-left: 150px;
+        margin-left: 60px;
+        font-size:13px;
 
     }
     .hidden {
@@ -90,7 +91,7 @@
                 <div class="container-xxl">
                     <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light p-3">
                         <!-- Left Section: Add Button -->
-                        <a href="{% url 'holiday_add' %}" class= "button" class="button:hover" class="btn btn-primary">Add</a>
+                        <a href="{% url 'holiday_add' %}" class= "button" class="button:hover" class="btn btn-primary" style="font-size:13px;">Add</a>
 
                         <!-- Center Section: Search Bar -->
                         <div class="search-bar-wrapper">
@@ -98,13 +99,13 @@
                                 <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                     <!-- Your SVG icon code -->
                                 </span>
-                                <input type="text" id="searchInput" class="form-control form-control-solid" style="width: 200px; padding-left: 40px;" placeholder="Search Holiday">
-                                <button class= "button" class="button:hover" style="height:40px;margin-left:1px" class="btn btn-primary" id="searchButton">Search</button>
+                                <input type="text" id="searchInput" class="form-control form-control-solid" style="width: 200px; padding-left: 40px;font-size:13px;" placeholder="Search Holiday">
+                                <button class= "button" class="button:hover" style="height:40px;margin-left:1px;font-size:13px;" class="btn btn-primary" id="searchButton">Search</button>
                             </div>
                         </div>
 
                         <!-- Right Section: Holiday List Text -->
-                        <h1 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0">Holiday List</h1>
+                        <h3 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0" style="font-size:22px;">Holiday List</h3>
                     </div>
 
                     <!-- Table Body -->

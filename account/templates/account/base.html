@@ -21,29 +21,33 @@
         padding: 0px;
         padding-top:40px;
 
-
-    }
-        .sidebar {
-          width: 20%;
-          background-color: black;
-         height: 100%;
         }
+
+        .sidebar {
+
+          background-color: black;
+         height: 100vh;
+         font-size:13px;
+
+        }
+
         / Sidebar styling /
         .sidebar {
           position: fixed;
           top: 0;
           left: 0;
-          height: 100%;
-          width: 250px;
           padding-top: 50px;
-          background-color: red;
+
         }
+
         .sidebar ul.navbar-nav li.nav-item {
           padding: 8px 15px;
         }
+
         .sidebar ul.navbar-nav li.nav-item a.nav-link {
           color: #fff;
         }
+
         .sidebar ul.navbar-nav li.nav-item a.nav-link:hover {
           color: #007bff;
         }
@@ -57,14 +61,14 @@
     <div class="row">
         <div class="col">
 
-    <div class="sidebar" style="width:250px;">
+    <div class="sidebar" style="width:250px;margin-top:60px;position:fixed;">
         <div>
 
-            <img alt="Logo" src="https://i.ibb.co/mcLscF0/pranshtech-2.jpg" class="align-items-center" height="100px" width="250px" style="margin-top: -50px;">
+            <img alt="Logo" src="https://i.ibb.co/mcLscF0/pranshtech-2.jpg" class="align-items-center" height="90px" width="250px" style="margin-top:-95px;position:fixed;">
 
         </div>
-        <div>
-            <nav class="navbar navbar-expand-lg navbar-light " style="margin-right:-1132px;margin-left:250px;margin-top:-89px ; height:90px;box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);">
+        <div style="position:fixed;width:70%;">
+            <nav class="navbar navbar-expand-lg navbar-light " style="margin-right:-1132px;margin-left:250px;margin-top:-84px;height:85px;box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);">
                 <div class="container-fluid">
 <!--                    <a class="navbar-brand" style="color:black;margin-top:-42px;margin-left:20px" href="#">Navbar</a>-->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -98,28 +102,18 @@
                                 <a class="nav-link disabled" style="color:black;margin-top:-19px"  href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                             </li>
                         </ul>
-<!--                        <form class="d-flex">-->
-<!--&lt;!&ndash;                            <input class="form-control me-2" style="margin-top:-19px;" type="search" placeholder="Search" aria-label="Search">&ndash;&gt;-->
-<!--                            <button class="btn btn-outline-success" style="margin-top:-19px;" type="submit">Logout</button>-->
-<!--                        </form>-->
-<!--                            <form class="d-flex justify-content-end">-->
 
-<!--                              <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>-->
-
-<!--                            </form>-->
 
                         <div>
 <!--                            <button class="btn btn-outline-danger" class= "button" class="button:hover" style="margin-top:-19px; margin-left:570px" onclick="logoutForm()">Logout</button>-->
-
-                                <a href="{% url 'home' %}"  onclick="logoutForm()">Logout</a>
-
+                               <a href="{% url 'home' %}">Logout</a>
                         </div>
                     </div>
                 </div>
             </nav>
         </div>
 
-        <ul class="navbar-nav">
+        <ul class="navbar-nav" style="position:fixed;">
 
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
@@ -154,34 +148,8 @@
         </ul>
     </div>
     </div>
-<!--    <div>-->
-<!--        <nav class="navbar navbar-expand-lg navbar-light">-->
-<!--  <a class="navbar-brand" href="#">Navbar</a>-->
-<!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--    <span class="navbar-toggler-icon"></span>-->
-<!--  </button>-->
 
-<!--  <div class="collapse navbar-collapse" id="navbarTogglerDemo02">-->
-<!--    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">-->
-<!--      <li class="nav-item active">-->
-<!--        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-<!--      </li>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link" href="#">Link</a>-->
-<!--      </li>-->
-<!--      <li class="nav-item">-->
-<!--        <a class="nav-link disabled" href="#">Disabled</a>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--    <form class="form-inline my-2 my-lg-0">-->
-<!--      <input class="form-control mr-sm-2" type="search" placeholder="Search">-->
-<!--      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">-->
-<!--        <a class="nav-link" href="{% url 'home' %}" >Logout</a>-->
-<!--          </button>-->
-<!--    </form>-->
-<!--  </div>-->
-<!--</nav>-->
-<!--    </div>-->
+
     <div class="col" >
         {% block main-content %}{% endblock %}
     </div>

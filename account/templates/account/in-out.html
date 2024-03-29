@@ -20,9 +20,10 @@
     }
     .container-xxl
     {
-    margin-left:260px;
-    margin-top:-520px;
-    width:1100px;
+      margin-left:-100px;
+      margin-top:110px;
+      width:1100px;
+      font-size:13px;
     }
 </style>
 <div class="container-xxl">
@@ -32,20 +33,20 @@
 
              <div class="input-group" style="width:150px;">
 
-                    <input type="text"   data-kt-customer-table-filter="search" id="searchInput" value="" name="searchInput" class="form-control form-control-solid search-input" placeholder="Search Employee" fdprocessedid="3pql1a">
+                    <input type="text" style="font-size:13px;"  data-kt-customer-table-filter="search" id="searchInput" value="" name="searchInput" class="form-control form-control-solid search-input" placeholder="Search Employee" fdprocessedid="3pql1a">
              </div>
-             <div style="margin-top:-39px;margin-left:152px;" >
-                 <button  class="button" class="button:hover" class="btn btn-primary ml-2 search-button" type="submit" name="searchButton" id="searchButton" fdprocessedid="48081" onclick="searchInOut()">Search</button>
+             <div style="margin-top:-39px;margin-left:152px;">
+                 <button style="font-size:13px;"  class="button" class="button:hover" class="btn btn-primary ml-2 search-button" type="submit" name="searchButton" id="searchButton" fdprocessedid="48081" onclick="searchInOut()">Search</button>
              </div>
     </form>
     <div class="card-title">
-        <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0">Employee Request list</h3>
+        <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0" style="font-size:22px;">Employee Request list</h3>
     </div>
     <div class="card-toolbar">
                 <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true"
                      id="kt-toolbar-filter"></div>
                 <button type="button" class="button" class="button:hover" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#kt_modal_add_customer" fdprocessedid="hrjq6j"><a href="{% url 'add-in-out' %}" class="text-white" style="text-decoration:none;">Add Request</a>
+                        data-bs-target="#kt_modal_add_customer" fdprocessedid="hrjq6j"><a href="{% url 'add-in-out' %}" class="text-white" style="text-decoration:none;font-size:13px;">Add Request</a>
                 </button>
     </div>
 </div>
@@ -66,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody class="fw-bold text-gray-600" id="inOutTableBody">
-                                  <tr>There are no records found.</tr>
+                                  <tr></tr>
                             </tbody>
                         </table>
                     </div>
@@ -238,9 +239,12 @@ function searchInOut() {
                         <td>${record.reason}</td>
                         <td>${record.approvel_status}</td>
 
-                        <td style="display:inline-flex; align-items:center; margin-right:10px">
-                            <button class="btn btn-primary" onclick="updateRecord(${record.id})">Update</button>
-                            <button class="btn btn-danger" onclick="deleteRecord(${record.id})">Delete</button>
+                        <td>
+                            <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${record.id})">...</button>
+                            <div id="actionMenu_${record.id}" class="action-menu hidden mt-2">
+                                <button class="btn btn-primary text-primary . bg-light"  onclick="updateRecord(${record.id})">Update</button>
+                                <button class="btn btn-danger text-danger . bg-light" style="margin-right:-200px" onclick="deleteRecord(${record.id})">Delete</button>
+                            </div>
                         </td>
                     `;
                     inOutTableBody.appendChild(row);

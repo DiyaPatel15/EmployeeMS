@@ -11,6 +11,7 @@
         .container-xxl {
                 margin-left: -490px; / Adjust the left margin as needed /
                 margin-top:50px;
+                font-size:13px;
 
 
         }
@@ -28,7 +29,7 @@
     <div class="post d-flex flex-column-fluid ml-5" id="kt_post">
         <div class="container-xxl">
             <div class="row mt-5 mb-2 ml-1">
-                <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0">Employee Task list</h3>
+                <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0" style="font-size:22px;">Employee Task list</h3>
             </div>
             <div class="card">
                 <div class="card-header border-1 pt-6" style="display: flex; align-items: center;">
@@ -67,14 +68,14 @@
                 </select>
                </div>
                 <div>
-                    <button  class="button" class="button:hover" type="submit" style="margin-left:5px;">Search</button>
+                    <button  class="button" class="button:hover" type="submit" style="margin-left:5px;font-size:13px;">Search</button>
                 </div>
                     <div class="card-toolbar ml-auto">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true"
                                  id="kt-toolbar-filter"></div>
-                            <button type="button"  class= "button" class="button:hover" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_add_customer" fdprocessedid="e02ael"><a href="{% url 'add-emp-task' %}" class="text-white" style="text-decoration:none;">Add Task Details</a>
+                            <button type="button"  class= "button" class="button:hover" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_add_customer" fdprocessedid="e02ael"><a href="{% url 'add-emp-task' %}" class="text-white" style="text-decoration:none;font-size:13px;">Add Task Details</a>
                             </button>
                         </div>
                     </div>
@@ -331,7 +332,6 @@
 
 </script>
 
-
 <script>
     // Function to filter tasks based on priority
 function filterTasksByPriority() {
@@ -349,7 +349,7 @@ function filterTasksByPriority() {
 }
 
 // Function to handle search button click event
-document.querySelector('.btn-primary').addEventListener('click', filterTasksByPriority);
+document.querySelector('.button').addEventListener('click', filterTasksByPriority);
 </script>
 
 

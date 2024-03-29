@@ -1,112 +1,10 @@
 {% extends 'account/base.html' %}
 
 {% load static %}
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--    <title>EMS</title>-->
-<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
-<!--    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
-<!--    &lt;!&ndash; FontAwesome CSS &ndash;&gt;-->
-<!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">-->
-<!--    &lt;!&ndash; Custom CSS &ndash;&gt;-->
-<!--    <style>-->
-<!--        .sidebar {-->
-<!--          position: fixed;-->
-<!--          top: 0;-->
-<!--          left: 0;-->
-<!--          width: 250px;-->
-<!--          padding-top: 50px;-->
-<!--          background-color: #343a40;-->
-<!--          max-height: 100%;-->
-<!--          overflow-y: auto; / Enable vertical scrolling /-->
-<!--      }-->
-
-<!--      .sidebar ul.navbar-nav li.nav-item {-->
-<!--          padding: 8px 15px;-->
-<!--      }-->
-
-<!--      .sidebar ul.navbar-nav li.nav-item a.nav-link {-->
-<!--          color: #fff;-->
-<!--      }-->
-
-<!--      .sidebar ul.navbar-nav li.nav-item a.nav-link:hover {-->
-<!--          color: #007bff;-->
-<!--      }-->
-
-<!--      .content {-->
-<!--          padding-left: 270px; / Sidebar width + additional padding /-->
-<!--      }-->
-
-<!--      @media (max-width: 768px) {-->
-<!--          .sidebar {-->
-<!--              width: 100%;-->
-<!--              padding-top: 15px; / Adjust padding for smaller screens /-->
-<!--              padding-bottom: 15px; / Add bottom padding to avoid content being hidden behind fixed footer /-->
-<!--              max-height: none; / Remove maximum height /-->
-<!--              overflow-y: visible; / Allow content to expand beyond viewport height /-->
-<!--          }-->
-
-<!--          .content {-->
-<!--              padding-left: 0;-->
-<!--          }-->
-<!--      }-->
-
-<!--    </style>-->
-<!--</head>-->
-<!--<body>-->
-
-<!--<div class="container">-->
-<!--    <div class="sidebar">-->
-<!--        <div>-->
-<!--&lt;!&ndash;            <img alt="Logo" src="https://i.ibb.co/mcLscF0/pranshtech-2.jpg" class="align-items-center" height="100px" width="250px">&ndash;&gt;-->
-<!--            <img alt="Logo" src="https://i.ibb.co/mcLscF0/pranshtech-2.jpg" class="align-items-center" height="100px" width="250px" style="margin-top: -50px;">-->
-
-<!--        </div>-->
-<!--        <ul class="navbar-nav">-->
-
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'dashboard' %}"><i class="fas fa-tachometer-alt"></i> Dashboard</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'emplistdata' %}"><i class="fas fa-users"></i> Employee</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#"><i class="fas fa-user-clock"></i> Employee Leave</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Calendar</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'holidayView'%}"><i class="fas fa-calendar-day"></i> Holiday</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'inout' %}"><i class="fas fa-sign-in-alt"></i> In-Out Request</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'employeetask' %}"><i class="fas fa-tasks"></i> Employee Task</a>-->
-<!--            </li>-->
-<!--             <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'issueticket'%}"><i class="fas fa-ticket-alt"></i> Isuue Ticket</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" href="{% url 'change_pass' %}"><i class="fas fa-lock"></i> Change Password</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link" onclick="logoutForm()"><i class="fas fa-sign-out-alt"></i> Logout</a>-->
-<!--            </li>-->
-<!--        </ul>-->
-
-<!--    </div>-->
-
-
-
-
-
 {% block main-content %}
 
-    <div class="content mt-5" >
+
+<div class="content mt-5">
     <div class="post d-flex flex-column-fluid" id="kt_post">
         <!-- Container -->
         <div id="kt_content_container" class="container-xxl" >
@@ -115,15 +13,15 @@
                 <!-- Left Column -->
                 <div class="col-xl-8 " >
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mb-xl-3 mt-4 "   style="width: 500px; height: 280px;margin-left:-420px">
+                    <div class="card card-xxl-stretch mb-xl-3 mt-5"   style="width: 500px; height: 380px;margin-left:-430px;">
                         <!-- Header -->
                         <div class="card-header border-0 ">
-                            <h3 class="card-title fw-bolder text-dark" >Today Birthday</h3>
+                            <h5 class="card-title fw-bolder text-dark" >Today Birthday</h5>
                         </div>
                         <!-- Body -->
                          <div class="card-body pt-2">
                                     <div class="flex-grow-1" id="today-birthday-details">
-                                        <table class="table">
+                                        <table class="table" style="font-size:12px">
                                             <thead>
                                                 <tr>
                                                     <th>Sr. No</th>
@@ -142,10 +40,10 @@
                 <!-- Right Column -->
                 <div class="col-xl-3 ">
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mb-xl-4 mt-4" style="width: 225px; height: 400px; margin-left:-320px;" >
+                    <div class="card card-xxl-stretch mb-xl-4 mt-5" style="width: 175px; height: 380px; margin-left:-320px;">
                         <!-- Header -->
                         <div class="card-header  border-0">
-                            <h3 class="card-title fw-bolder text-dark">QR-Code</h3>
+                            <h5 class="card-title fw-bolder text-dark">QR-Code</h5>
                         </div>
                         <!-- Body -->
                         <div class="card-body pt-2">
@@ -154,7 +52,7 @@
 <!--                                    <img style="width:100px; height:100px;" src="https://chart.googleapis.com/chart?chs=400x400&amp;cht=qr&amp;chl=89b0c2d8d8a35d1e74a8edf68ddd5b4fd3d821e0d8653a937c0b159fc6d24e8e&amp;choe=UTF-8">-->
                                          <!-- Add this div where you want to display the QR code -->
                                             <div id="qrcode-container">
-                                                <img id="qr-code-image" style="height:200px;width:200px;margin-left:-13px" src="http://127.0.0.1:8000/generate-qr/" alt="QR Code">
+                                                <img id="qr-code-image" style="height:150px;width:150px;margin-left:-13px;" src="http://127.0.0.1:8000/generate-qr/" alt="QR Code">
                                             </div>
 
                                 </span>
@@ -167,16 +65,16 @@
                 <!-- Left Column -->
                 <div class="col-xl-4 ">
                     <!-- Tables Widget 9 -->
-                    <div class="card card-xxl-stretch mb-5 mb-xl-8" style="width: 500px; height: 280px; margin-left:-420px;margin-top:-30px" >
+                    <div class="card card-xxl-stretch mb-5 mb-xl-8" style="width: 500px; height: 280px; margin-left:-430px;margin-top:-30px;">
                         <!-- Header -->
                         <div class="card-header  border-0">
-                            <h3 class="card-title fw-bolder text-dark">Employee Statistics</h3>
+                            <h5 class="card-title fw-bolder text-dark">Employee Statistics</h5>
                         </div>
                         <div class="card-body py-3">
                             <!-- Table Container -->
                             <div class="table-responsive">
                                 <!-- Table -->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4">
+                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="font-size:12px;">
                                     <!-- Table Body -->
                                     <tbody>
                                         <tr>
@@ -198,17 +96,17 @@
                 <!-- Right Column -->
                 <div class="col-xl-8  ">
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mr-6 mb-xl-8" style="width: 590px; height: 280px; margin-top:-29px; margin-left:-115px;">
+                    <div class="card card-xxl-stretch mr-6 mb-xl-8" style="width: 590px; height: 280px; margin-top:-30px; margin-left:-120px;">
                         <!-- Header -->
                         <div class="card-header border-0">
-                            <h3 class="card-title fw-bolder text-dark">Today Task</h3>
-                            <h3 class="card-title fw-bolder text-dark" id="today-date" style="margin-left:340px;margin-top:-42px"></h3>
+                            <h5 class="card-title fw-bolder text-dark">Today Task</h5>
+                            <h5  class="card-title fw-bolder text-dark" id="today-date" style="margin-left:340px;margin-top:-42px"></h5>
 <!--                            <h3 class="card-title fw-bolder text-dark" id="currentDate" style="margin-left:340px;margin-top:-42px"></h3>-->
                         </div>
                         <!-- Body -->
                         <div class="card-body pt-2">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" style="font-size:12px;">
                                     <thead>
                                         <tr class="fw-bolder text-muted">
                                             <th class="min-w-100px">Task Link</th>
