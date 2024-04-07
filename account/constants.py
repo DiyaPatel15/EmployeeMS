@@ -63,3 +63,68 @@ APPROVEL_STATUS=(
     ("Rejected","Rejected"),
     ("Pending","Pending")
 )
+
+ISSUE_STATUS =(
+    ("Pending","Pending"),
+    ("Solved","Solved")
+)
+
+
+
+
+EVENT_DAY = (
+    ('Sunday', 'Sunday'),
+    ('Monday', 'Monday'),
+    ('Tuesday', 'Tuesday'),
+    ('Wednesday', 'Wednesday'),
+    ('Thursday', 'Thursday'),
+    ('Friday', 'Friday'),
+    ('Saturday', 'Saturday'),
+)
+
+LEAVE_TYPE = (
+    ("Planned", "Planned"),
+    ("Unplanned", "Unplanned"),
+    ("Compensation", "Compensation")
+)
+
+LEAVE_DAY = (
+    ("Full Day", "Full Day"),
+    ("Half Day", "Half Day")
+)
+
+LEAVE_STATUS = (
+    ("Pending", "Pending"),
+    ("Approved", "Approved"),
+    ("Rejected", "Rejected")
+)
+
+ALLOWANCE_TYPE = (
+    ("Basic", "Basic"),
+    ("Allowance", "Allowance"),
+    ("Deduct", "Deduct")
+)
+
+
+AMOUNT_TYPE = (
+    # ("Percentage", "Percentage"),
+    ("Fixed", "Fixed"),
+    ("Python Code", "Python Code")
+)
+class TableName:
+    USERS = 'user'
+    HOLIDAYS = 'holiday'
+    LEAVES = 'leave'
+    SALARY = 'salary'
+    ALLOWANCE_PERCENTAGE_RULES = "allowance_percentage"
+    SALARY_STRUCTURE = "salary_structure"
+    EMPLOYEE_STATUS = "employee_status"
+    EMP_CONTRACT = "emp_contract"
+    RULES_CATEGORY = 'rules_category'
+    RULES = "rules"
+    EMPLOYEE_PAY_SLIP = "employee_pay_slip"
+    COMPUTE_PAY_SLIP = "compute_pay_slip"
+
+class Integers:
+    HUNDRED = 100
+    TWELVE = 12

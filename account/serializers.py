@@ -1,10 +1,11 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Employee,Issue_Ticket,Holiday,Employee_Task,In_Out
+from .models import Employee,Issue_Ticket,Holiday,Employee_Task,In_Out,SalaryStructure, EmployeeStatus, EmpContract, RulesCategory, Rule,EmployeePaySlip, EmployeePaySlipLines,Leave
 from rest_framework import serializers
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from account.utils import Util
+import ast
 
 
 
@@ -12,6 +13,11 @@ class EmployeeSerializer(ModelSerializer):
     class Meta:
         model = Employee
         fields = "__all__"
+
+
+
+
+
 
 class RelativeImageField(serializers.ImageField):
     def to_representation(self, value):
@@ -129,7 +135,9 @@ class UserPasswordResetSerializer(serializers.Serializer):
 class IssueTicketSerializer(ModelSerializer):
     class Meta:
         model = Issue_Ticket
-        fields = ['ticket_email', 'ticket_issue']
+        fields = '__all__'
+
+
 
 class HolidaySerializer(ModelSerializer):
     class Meta:
@@ -148,6 +156,82 @@ class In_Out_serializer(ModelSerializer):
     class Meta:
         model = In_Out
         fields = '__all__'
+
+
+class SalaryStructureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SalaryStructure
+        fields = ['id', 'structure_name']
+
+
+class EmployeeStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeStatus
+        fields = ['id', 'employee_status']
+
+
+class EmpContractSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmpContract
+        fields = ['id', 'user', 'first_name', 'last_name', 'ctc', 'salary_structure', 'start_date', 'end_date',
+                  'status']
+
+
+class RuleCategorySerializer(serializers.ModelSerializer):
+    # id = serializers.IntegerField(allow_null=True)
+    class Meta:
+        model = RulesCategory
+        fields = ['id', 'rule_category_name', 'rule_category_code']
+
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rule
+        fields = ['id', 'name', 'code', 'category_id', 'amount_type', 'amount_value', 'salary_structure_id']
+
+    def validate(self, data):
+        amt_type = data.get('amount_type')
+        amt_value = data.get('amount_value')
+
+        if amt_type == "Python Code" or amt_type != "Fixed":
+            try:
+                ast.parse(amt_value)
+            except SyntaxError as e:
+                raise serializers.ValidationError(f"Invalid Python Code {e}")
+
+        if amt_type == "Fixed":
+
+            try:
+                amt_value = float(amt_value)
+            except ValueError as e:
+                raise serializers.ValidationError(f"Please Enter The Digits {e}")
+
+        return data
+
+
+class EmployeePaySlipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeePaySlip
+        fields = ['id', 'emp', 'start_date', 'end_date', 'total_working_days', 'total_payable_days_count']
+
+    def validate(self, data):
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        duration = end_date - start_date
+        if duration.days < 0:
+            raise serializers.ValidationError("End date should be greater than Start date")
+        return data
+
+
+class EmployeePaySlipLinesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeePaySlipLines
+        fields = ["id", "slip_id", "name", "code", "category_id", "amount_type", "amount_value", "rate", "final"]
+
+class LeaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Leave
+        fields = ['id', 'emp_id', "leave_type", "leave_day", "from_date", "to_date", "status"]
 
 
 

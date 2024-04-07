@@ -1,171 +1,56 @@
 {% extends 'account/base.html' %}
 
 {% block main-content %}
-<style>
 
-    .container-xxl {
-        width: 1200px;
-        margin-top: 50px;
-        padding: 0 15px;
-        margin-left: 60px;
-        font-size:13px;
 
-    }
-    .hidden {
-    display: none;
-    }
-
-    .error {
-        color: #FF0000;
-    }
-
-    .page-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-    }
-
-    .table {
-        background-color: #f8f9fa;
-        width: 100%;
-        border-collapse: collapse;
-
-    }
-
-    .table th,
-    .table td {
-        background-color: #ffffff;
-        padding: 0.75rem;
-        border: none; / Remove borders from table cells /
-    }
-
-    / Add bottom border to table rows /
-    .table tbody tr {
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .pagination {
-        margin: 0;
-        padding: 0;
-    }
-
-    .pagination li {
-        display: inline-block;
-        margin-right: 0.5rem;
-    }
-
-    .pagination li:last-child {
-        margin-right: 0;
-    }
-
-    .pagination li.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-
-    .pagination li a.page-link {
-        color: #0d6efd;
-        border: 1px solid #0d6efd;
-        padding: 0.5rem 1rem;
-        text-decoration: none;
-    }
-
-    .pagination li.disabled .page-link {
-        color: #6c757d;
-        pointer-events: none;
-    }
-
-    .bg-light {
-        background-color: #f8f9fa;
-
-    }
-    a:hover {
-                        text-decoration: none;
-                        color: white; / Change to the desired color     /
-    }
-</style>
-<div class="post d-flex flex-column-fluid">
+<h1 class="main_heading">Holiday List</h1>
+<div class="post"  id="kt_post">
     <div class="container-xxl" >
-        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-            <div class="post d-flex flex-column-fluid" id="kt_post">
-                <div class="container-xxl">
-                    <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light p-3">
-                        <!-- Left Section: Add Button -->
-                        <a href="{% url 'holiday_add' %}" class= "button" class="button:hover" class="btn btn-primary" style="font-size:13px;">Add</a>
-
-                        <!-- Center Section: Search Bar -->
-                        <div class="search-bar-wrapper">
-                            <div class="search-bar d-flex align-items-center position-relative">
-                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                    <!-- Your SVG icon code -->
-                                </span>
-                                <input type="text" id="searchInput" class="form-control form-control-solid" style="width: 200px; padding-left: 40px;font-size:13px;" placeholder="Search Holiday">
-                                <button class= "button" class="button:hover" style="height:40px;margin-left:1px;font-size:13px;" class="btn btn-primary" id="searchButton">Search</button>
-                            </div>
-                        </div>
-
-                        <!-- Right Section: Holiday List Text -->
-                        <h3 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0" style="font-size:22px;">Holiday List</h3>
+        <div class="card content d-flex flex-column flex-column-fluid" id="kt_content">
+            <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light box_header_main">
+                <!-- Left Section: Add Button -->
+                 <button type="button" class="button_mian" data-bs-toggle="modal" data-bs-target="#addModal" onclick="displayAddModal()"  fdprocessedid="hrjq6j"><a>Add Holiday</a></button>
+                <!-- Center Section: Search Bar -->
+                <div class="search-bar-wrapper">
+                    <div class="search-bar d-flex align-items-center position-relative">
+                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                            <!-- Your SVG icon code -->
+                        </span>
+                        <input type="text" id="searchInput" class="form-control form-control-solid" placeholder="Search Holiday">
+                        <button class="button_mian" id="searchButton">Search</button>
                     </div>
+                </div>
 
-                    <!-- Table Body -->
-                    <div class="card-body pt-0">
-                        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="holidayTable">
-                            <thead>
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px sorting" style="width: 171.516px;">Sr no</th>
-                                    <th class="min-w-125px sorting" style="width: 171.516px;">Holiday</th>
-                                    <th class="min-w-125px sorting" style="width: 171.516px;">Date</th>
-                                    <th class="min-w-125px sorting" style="width: 171.516px;">Day</th>
-                                    <th class="min-w-125px sorting" style="width: 171.516px;">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="fw-bold text-gray-600" id="holidayTableBody">
-                                <!-- Table rows will be inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- End Table Body -->
+                <!-- Right Section: Holiday List Text -->
+<!--                        <h1 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0">Holiday List</h1>-->
+            </div>
+
+            <!-- Table Body -->
+            <div class="card-body pt-3">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer table_main" id="holidayTable">
+                        <thead>
+                            <tr class="text-start text-gray-400 fw-bolder">
+                                <th class="min-w-125px sorting">Sr no</th>
+                                <th class="min-w-125px sorting">Holiday</th>
+                                <th class="min-w-125px sorting">Date</th>
+                                <th class="min-w-125px sorting">Day</th>
+                                <th class="min-w-125px sorting">Actions</th>
+
+                            </tr>
+                        </thead>
+                        <tbody class="fw-bold text-gray-600" id="holidayTableBody">
+                            <!-- Table rows will be inserted here -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
+
+            <!-- End Table Body -->
         </div>
     </div>
 </div>
-<!--<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--  <div class="modal-dialog">-->
-<!--    <div class="modal-content">-->
-<!--      <div class="modal-header">-->
-<!--        <h5 class="modal-title" id="exampleModalLabel">Update Holiday</h5>-->
-<!--        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--          <span aria-hidden="true">&times;</span>-->
-<!--      </div>-->
-<!--      <div class="modal-body">-->
-<!--        &lt;!&ndash; Update form fields go here &ndash;&gt;-->
-<!--        <form id="updateForm">-->
-<!--          <div class="mb-3">-->
-<!--            <label for="holidayName" class="form-label">Holiday Name</label>-->
-<!--            <input type="text" class="form-control" id="holidayName" required>-->
-<!--          </div>-->
-<!--          <div class="mb-3">-->
-<!--            <label for="holidayDate" class="form-label">Holiday Date</label>-->
-<!--            <input type="date" class="form-control" id="holidayDate" required>-->
-<!--          </div>-->
-<!--          <div class="mb-3">-->
-<!--            <label for="holidayDay" class="form-label">Holiday Day</label>-->
-<!--            <input type="text" class="form-control" id="holidayDay" required>-->
-<!--          </div>-->
-<!--          <input type="hidden" id="holidayId">-->
-<!--        </form>-->
-<!--      </div>-->
-<!--      <div class="modal-footer">-->
-<!--        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">-->
-<!--            <span aria-hidden="true">Close</span>-->
-<!--        </button>-->
-<!--        <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Save changes</button>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--</div>-->
+
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -189,7 +74,16 @@
           </div>
           <div class="mb-3">
             <label for="holidayDay" class="form-label">Holiday Day</label>
-            <input type="text" class="form-control" id="holidayDay" required>
+              <select class="form-control" id="holidayDay" required>
+                  <option value="">Select Day</option>
+                  <option value="Monday">Monday</option>
+                  <option value="Tuesday">Tuesday</option>
+                  <option value="Wednesday">Wednesday</option>
+                  <option value="Thursday">Thursday</option>
+                  <option value="Friday">Friday</option>
+                  <option value="Saturday">Saturday</option>
+                  <option value="Sunday">Sunday</option>
+              </select>
           </div>
           <input type="hidden" id="holidayId">
         </form>
@@ -204,11 +98,100 @@
   </div>
 </div>
 
+
+
+
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Add Holiday</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add form fields -->
+                <form id="addForm">
+                    <div class="mb-3">
+                        <label for="holidayName1" class="form-label">Holiday Name</label>
+                        <input type="text" class="form-control" id="holidayName1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="holidayDate1" class="form-label">Holiday Date</label>
+                        <input type="date" class="form-control" id="holidayDate1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="holidayDay1" class="form-label">Holiday Day</label>
+                        <select class="form-control" id="holidayDay1" required>
+                            <option value="">Select Day</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addHoliday()">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this holiday?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteEmployeeConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteEmployeeConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteEmployeeConfirmationModalLabel">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this employee?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelDeleteEmployeeBtn">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteEmployeeBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Include jQuery and Bootstrap JavaScript -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
 <script>
             // Function to fetch and display holidays
             function fetchAndDisplayHolidays() {
@@ -238,24 +221,33 @@
                     <td>${holiday.holiday_name}</td>
                     <td>${holiday.holiday_date}</td>
                     <td>${holiday.holiday_day}</td>
-                    <td>
-                        <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${holiday.id})">...</button>
-                        <div id="actionMenu_${holiday.id}" class="action-menu hidden mt-2">
+                    <td class="editbtns">
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${holiday.id})">...</button>
+                        <div id="actionMenu_${holiday.id}" class="action-menu hidden mt-2" style="display: none;">
                             <button class="btn btn-primary text-primary . bg-light" onclick="updateHoliday(${holiday.id})">Update</button>
-                            <button class="btn btn-danger text-danger . bg-light" onclick="deleteHoliday(${holiday.id})">Delete</button>
+                            <button class="btn btn-danger text-danger . bg-light" onclick="displayConfirmationModal(${holiday.id})">Delete</button>
                         </div>
                     </td>
                 `;
                 return row;
             }
-             function toggleActionMenu(holidayId) {
-                    const actionMenu = document.getElementById(`actionMenu_${holidayId}`);
-                    if (actionMenu.classList.contains('hidden')) {
-                        actionMenu.classList.remove('hidden');
-                    } else {
-                        actionMenu.classList.add('hidden');
-                    }
-             }
+             // function toggleActionMenu(holidayId) {
+                // const actionMenu = document.getElementById(`actionMenu_${holidayId}`);
+                   // if (actionMenu.classList.contains('hidden')) {
+                      // actionMenu.classList.remove('hidden');
+                   // } else {
+                      // actionMenu.classList.add('hidden');
+                // }
+             // }
+
+             // Toggle action menu
+            function toggleActionMenu(holidayId) {
+                const actionMenu = $(`#actionMenu_${holidayId}`);
+                // Close all other action menus
+                $('[id^=actionMenu_]').not(actionMenu).slideUp();
+                // Toggle the targeted action menu
+                actionMenu.slideToggle();
+            }
 
              function clickOutsideHandler(e) {
                     if (!actionMenu.contains(e.target) && !actionButton.contains(e.target)) {
@@ -266,27 +258,54 @@
              }
 
 
-            // Function to delete a holiday
-            function deleteHoliday(holidayId) {
-                // Send delete request using AJAX
-                $.ajax({
-                    url: `http://127.0.0.1:8000/holidays/${holidayId}/`,
-                    type: 'DELETE',
-                    success: function(response) {
-                        // Remove the corresponding row from the table
-                        const row = document.getElementById(`holidayRow${holidayId}`);
-                        if (row) {
-                            row.remove();
-                            console.log(`Holiday with ID ${holidayId} deleted successfully`);
-                        } else {
-                            console.error(`Failed to find holiday row with ID ${holidayId}`);
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(`Failed to delete holiday with ID ${holidayId}: ${error}`);
-                    }
-                });
+
+// Function to delete a holiday
+function deleteHoliday(holidayId) {
+    // Send delete request using AJAX
+    $.ajax({
+        url: `http://127.0.0.1:8000/holidays/${holidayId}/`,
+        type: 'DELETE',
+        success: function(response) {
+            // Remove the corresponding row from the table
+            const row = document.getElementById(`holidayRow${holidayId}`);
+            if (row) {
+                row.remove();
+                console.log(`Holiday with ID ${holidayId} deleted successfully`);
+            } else {
+                console.error(`Failed to find holiday row with ID ${holidayId}`);
             }
+        },
+        error: function(xhr, status, error) {
+            console.error(`Failed to delete holiday with ID ${holidayId}: ${error}`);
+        }
+    });
+}
+
+// Function to display the delete confirmation modal
+function displayConfirmationModal(holidayId) {
+    // Store the holiday ID in a data attribute of the confirmation modal
+    $("#deleteConfirmationModal").data("holiday-id", holidayId);
+    $("#deleteConfirmationModal").modal("show"); // Show the modal
+}
+
+// Function to hide the delete confirmation modal
+function hideConfirmationModal() {
+    $("#deleteConfirmationModal").modal("hide"); // Hide the modal
+}
+
+// Event listener for the "Confirm Delete" button click
+$("#confirmDeleteBtn").on("click", function() {
+    hideConfirmationModal(); // Hide the confirmation modal
+    // Get the holiday ID from the data attribute of the confirmation modal
+    var holidayId = $("#deleteConfirmationModal").data("holiday-id");
+    // Call the deleteHoliday function to perform the deletion
+    deleteHoliday(holidayId);
+});
+
+// Event listener for the "Cancel" button click
+$("#cancelDeleteBtn").on("click", function() {
+    hideConfirmationModal(); // Hide the confirmation modal
+});
 
             // Function to handle search
             function searchHoliday() {
@@ -340,9 +359,16 @@
 // Function to submit the update form data via AJAX
 function submitUpdateForm() {
     const holidayId = $('#holidayId').val();
-    const holidayName = $('#holidayName').val();
+    const holidayName = $('#holidayName').val().trim();
     const holidayDate = $('#holidayDate').val();
     const holidayDay = $('#holidayDay').val();
+
+    if (typeof holidayName !== 'string' || !/^[a-zA-Z\s]+$/.test(holidayName)) {
+        alert('Holiday name must be a valid string containing only letters and spaces.');
+        // You can display an error message to the user or handle the situation in any other appropriate way
+        return; // Exit function early if the holiday name is not a valid string
+    }
+
 
     $.ajax({
         url: `http://127.0.0.1:8000/holidays/${holidayId}/`,
@@ -366,6 +392,120 @@ function submitUpdateForm() {
     });
 }
 
+ function displayAddModal() {
+        // Clear any previous data in the form fields
+
+        document.getElementById("holidayName1").value = "";
+        document.getElementById("holidayDate1").value = "";
+        document.getElementById("holidayDay1").value = "";
+
+        // Change modal title to indicate adding a new holiday
+        document.getElementById("exampleModalLabel").innerText = "Add Holiday";
+
+        // Show the modal
+        $('#addModal').modal('show');
+    }
+   function addHoliday() {
+    // Get the values from the input fields
+    const holidayName = document.getElementById('holidayName1').value.trim();
+    const holidayDate = document.getElementById('holidayDate1').value;
+    const holidayDay = document.getElementById('holidayDay1').value;
+
+      if (typeof holidayName !== 'string' || !/^[a-zA-Z\s]+$/.test(holidayName)) {
+        alert('Holiday name must be a valid string containing only letters and spaces.');
+        // You can display an error message to the user or handle the situation in any other appropriate way
+        return; // Exit function early if the holiday name is not a valid string
+    }
+
+    // Create a new holiday object
+    const newHoliday = {
+        holiday_name: holidayName,
+        holiday_date: holidayDate,
+        holiday_day: holidayDay
+    };
+
+    // Perform POST request to add holiday
+    fetch('http://127.0.0.1:8000/holidays/', {
+        method: 'POST',
+        body: JSON.stringify(newHoliday),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Holiday added successfully
+            // You may want to refresh the table or perform any other actions
+            console.log('Holiday added successfully.');
+            window.location.href = "http://127.0.0.1:8000/holidayView/";
+
+        } else {
+            // Error adding holiday
+            console.error('Failed to add holiday.');
+        }
+    })
+    .catch(error => console.error('Error adding holiday:', error));
+}
+
+
+
+
+$(document).ready(function() {
+    // Initialize dropdowns
+    $('.dropdown-toggle').dropdown();
+});
+
+</script>
+<script>
+
+    // Function to delete an employee
+function deleteEmployee(employeeId) {
+    // Send delete request using fetch
+    fetch(`http://127.0.0.1:8000/employees/${employeeId}/`, {
+        method: 'DELETE',
+    })
+    .then(response => {
+        if (response.ok) {
+            // Employee deleted successfully
+            console.log(`Employee with ID ${employeeId} deleted successfully`);
+            // Remove the corresponding row from the table
+            const row = document.getElementById(`employeeRow${employeeId}`);
+            if (row) {
+                row.remove();
+            }
+        } else {
+            // Error deleting employee
+            console.error(`Failed to delete employee with ID ${employeeId}`);
+        }
+    })
+    .catch(error => console.error(`Failed to delete employee with ID ${employeeId}: ${error}`));
+}
+
+// Function to display the delete confirmation modal
+function displayDeleteConfirmationModal(employeeId) {
+    // Store the employee ID in a data attribute of the confirmation modal
+    $("#deleteEmployeeConfirmationModal").data("employee-id", employeeId);
+    $("#deleteEmployeeConfirmationModal").modal("show"); // Show the modal
+}
+
+// Function to hide the delete confirmation modal
+function hideDeleteConfirmationModal() {
+    $("#deleteEmployeeConfirmationModal").modal("hide"); // Hide the modal
+}
+
+// Event listener for the "Delete" button click in the confirmation modal
+$("#confirmDeleteEmployeeBtn").on("click", function() {
+    hideDeleteConfirmationModal(); // Hide the confirmation modal
+    // Get the employee ID from the data attribute of the confirmation modal
+    var employeeId = $("#deleteEmployeeConfirmationModal").data("employee-id");
+    // Call the deleteEmployee function to perform the deletion
+    deleteEmployee(employeeId);
+});
+
+// Event listener for the "Cancel" button click in the confirmation modal
+$("#cancelDeleteEmployeeBtn").on("click", function() {
+    hideDeleteConfirmationModal(); // Hide the confirmation modal
+});
 
 </script>
 

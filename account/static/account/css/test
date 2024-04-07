@@ -1,0 +1,377 @@
+<style>
+
+
+        .staff-item {
+            border: 1px solid #ccc;
+            margin: 5px;
+            padding: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .staff-item button {
+            margin-left: 10px;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .edit-button {
+            background-color: transparent; / Choose your desired background color /
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .edit-button img {
+            width: 20px; / Adjust the width of the icon as needed /
+            height: 20px; / Adjust the height of the icon as needed /
+        }
+
+        .edit-button:hover {
+            background-color: transparent; / Change color on hover if desired /
+        }
+
+        .make-inactive-button {
+            background-color: transparent; / Choose your desired background color /
+            border: none;
+            padding: 0;
+            cursor: pointer;
+        }
+
+        .make-inactive-button img {
+            width: 20px; / Adjust the width of the icon as needed /
+            height: 20px; / Adjust the height of the icon as needed /
+        }
+
+        .make-inactive-button:hover {
+            background-color: transparent; / Change color on hover if desired /
+        }
+
+        .button2 {
+            background-color: #008000;
+
+        }
+
+        / Style for the dialog /
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius:25px;
+            overflow-y: auto;
+
+        }
+div#updateModal {
+    margin: 100px auto 20px;
+}
+        #updateForm {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: 0px auto;
+            height: 80vh;
+        }
+
+        #updateForm div {
+            margin-bottom: 15px;
+
+        }
+
+        #updateForm label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        #updateForm input {
+            padding: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        #updateForm button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+        }
+        #createUserForm div {
+            margin-bottom: 15px;
+        }
+
+        #createUserForm label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        #createUserForm input {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc; / Add a border to input fields /
+            border-radius: 5px; / Add rounded corners to input fields /
+            margin-top: 5px; / Add some space between input fields /
+        }
+
+        #createUserForm button {
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 5px; / Add rounded corners to buttons /
+        }
+
+        / Close button style /
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        select {
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        / Style for labels of dropdowns /
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .staff-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .staff-table th, .staff-table td {
+            border: 1px solid #ddd;
+            padding-left: 3px;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-right: 3px;
+            text-align: left;
+        }
+
+        .staff-table th {
+            background-color: #f2f2f2;
+        }
+
+        .staff-item-actions button {
+            margin-right: 5px;
+        }
+
+
+
+</style>
+
+
+<style>
+
+        #div1 {
+            display: none;
+
+        }
+        .label-container {
+            display: flex;
+            align-items: center;
+            white-space:nowrap;
+            margin-left: 30px;
+            margin-bottom: 5px; / Adjust as needed /
+
+        }
+
+        .label-container label {
+            margin-right: 10px; / Adjust as needed /
+            margin-left: -28px;
+        }
+        .container-xxl{
+
+          font-size:13px;
+        }
+
+    </style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        thead {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tfoot td {
+            font-weight: bold;
+        }
+    </style>
+
+
+    <style>
+    .hidden {
+    display: none;
+    }
+
+    .error {
+        color: #FF0000;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .table {
+        background-color: #f8f9fa;
+        width: 100%;
+        border-collapse: collapse;
+        font-size:13px;
+
+    }
+
+    .table th,
+    .table td {
+        background-color: #ffffff;
+        padding: 0.75rem;
+        border: none; / Remove borders from table cells /
+    }
+
+    / Add bottom border to table rows /
+    .table tbody tr {
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .pagination {
+        margin: 0;
+        padding: 0;
+    }
+
+    .pagination li {
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+
+    .pagination li:last-child {
+        margin-right: 0;
+    }
+
+    .pagination li.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    .pagination li a.page-link {
+        color: #0d6efd;
+        border: 1px solid #0d6efd;
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+    }
+
+    .pagination li.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+    }
+
+    .bg-light {
+        background-color: #f8f9fa;
+
+    }
+    a:hover {
+                        text-decoration: none;
+                        color: white; / Change to the desired color     /
+    }
+
+
+</style>
+
+
+<style>
+    .error {
+        color: #FF0000;
+    }
+    .hidden {
+       display: none;
+    }
+
+    / Custom Styles /
+    .search-form {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input {
+        width: 150px; / Adjust size as needed /
+    }
+    .container-xxl{
+
+          font-size:13px;
+    }
+</style>
+
+<style>
+        .card-header {
+                display: flex;
+                align-items: center;
+        }
+        .hidden {
+              display: none;
+        }
+        .container-xxl{
+
+          font-size:13px;
+        }
+
+    </style>

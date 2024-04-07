@@ -2,11 +2,13 @@ from django.urls import path, include
 from .views import (EmployeeViewSet, EmployeeRegistrationView, EmployeeLoginView, TokenRefreshView, EmployeeLogoutView,
                     EmployeeProfileView, EmployeeChangePasswordView, SendPasswordResetEmailView, UserPasswordResetView,
                     scan_qr_code, generate_qr_code, IssueTicketViewSet, issue_ticket, holidayViewSet,
-                    update_holidayView, holidayView, holiday_add_view, employee_task_View, EmployeeTaskViewSet,inoutViewSet,inout_view,add_inout_view,add_emptask_view)
+                     holidayView,  employee_task_View, EmployeeTaskViewSet,inoutViewSet,inout_view,
+                    LeaveViewSet, SalaryStructureViewSet,EmployeeStatusViewSet, EmpContractViewSet, RuleCategoryViewSet, RuleViewSet, EmployeePaySlipViewSet, EmployeePaySlipLinesViewSet)
 from rest_framework.routers import DefaultRouter
 from account import views
 from django.conf import settings
 from django.conf.urls.static import static
+from account.views import  compute_employee, print_payslip
 
 router = DefaultRouter()
 
@@ -15,6 +17,15 @@ router.register(r"emp-task", EmployeeTaskViewSet, basename="Employee task")
 router.register(r"issue-ticket", IssueTicketViewSet, basename="Issue Ticket")
 router.register(r"holidays", holidayViewSet, basename="holidays")
 router.register(r"in-out", inoutViewSet, basename="in-out")
+router.register("leave", LeaveViewSet, basename="leave")
+router.register("salary-structure", SalaryStructureViewSet, basename="salary_structure")
+router.register("employee-status", EmployeeStatusViewSet, basename="employee_status")
+router.register("emp-contract", EmpContractViewSet, basename="emp_contract")
+router.register("rule-category", RuleCategoryViewSet, basename="rule_category")
+router.register("rule", RuleViewSet, basename="rule")
+router.register('employee-pay-slip', EmployeePaySlipViewSet, basename="employee_pay_slip")
+router.register('employee-pay-slip-lines', EmployeePaySlipLinesViewSet, basename="employee_pay_slip_lines")
+
 
 urlpatterns = [
                   path('', include(router.urls)),
@@ -35,18 +46,16 @@ urlpatterns = [
                   path('dashboard/', views.dashboard, name="dashboard"),
                   path('emp-list-data/', views.employee_list, name="emplistdata"),
                   path('issueticket/', issue_ticket, name="issueticket"),
-                  path('update-holiday/<int:pk>', update_holidayView, name="update_holiday"),
                   path('holidayView/', holidayView, name="holidayView"),
-                  path('holiday/add/', holiday_add_view, name='holiday_add'),
                   path('employeetask/', employee_task_View, name='employeetask'),
                   path('emp-leave/', views.emp_leave, name="emp-leave"),
                   path('inout/', inout_view, name='inout'),
-                  path('add-in-out/',add_inout_view,name='add-in-out'),
-                  path('add-emp-task/',add_emptask_view,name='add-emp-task'),
                   path('calendar/', views.Calendar, name='calendar'),
                   path('all_events/', views.all_events, name='all_events'),
                   path('add_event/', views.add_event, name='add_event'),
                   path('update/', views.update, name='update'),
                   path('remove/', views.remove, name='remove'),
+                  path('api/<int:payslip_id>/calculate_payslip/', compute_employee, name='employee_pay_slip'),
+                  path('api/<int:payslip_id>/generate_payslip/', print_payslip, name='generate_pay_slip'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

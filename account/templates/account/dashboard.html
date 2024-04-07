@@ -4,24 +4,24 @@
 {% block main-content %}
 
 
-<div class="content mt-5">
-    <div class="post d-flex flex-column-fluid" id="kt_post">
+<div class="content">
+    <div class="post" id="kt_post">
         <!-- Container -->
         <div id="kt_content_container" class="container-xxl" >
             <meta name="_token" value="GnxI213sOLraQGVIq0mfqLMyWSBJUonIw7RJrNIH">
             <div class="row gy-5" >
                 <!-- Left Column -->
-                <div class="col-xl-8 " >
+                <div class="col-xl-8 d-flex" >
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mb-xl-3 mt-5"   style="width: 500px; height: 380px;margin-left:-430px;">
+                    <div class="card card-xxl-stretch mb-xl-3" >
                         <!-- Header -->
-                        <div class="card-header border-0 ">
+                        <div class="card-header card_header border-0 ">
                             <h5 class="card-title fw-bolder text-dark" >Today Birthday</h5>
                         </div>
                         <!-- Body -->
                          <div class="card-body pt-2">
                                     <div class="flex-grow-1" id="today-birthday-details">
-                                        <table class="table" style="font-size:12px">
+                                        <table class="table table_main" style="font-size:12px">
                                             <thead>
                                                 <tr>
                                                     <th>Sr. No</th>
@@ -38,11 +38,11 @@
                     </div>
                 </div>
                 <!-- Right Column -->
-                <div class="col-xl-3 ">
+                <div class="col-xl-4 d-flex">
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mb-xl-4 mt-5" style="width: 175px; height: 380px; margin-left:-320px;">
+                    <div class="card card-xxl-stretch mb-xl-3">
                         <!-- Header -->
-                        <div class="card-header  border-0">
+                        <div class="card-header card_header border-0">
                             <h5 class="card-title fw-bolder text-dark">QR-Code</h5>
                         </div>
                         <!-- Body -->
@@ -61,20 +61,20 @@
                     </div>
                 </div>
             </div>
-            <div class="row gy-5  mt-5">
+            <div class="row gy-5 mt-3">
                 <!-- Left Column -->
-                <div class="col-xl-4 ">
+                <div class="col-xl-5 d-flex">
                     <!-- Tables Widget 9 -->
-                    <div class="card card-xxl-stretch mb-5 mb-xl-8" style="width: 500px; height: 280px; margin-left:-430px;margin-top:-30px;">
+                    <div class="card card-xxl-stretch mb-5 mb-xl-5">
                         <!-- Header -->
-                        <div class="card-header  border-0">
+                        <div class="card-header card_header border-0">
                             <h5 class="card-title fw-bolder text-dark">Employee Statistics</h5>
                         </div>
                         <div class="card-body py-3">
                             <!-- Table Container -->
                             <div class="table-responsive">
                                 <!-- Table -->
-                                <table class="table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4" style="font-size:12px;">
+                                <table class="table table-row-dashed table-row-gray-300 align-middle table_main" style="font-size:12px;">
                                     <!-- Table Body -->
                                     <tbody>
                                         <tr>
@@ -82,10 +82,10 @@
                                             <th><b>OUT</b></th>
                                             <th><b>HOUR</b></th>
                                         </tr>
-                                        <tr>
-                                            <td>9:18 am</td>
-                                            <td></td>
-                                            <td></td>
+                                         <tr>
+                                            <td id="lastScanInTime">{{request.user.last_scan_in_time}}</td>
+                                            <td id="lastScanOutTime">{{request.user.last_scan_out_time}}</td>
+                                            <td id="totalWorkedHours">{{request.user.total_worked_hours}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -94,19 +94,19 @@
                     </div>
                 </div>
                 <!-- Right Column -->
-                <div class="col-xl-8  ">
+                <div class="col-xl-7 d-flex">
                     <!-- List Widget 3 -->
-                    <div class="card card-xxl-stretch mr-6 mb-xl-8" style="width: 590px; height: 280px; margin-top:-30px; margin-left:-120px;">
+                    <div class="card card-xxl-stretch mr-6 mb-xl-5">
                         <!-- Header -->
-                        <div class="card-header border-0">
+                        <div class="card-header border-0 card_header">
                             <h5 class="card-title fw-bolder text-dark">Today Task</h5>
-                            <h5  class="card-title fw-bolder text-dark" id="today-date" style="margin-left:340px;margin-top:-42px"></h5>
+                            <h5  class="card-title fw-bolder text-dark" id="today-date"></h5>
 <!--                            <h3 class="card-title fw-bolder text-dark" id="currentDate" style="margin-left:340px;margin-top:-42px"></h3>-->
                         </div>
                         <!-- Body -->
-                        <div class="card-body pt-2">
+                        <div class="card-body py-3">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" style="font-size:12px;">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer table_main" style="font-size:12px;">
                                     <thead>
                                         <tr class="fw-bolder text-muted">
                                             <th class="min-w-100px">Task Link</th>
@@ -267,7 +267,7 @@
                 // If no records found, display a message
                 const noRecordsRow = document.createElement('tr');
                 const noRecordsCell = document.createElement('td');
-                noRecordsCell.setAttribute('colspan', '2');
+                noRecordsCell.setAttribute('colspan', '10');
                 noRecordsCell.textContent = 'No birthday records found for today.';
                 noRecordsRow.appendChild(noRecordsCell);
                 tableBody.appendChild(noRecordsRow);

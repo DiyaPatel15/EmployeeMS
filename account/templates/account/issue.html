@@ -1,0 +1,134 @@
+{% extends 'account/base.html' %}
+{% load static %}
+{% block main-content %}
+<!--<html lang="en">-->
+
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <link rel="stylesheet" href="{% static 'account/css/ticket.css' %}" type="text/css">-->
+
+<!--  <title>Issue Ticket</title>-->
+
+
+<style>
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+      margin-top:100px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 25px;
+      box-shadow: 0 5px 10px rgb(248, 84, 172);
+
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 22px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 570;
+      font-style: bold;
+      margin-left: -7px;
+      font-size:13px;
+
+    }
+
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-left: -7px;
+
+    }
+
+    .button {
+      padding: 10px 20px;
+      background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 auto;
+      display: block;
+      font-size:13px;
+
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+
+    #message {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+</style>
+<div class="container">
+    <h2>Issue Ticket</h2>
+    <form id="ticketIssueForm" class="ticketIssueForm">
+        <div class="form-group">
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="issue">Issue</label>
+            <textarea id="issue" name="issue" rows="4" required></textarea>
+        </div>
+        <button type="submit" class= "button" class="button:hover">Submit Ticket</button>
+    </form>
+    <div id="message"></div>
+</div>
+<!--  <script src="script.js"></script>-->
+<script>
+    document.getElementById('ticketIssueForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const issue = document.getElementById('issue').value;
+    var storedAccessToken = localStorage.getItem('accessToken');
+
+    const data = {
+      ticket_email: email,
+      ticket_issue: issue
+    };
+
+    // Make sure to replace 'http://example.com/submit-ticket' with your actual endpoint for submitting the ticket
+    fetch('http://127.0.0.1:8000/issue-ticket/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + storedAccessToken
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (response.ok) {
+          document.getElementById('message').textContent = 'Ticket submitted successfully.';
+          document.getElementById('ticketIssueForm').reset();
+        } else {
+          document.getElementById('message').textContent = 'Failed to submit ticket. Please try again later.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').textContent = 'An error occurred. Please try again later.';
+      });
+  });
+
+</script>
+
+{% endblock main-content %}
+
