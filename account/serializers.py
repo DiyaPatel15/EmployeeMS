@@ -51,24 +51,33 @@ class EmployeeProfileSerializer(ModelSerializer):
 
 
 
-class EmployeeChangePasswordSerializer(ModelSerializer):
-    password = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
-    password2 = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
+class EmployeeChangePasswordSerializer(serializers.ModelSerializer):
+        old_password = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
+        password = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
+        password2 = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
 
-    class Meta:
-        model = Employee
-        fields = ['password', 'password2']
+        class Meta:
+            model = Employee
+            fields = ['old_password', 'password', 'password2']
 
-    def validate(self, data):
-        password = data.get('password')
-        password2 = data.get('password2')
-        user = self.context.get('user')
-        if password != password2:
-            raise serializers.ValidationError("Password and Password2 Doesn't Matched")
-        user.set_password(password)
-        user.save()
-        return super().validate(data)
+        def validate_old_password(self, value):
+            user = self.context['user']
+            if not user.check_password(value):
+                raise serializers.ValidationError("Invalid old password")
+            return value
 
+        def validate(self, data):
+            password = data.get('password')
+            password2 = data.get('password2')
+            if password != password2:
+                raise serializers.ValidationError("New password and confirm password must match")
+            return data
+
+        def save(self):
+            user = self.context['user']
+            new_password = self.validated_data['password']
+            user.set_password(new_password)
+            user.save()
 
 
 class SendPasswordResetSerializer(ModelSerializer):

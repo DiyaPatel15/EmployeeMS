@@ -175,7 +175,7 @@ class UserPasswordResetView(APIView):
 def generate_qr_code(request):
     try:
         # Assuming you have only one employee for simplicity
-        employee = Employee.objects.get(id=15)
+        employee = Employee.objects.get(id=26)
 
         # Generate QR code data based on employee ID
         qr_code_data = f"employee_id:{employee.id}"
@@ -305,12 +305,6 @@ def holidayView(request):
     return render(request, 'account/holidays.html', {'form': form})
 
 
-
-
-
-
-
-
 def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
@@ -318,13 +312,10 @@ def emp_leave(request):
     return render(request, 'account/employee_leave.html')
 
 
-
 def inout_view(request):
     form = In_Out.objects.all()
     print(form)
     return render(request, 'account/in-out.html', {'form': form})
-
-
 
 
 def Calendar(request):
@@ -556,3 +547,8 @@ def print_payslip(request, payslip_id):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
     return response
+
+
+
+
+

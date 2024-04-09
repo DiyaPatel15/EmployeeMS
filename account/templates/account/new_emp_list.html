@@ -8,7 +8,7 @@
         }
 </style>
 <br>
-<div class="post d-flex flex-column-fluid ma ">
+<div class="post d-flex flex-column-fluid ma">
     <div class="container-xxl ">
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <div class="post d-flex flex-column-fluid" id="kt_post">
@@ -26,12 +26,53 @@
                                 <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                     <!-- Your SVG icon code -->
                                 </span>
-                                <input type="text" id="searchInput" class="form-control form-control-solid"
-                                        placeholder="Search Employee">
-                                <button class="button_mian" id="searchButton">Search
-                                </button>
+                                <div>
+                                    <input type="text" id="searchInput" class="form-control form-control-solid"
+                                            placeholder="Search Employee">
+                                </div>
+                                <div>
+                                    <button class="button_mian" id="searchButton" onclick="searchEmployees()" name="searchButton" type="submit">Search
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                        <div class="search-bar-wrapper">
+                            <div class="search-bar d-flex align-items-center position-relative">
+                                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                    <!-- Your SVG icon code -->
+                                </span>
+
+                                <select id="designationDropdown" class="form-control">
+                                    <option value="" disabled selected>Select your designation</option>
+                                    <option value="CEO">CEO</option>
+                                    <option value="COO">COO</option>
+                                    <option value="Project Manager">Project Manager</option>
+                                    <option value="Jr. PHP Laravel Developer">Jr. PHP Laravel Developer</option>
+                                    <option value="Sr. Developer">Sr. Developer</option>
+                                    <option value="UI/UX Designer">UI/UX Designer</option>
+                                    <option value="Product Manager">Product Manager</option>
+                                    <option value="Quality Engineer">Quality Engineer</option>
+                                    <option value="Quality Engineer Lead">Quality Engineer Lead</option>
+                                    <option value="Web Designer">Web Designer</option>
+                                    <option value="Sr. Developer">Sr. Developer</option>
+                                    <option value="SEO Executive">SEO Executive</option>
+                                    <option value="Jr. HR Executive">Jr. HR Executive</option>
+                                    <option value="Jr. PHP Laravel Developer">Jr. PHP Laravel Developer</option>
+                                    <option value="Sr. HR Executive">Sr. HR Executive</option>
+                                    <option value="Sr. SEO Executive">Sr. SEO Executive</option>
+                                    <option value="Content Writer">Content Writer</option>
+                                    <option value="Python Developer">Python Developer</option>
+                                    <option value="Jr. Web Designer">Jr. Web Designer</option>
+                                    <option value="Intern">Intern</option>
+                                    <option value="Lead Generation Executive">Lead Generation Executive</option>
+                                    <option value="Trainee">Trainee</option>
+                                    <!-- Add more options as needed -->
+                                </select>
+                                <!-- Search Button -->
+                                <button class="button_mian" id="searchButton1">Search</button>
+                            </div>
+                        </div>
+
 
                         <!-- Right Section: Employee List Text -->
                         <h2 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0" class="main_heading">Employee List</h2>
@@ -153,6 +194,10 @@
                             <!-- Add other options as needed -->
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="empPassword">Password</label>
+                        <input type="text" class="form-control" id="empPassword" required>
+                    </div>
                     <button type="submit" class="btn btn-primary" onclick="addEmployee()">Add Employee</button>
                 </form>
             </div>
@@ -172,6 +217,7 @@
             </div>
             <div class="modal-body">
                 <form id="updateEmployeeForm">
+                      <input type="hidden" id="Id" name="Id">
                     <div class="form-group">
                         <label for="updateEmpId">Employee ID</label>
                         <input type="text" class="form-control" id="updateEmpId" readonly>
@@ -255,7 +301,7 @@
                         <label for="updateEmpPassword">Password</label>
                         <input type="password" class="form-control" id="updateEmpPassword">
                     </div>
-                    <button type="button" class="btn btn-primary" onclick="updateEmployee()">Update Employee</button>
+                    <button type="button" class="btn btn-primary" onclick="submitUpdateEmployeeForm()">Update Employee</button>
                 </form>
             </div>
         </div>
@@ -283,10 +329,12 @@
 </div>
 
 
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
 <script>
             function displayAddEmployeeForm() {
               $('#addEmployeeModal').modal('show'); // Show the modal
@@ -389,16 +437,19 @@ $(document).ready(function() {
 document.addEventListener('DOMContentLoaded', fetchEmployeeData);
 </script>
 
-<script>
+    <script>
         function addEmployee() {
+        console.log("addEmployee() called");
         // Get the values from the input fields
-        const empId = document.getElementById('empId').value.trim();
+        const empId = document.getElementById('empId').value;
         const empName = document.getElementById('empName').value.trim();
         const empBirthday = document.getElementById('empBirthday').value;
         const empEmail = document.getElementById('empEmail').value;
-        const empContact = document.getElementById('empContact').value.trim();
-        const empAddress = document.getElementById('empAddress').value.trim();
-        const empProfile = document.getElementById('empProfile').value; // This will contain the file path or name
+        const empContact = document.getElementById('empContact').value;
+        const empAddress = document.getElementById('empAddress').value;
+        const empProfile = document.getElementById('empProfile') ? document.getElementById('empProfile').files[0] : null;
+        const empPassword = document.getElementById('empPassword').value;
+        console.log("----------------------------------",empProfile);
         const empDesignation = document.getElementById('empDesignation').value;
         const empRole = document.getElementById('empRole').value;
         const empCompany = document.getElementById('empCompany').value;
@@ -415,6 +466,7 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
             emp_name: empName,
             emp_birthday: empBirthday,
             emp_email: empEmail,
+            password: empPassword,
             emp_contact: empContact,
             emp_address: empAddress,
             emp_profile: empProfile,
@@ -438,7 +490,7 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
                 // You can perform any additional actions here, like displaying a success message or redirecting the user
                 // For example:
                 // alert('Employee added successfully.');
-                // window.location.href = "http://127.0.0.1:8000/employeeView/";
+                window.location.href = "http://127.0.0.1:8000/emp-list-data/";
             } else {
                 // Error adding employee
                 console.error('Failed to add employee.');
@@ -450,64 +502,72 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
 
 </script>
 
+
+
 <script>
     function updateEmployee() {
-    // Get the values from the input fields
+        // Get the values from the input fields
+        const employeeId = document.getElementById('updateId').value; // Corrected variable name
         const empId = document.getElementById('updateEmpId').value.trim();
         const empName = document.getElementById('updateEmpName').value.trim();
         const empBirthday = document.getElementById('updateEmpBirthday').value;
         const empEmail = document.getElementById('updateEmpEmail').value;
         const empContact = document.getElementById('updateEmpContact').value.trim();
         const empAddress = document.getElementById('updateEmpAddress').value.trim();
-        const empProfile = document.getElementById('updateEmpProfile').value; // This will contain the file path or name
+        const empProfile = document.getElementById('updateEmpProfile').files[0]; // This will contain the file path or name
         const empDesignation = document.getElementById('updateEmpDesignation').value;
         const empRole = document.getElementById('updateEmpRole').value;
         const empCompany = document.getElementById('updateEmpCompany').value;
         const empPassword = document.getElementById('updateEmpPassword').value;
-    // Get other updated employee details similarly
 
-    // Create a new employee object with updated details
-    const updatedEmployee = {
 
-            emp_id: 15,
+
+        // Create a new employee object with updated details
+        const updatedEmployee = {
+            emp_id: empId,
             emp_name: empName,
             emp_birthday: empBirthday,
             emp_email: empEmail,
             emp_contact: empContact,
             emp_address: empAddress,
-            emp_profile: empProfile,
+            //emp_profile: null,
+            //emp_profile: empProfile,
             emp_designation: empDesignation,
             emp_role: empRole,
             emp_company: empCompany,
-            emp_password:empPassword
-        // Add other updated employee details similarly
-    };
+            emp_password: empPassword
+            // Add other updated employee details similarly
+        };
 
-    // Perform PUT request to update employee
-    fetch(`http://127.0.0.1:8000/emp-list/15/`, {
-        method: 'PUT',
-        body: JSON.stringify(updatedEmployee),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response.ok) {
-            // Employee updated successfully
-            console.log('Employee updated successfully.');
-            // You can perform any additional actions here, like displaying a success message or redirecting the user
-            // For example:
-            // alert('Employee updated successfully.');
-            // window.location.href = "http://127.0.0.1:8000/employeeView/";
-        } else {
-            // Error updating employee
-            console.error('Failed to update employee.');
-            // You can display an error message to the user or handle the situation in any other appropriate way
-        }
-    })
-    .catch(error => console.error('Error updating employee:', error));
-}
+        // Perform PUT request to update employee
+        fetch(`http://127.0.0.1:8000/emp-list/${employeeId}/`, {
+            method: 'PATCH',
+            body: JSON.stringify(updatedEmployee),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Employee updated successfully
+                console.log('Employee updated successfully.');
+                // You can perform any additional actions here, like displaying a success message or redirecting the user
+                // For example:
+                // alert('Employee updated successfully.');
+                 window.location.href = "http://127.0.0.1:8000/employeeView/";
+
+            }
+            else {
+                // Error updating employee
+                console.error('Failed to update employee.');
+                // You can display an error message to the user or handle the situation in any other appropriate way
+            }
+        })
+        .catch(error => console.error('Error updating employee:', error));
+    }
 </script>
+
+
 <script>
     // Function to display update employee form
     function displayUpdateEmployeeForm(employeeId) {
@@ -516,13 +576,14 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
             .then(response => response.json())
             .then(data => {
                 // Populate the update form fields with employee data
+                document.getElementById('Id').value = data.id;
                 document.getElementById('updateEmpId').value = data.emp_id;
                 document.getElementById('updateEmpName').value = data.emp_name;
                 document.getElementById('updateEmpBirthday').value = data.emp_birthday;
                 document.getElementById('updateEmpEmail').value = data.emp_email;
                 document.getElementById('updateEmpContact').value = data.emp_contact;
                 document.getElementById('updateEmpAddress').value = data.emp_address;
-                document.getElementById('updateEmpProfile').value = data.emp_profile;
+                //document.getElementById('updateEmpProfile').value = data.emp_profile;
                 document.getElementById('updateEmpDesignation').value = data.emp_designation;
                 document.getElementById('updateEmpRole').value = data.emp_role;
                 document.getElementById('updateEmpCompany').value = data.emp_company;
@@ -537,13 +598,69 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
             .catch(error => console.error('Error fetching employee:', error));
     }
 </script>
+<script>
+    // Function to submit the update employee form
+    function submitUpdateEmployeeForm() {
+        // Retrieve updated employee data from form fields
+        const employeeId = document.getElementById('Id').value;
+        const empId = document.getElementById('updateEmpId').value.trim();
+        const empName = document.getElementById('updateEmpName').value.trim();
+        const empBirthday = document.getElementById('updateEmpBirthday').value;
+        const empEmail = document.getElementById('updateEmpEmail').value;
+        const empContact = document.getElementById('updateEmpContact').value.trim();
+        const empAddress = document.getElementById('updateEmpAddress').value.trim();
+        //const empProfile = document.getElementById('updateEmpProfile').value; // This will contain the file path or name
+        const empDesignation = document.getElementById('updateEmpDesignation').value;
+        const empRole = document.getElementById('updateEmpRole').value;
+        const empCompany = document.getElementById('updateEmpCompany').value;
+        const empPassword = document.getElementById('updateEmpPassword').value;
+
+        // Construct updated employee object
+        const updatedEmployee = {
+            emp_id: empId,
+            emp_name: empName,
+            emp_birthday: empBirthday,
+            emp_email: empEmail,
+            emp_contact: empContact,
+            emp_address: empAddress,
+            //emp_profile: empProfile,
+            emp_designation: empDesignation,
+            emp_role: empRole,
+            emp_company: empCompany,
+            emp_password: empPassword
+        };
+
+        // Perform PUT request to update employee data
+        fetch(`http://127.0.0.1:8000/emp-list/${employeeId}/`, {
+            method: 'PATCH',
+            body: JSON.stringify(updatedEmployee),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                // Employee updated successfully
+                console.log(`Employee with ID ${employeeId} updated successfully`);
+                // Optionally, perform any additional actions after successful update
+                // For example, display a success message or redirect the user
+                 // Redirect to emp-list page
+                window.location.href = 'http://127.0.0.1:8000/emp-list-data/';
+            } else {
+                // Error updating employee
+                console.error(`Failed to update employee with ID ${employeeId}`);
+                // Optionally, display an error message or handle the situation in another way
+            }
+        })
+        .catch(error => console.error(`Error updating employee with ID ${employeeId}:`, error));
+    }
+</script>
 
 <script>
-
     // Function to delete an employee
     function deleteEmployee(employeeId) {
         // Send delete request using fetch
-        fetch(`http://127.0.0.1:8000/employees/${employeeId}/`, {
+        fetch(`http://127.0.0.1:8000/emp-list/${employeeId}/`, {
             method: 'DELETE',
         })
         .then(response => {
@@ -555,6 +672,8 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
                 if (row) {
                     row.remove();
                 }
+                // Redirect to emp-list page
+                window.location.href = 'http://127.0.0.1:8000/emp-list-data/';
             } else {
                 // Error deleting employee
                 console.error(`Failed to delete employee with ID ${employeeId}`);
@@ -590,80 +709,64 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
     });
 
 </script>
-
 <script>
+    function filterEmployeesByDesignation() {
+    const selectedDesignation = document.getElementById('designationDropdown').value;
+    const allRows = document.querySelectorAll('#employeeTableBody tr'); // Assuming the table body has the id 'employeeTableBody'
 
-    // Function to filter employee data based on empName
-    function filterEmployeeData(empName) {
-        $.ajax({
-            url: 'http://127.0.0.1:8000/emp-list/',  // Replace this URL with your backend API endpoint
-            type: 'GET',
-            success: function(data) {
-                // Clear existing table rows
-                $('#employeeTableBody').empty();
-
-                // Filter employee data based on empName
-                var filteredData = data.filter(function(employee) {
-                    return employee.emp_name.toLowerCase().includes(empName.toLowerCase());
-                });
-
-                // Populate table with filtered data
-                $.each(filteredData, function(index, employee) {
-                    var profileImage = employee.emp_profile ? employee.emp_profile : 'http://127.0.0.1:8000/media/profile_image/empty_profile.jpg';
-                    var row = '<tr>' +
-                        '<td>' + employee.emp_id + '</td>' +
-                        '<td>' + employee.emp_joining_date + '</td>' +
-                        '<td style="display: flex; align-items: center;">' +
-                        '<img src="' + profileImage + '" alt="Profile Picture" width="80" height="80" style="border-radius: 50%;">' +
-                        '<div style="margin-left: 10px;">' +
-                        '<div>' + employee.emp_name + '</div>' +
-                        '<div>' + employee.emp_email + '</div>' +
-                        '<div>' + employee.emp_contact + '</div>' +
-                        '</div>' +
-                        '</td>' +
-                        '<td>' + employee.emp_company + '</td>' +
-                        '<td>' + employee.emp_designation + '</td>' +
-                        '<td>' +
-                        '<button class="btn btn-primary">Edit</button>' +
-                        '<button class="btn btn-danger">Delete</button>' +
-                        '</td>' +
-                        '</tr>';
-                    $('#employeeTableBody').append(row);
-                });
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching employee data:', error);
-            }
-        });
-    }
-
-    // Event listener for clicking the search button
-    $('#searchButton').on('click', function() {
-        var empName = $('#searchInput').val().trim();
-        if (empName !== '') {
-            filterEmployeeData(empName); // Call function to filter employee data
+    allRows.forEach(row => {
+        const designationCell = row.querySelector('td:nth-child(5)'); // Assuming the designation is in the 5th cell
+        if (selectedDesignation === '' || designationCell.textContent.trim() === selectedDesignation) {
+            row.style.display = ''; // Show row if designation matches or no designation selected
         } else {
-            fetchAllEmployeeData(); // Call function to fetch all employee data
+            row.style.display = 'none'; // Hide row if designation doesn't match
         }
     });
+}
 
-    // Event listener for pressing "Enter" key in the search input field
-    $('#searchInput').on('keypress', function(event) {
-        if (event.which === 13) {
-            var empName = $('#searchInput').val().trim();
-            if (empName !== '') {
-                filterEmployeeData(empName); // Call function to filter employee data
-            } else {
-                fetchAllEmployeeData(); // Call function to fetch all employee data
-            }
-        }
-    });
+// Function to handle search button click event
+document.addEventListener('DOMContentLoaded', function() {
+    const searchButton = document.getElementById('searchButton1'); // Assuming the search button has the id 'searchButton1'
+    if (searchButton) {
+        searchButton.addEventListener('click', filterEmployeesByDesignation);
+    } else {
+        console.error('Search button with id "searchButton1" not found.');
+    }
+});
 
-    // Fetch all employee data when the page loads
-    $(document).ready(function() {
-        fetchAllEmployeeData();
-    });
+
 
 </script>
+<script>
+function searchEmployees() {
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    const employeeTableBody = document.getElementById('employeeTableBody');
+
+    // Fetch data from API
+    fetch('http://127.0.0.1:8000/emp-list/')
+        .then(response => response.json())
+        .then(data => {
+            // Clear existing table rows
+            employeeTableBody.innerHTML = '';
+
+            // Filter data based on search term
+            const filteredData = data.filter(employee => employee.emp_name.toLowerCase().includes(searchTerm));
+
+            // Populate table rows with filtered data
+            filteredData.forEach((employee, index) => {
+                const row = createEmployeeRow(employee);
+                employeeTableBody.appendChild(row);
+            });
+        })
+        .catch(error => console.error('Error fetching employee data:', error));
+}
+
+
+</script>
+
+
+
+
+
 
 {% endblock main-content %}

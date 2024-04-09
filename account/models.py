@@ -2,7 +2,7 @@ from django.db import models
 from .constants import (EMPLOYEE_DESIGNATION, EMPLOYEE_ROLE, EMPLOYEE_COMPANY, E_PRIORITY, E_MENTOR, IN_OUT,APPROVEL_STATUS,ISSUE_STATUS,TableName, Integers,AMOUNT_TYPE,ALLOWANCE_TYPE,LEAVE_STATUS,LEAVE_DAY,LEAVE_TYPE,EVENT_DAY )
 
 
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser,UserManager
 from .managers import UserBaseManager
 from datetime import datetime,date,timedelta
 import ast
@@ -35,6 +35,7 @@ class Employee(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 
     objects = UserBaseManager()
@@ -143,6 +144,9 @@ class Events(models.Model):
 
 
 
+
+
+
 class SalaryStructure(models.Model):
     structure_name = models.CharField(max_length=100, unique=True, help_text="Structure Name")
 
@@ -164,7 +168,7 @@ class EmployeeStatus(models.Model):
 
 
 class EmpContract(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="emp_contract")
+    user = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="emp_contract", null=True)
     first_name = models.CharField(max_length=30, help_text="first_name")
     last_name = models.CharField(max_length=30, help_text="last_name")
     ctc = models.DecimalField(default=0.0, decimal_places=2, max_digits=10, null=False, blank=False, help_text="CTC", )
@@ -253,7 +257,7 @@ class Rule(models.Model):
 
 
 class EmployeePaySlip(models.Model):
-    # emp = models.ForeignKey(User, on_delete=models.CASCADE, related_name="employee_pay_slip")
+    emp = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_pay_slip", null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     total_working_days = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
@@ -378,7 +382,7 @@ class EmployeePaySlipLines(models.Model):
 
 
 class Leave(models.Model):
-    # emp_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="leaves")
+    emp_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="leaves", null=True)
     leave_type = models.CharField(choices=LEAVE_TYPE, max_length=20, default=1, help_text="leave_type")
     leave_day = models.CharField(choices=LEAVE_DAY, max_length=15, default=1, help_text="leave_day")
     from_date = models.DateField()
