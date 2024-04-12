@@ -1,34 +1,7 @@
 {% extends 'account/base.html' %}
 {% block main-content %}
 {% load static %}
-    <style>
-        .error {
-            color: #FF0000;
-        }
-        #div1 {
-            display: none;
-        }
-    .container-xxl{
-      margin-left:265px;
-      margin-top:120px;
-    }
-    .label-container {
-        display: flex;
-        align-items: center;
-        white-space:nowrap;
-        margin-left: 30px;
-        margin-bottom: 5px; / Adjust as needed /
-    }
 
-    .label-container label {
-        margin-right: 10px; / Adjust as needed /
-        margin-left: -28px;
-    }
-
-        .post{
-        margin-top:-40px;
-        }
-    </style>
 
 
     <div class="post" id="kt_post">
@@ -38,21 +11,20 @@
             </div>
             <div class="card">
                 <div class="card-header border-0 pt-6">
-    <div class="d-flex justify-content-between align-items-center">
+    <div  class="d-flex justify-content-between align-items-center box_header_main">
          <form action=""
-              class="d-flex align-items-center">
+               class="d-flex align-items-end employeeLeave">
 
-            <div class="label-container ml-1">
-                <label for="month" class="visually-hidden">Search Employee date</label>
-<!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
-<!--                       placeholder="Search Employee date">-->
+
+             <div class="label-container">
+                 <label for="month" class="visually-hidden">Employee date</label>
                 <input type="month" name="month" id="month" class="form-control form-control-solid me-2"
-                   placeholder="Search Employee date" style="margin-right:120px ; margin-left:1px" >
+                   placeholder="Search Employee date" >
             </div>
 
 
             <select class="form-select me-2"  id="leavetypesearch" name="leavetypesearch"
-                    aria-label="Select Leave type" style="height:39px;width:190px;border-radius:5px;">
+                    aria-label="Select Leave type">
                 <option value="">Select a Leave type...</option>
                 <option value="Casual Leave">Casual Leave</option>
                 <option value="Sick Leave">Sick Leave</option>
@@ -73,24 +45,24 @@
                     <div class="card-body pt-0">
                         <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
                             <div class="table-responsive">
-                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer table_main" id="kt_customers_table">
                                     <thead>
-                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="leaveSR">Sr no</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="Name">Name</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="Leave-Type">Leave-Type</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Date-From">Date-From</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Date-To">Date-To</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Leave-Days">Leave-Days</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Leave-Reason">Leave-Reason</th>
-                                            <th class="min-w-125px sorting" style="width: 171.516px;">Approval-Status</th>
+                                        <tr class="text-start text-gray-400 gs-0">
+                                            <th class="min-w-125px sorting" id="leaveSR">Sr no</th>
+                                            <th class="min-w-125px sorting"  id="Name">Name</th>
+                                            <th class="min-w-125px sorting"  id="Leave-Type">Leave-Type</th>
+                                            <th class="min-w-125px sorting" id="Date-From">Date-From</th>
+                                            <th class="min-w-125px sorting" id="Date-To">Date-To</th>
+                                            <th class="min-w-125px sorting" id="Leave-Days">Leave-Days</th>
+                                            <th class="min-w-125px sorting" id="Leave-Reason">Leave-Reason</th>
+                                            <th class="min-w-125px sorting" >Approval-Status</th>
                                             {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                                            <th class="text-end min-w-70px sorting_disabled" style="width: 133.062px;">Actions</th>
+                                            <th class="text-end min-w-70px sorting_disabled" >Actions</th>
                                             {% endif %}
                                         </tr>
                                     </thead>
                                     <tbody class="fw-bold text-gray-600" id="searchResults">
-                                        <tr id="searchResultsRow" style="display:none;">
+                                        <tr id="searchResultsRow">
                                             <td colspan="10">There are no Record found</td>
                                         </tr>
                                     </tbody>
@@ -113,9 +85,9 @@
         </div>
     </div>
     <!-- Modal - Add Employee Leave -->
-    <div class="modal fade modal-md" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+    <div class="modal fade md-5" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content p-3" >
+            <div class="modal-content" >
                 <form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="form"  method="POST"  >
                     {% csrf_token %}
 
@@ -136,7 +108,7 @@
                     <!-- Modal body -->
                     <div class="container-fluid modal-body py-10 px-lg-17">
                         <!-- Scroll -->
-                        <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px" style="max-height: 300px;">
+                        <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" >
                             <!-- Input group -->
 
                             <div class="d-flex flex-column mb-7 fv-row fv-plugins-icon-container" data-select2-id="select2-data-128-oqed">
@@ -199,7 +171,7 @@
                                     <span>Reason</span>
                                     <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Enter any additional notes about the contact (optional)." aria-label="Enter any additional notes about the contact (optional)."></i>
                                 </label>
-                                <textarea class="form-control" id="leave_reason" onkeyup="validate()" maxlength="300" name="reason" placeholder="Enter Reason" data-kt-autosize="true"  style="overflow: hidden; overflow-wrap: break-word; resize: none;"></textarea>
+                                <textarea class="form-control" id="leave_reason"  maxlength="300" name="reason" placeholder="Enter Reason" data-kt-autosize="true"  style="overflow: hidden; overflow-wrap: break-word; resize: none;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -250,7 +222,7 @@
       </div>
       <div class="modal-body">
         <p>Choose action:</p>
-        <button type="button" class="button_mian" id="acceptBtn" value="Accepted" data-id="${leave.id}">Accept</button>
+        <button type="button" class="btn btn-primary" id="acceptBtn" value="Accepted" data-id="${leave.id}">Accept</button>
         <button type="button" class="btn btn-danger" id="rejectBtn" value="Rejected" data-id="${leave.id}">Reject</button>
       </div>
     </div>
@@ -314,9 +286,12 @@
                     <td>${leave.leave_reason}</td>
                     <td>${leave.approval_status}</td>
                     {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                    <td>
-                        <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
-                        <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                    <td class="editbtns">
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${111})">...</button>
+                        <div id="actionMenu_${111}" class="action-menu hidden mt-2" style="display: none;">
+                            <button class="btn btn-primary">Update</button>
+                            <button class="btn btn-danger" >Delete</button>
+                        </div>
                     </td>
                     {% endif %}
                 </tr>

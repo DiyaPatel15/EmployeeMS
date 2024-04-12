@@ -58,6 +58,8 @@ urlpatterns = [
                   path('remove/', views.remove, name='remove'),
                   path('issueticketuser/', views.IssueTicketUserViewSet.as_view(), name='issueticketuser'),
                   path('leaveuser/', views.EmployeeLeaveView.as_view(), name='leaveuser'),
+                  path('taskuser/', views.EmployeeTaskView.as_view(), name='taskuser'),
+                  path('inoutuser/', views.EmployeeInOutView.as_view(), name='inoutuser'),
                   path('api/<int:payslip_id>/calculate_payslip/', compute_employee, name='employee_pay_slip'),
                   path('api/<int:payslip_id>/generate_payslip/', print_payslip, name='generate_pay_slip'),
 

@@ -123,19 +123,31 @@ class Issue_Ticket(models.Model):
 
 
 class Employee_Task(models.Model):
-    E_name = models.CharField(max_length=100)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_task", null=True, blank=True )
+    E_name = models.CharField(max_length=100, null=True, blank=True)
     E_Card_Link = models.CharField(max_length=100)
     E_Assign_Date = models.DateField(max_length=100)
     E_Mentor = models.CharField(max_length=100, choices=E_MENTOR)
     E_Priority = models.CharField(max_length=100, choices=E_PRIORITY)
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.employee:
+                self.E_name = self.employee.emp_name
+        super().save(*args, **kwargs)
 
 class In_Out(models.Model):
-    name = models.CharField(max_length=100)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="in_out", null=True, blank=True )
+    name = models.CharField(max_length=100,  null=True, blank=True )
     date = models.DateField()
     type = models.CharField(max_length=50, choices=IN_OUT)
     reason = models.CharField(max_length=1000)
     approvel_status = models.CharField(max_length=50, choices=APPROVEL_STATUS)
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            if self.employee:
+                self.name = self.employee.emp_name
+        super().save(*args, **kwargs)
 
 
 class Events(models.Model):

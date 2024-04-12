@@ -21,8 +21,8 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework.filters import SearchFilter
 from rest_framework import filters
 import qrcode
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
+# from datetime import timedelta
 from rest_framework.decorators import api_view, permission_classes
 import re
 import inflect
@@ -50,7 +50,13 @@ class EmployeeTaskViewSet(ModelViewSet):
     queryset = Employee_Task.objects.all()
     serializer_class = EmployeeTaskSerializer
 
-
+class EmployeeTaskView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request):
+        print(request.user.id)
+        instance = Employee_Task.objects.filter(employee=request.user.id)
+        serializer = EmployeeTaskSerializer(instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 class EmployeeRegistrationView(APIView):
     def post(self, request, format=None):
         serializer = EmployeeRegistrationSerializer(data=request.data)
@@ -204,6 +210,7 @@ def generate_qr_code(request):
 
 @api_view(['POST'])
 # @permission_classes([IsAuthenticated])
+
 def scan_qr_code(request):
     try:
         qr_code_data = request.data.get('qr_code_data')
@@ -213,34 +220,39 @@ def scan_qr_code(request):
         employee = Employee.objects.get(id=employee_id)
 
         # Update time entry based on employee's current status
-        current_time = datetime.now().time()
+        current_time = datetime.now()
         total_worked_hours = timedelta()
-        print("employee status", employee.status)
+
         if employee.status:
             # This is an out-time scan
             if employee.last_scan_in_time:
-                if employee.last_scan_in_time > employee.last_scan_out_time:
+                employee.last_scan_out_time = current_time
+                if employee.last_scan_in_time.time() > employee.last_scan_out_time.time():
                     # Swap in and out times if out time is earlier than in time
                     employee.last_scan_in_time, employee.last_scan_out_time = employee.last_scan_out_time, employee.last_scan_in_time
 
                 # Calculate time difference as timedelta
-                time_difference = datetime.combine(datetime.today(), employee.last_scan_out_time) - datetime.combine(
-                    datetime.today(), employee.last_scan_in_time)
+                time_difference = datetime.combine(datetime.today(), employee.last_scan_out_time.time()) - datetime.combine(datetime.today(), employee.last_scan_in_time.time())
+
                 # Update total worked hours
                 employee.total_worked_hours += time_difference
                 employee.last_scan_out_time = current_time
             else:
                 # If there's no previous in-time, we can't calculate worked hours
-                return Response({"error": "Missing previous in-time scan"},
-                                status=status.HTTP_400_BAD_REQUEST)
+                employee.last_scan_in_time = current_time
         else:
             # This is an in-time scan
-            print("-----------", current_time, type(current_time))
-            employee.last_scan_in_time = current_time
+            if employee.last_scan_out_time:
+                # If there's a previous out-time, update the last scan in-time
+                employee.last_scan_in_time = current_time
+            else:
+                # If there's no previous out-time, set the current time as the last scan in-time
+                employee.last_scan_in_time = current_time
 
         # Toggle employee status
         employee.status = not employee.status
         employee.save()
+
         # Format total worked hours
         total_worked_hours_with_units = format_total_worked_hours(employee.total_worked_hours)
 
@@ -254,12 +266,14 @@ def scan_qr_code(request):
         return Response({"error": "Invalid QR code data or Employee does not exist"},
                         status=status.HTTP_400_BAD_REQUEST)
 
-
 def format_total_worked_hours(total_worked_hours):
     # Convert total worked hours to hours and minutes format
     hours = total_worked_hours.seconds // 3600
     minutes = (total_worked_hours.seconds // 60) % 60
     return f"{hours} hours {minutes} minutes"
+
+
+
 
 
 class IssueTicketUserViewSet(APIView):
@@ -306,6 +320,15 @@ class inoutViewSet(ModelViewSet):
     serializer_class = In_Out_serializer
     queryset = In_Out.objects.all()
 
+
+
+class EmployeeInOutView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request):
+        print(request.user.id)
+        instance = In_Out.objects.filter(employee=request.user.id)
+        serializer = In_Out_serializer(instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 def home(request):
     return render(request, 'account/authentication.html')

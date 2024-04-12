@@ -369,6 +369,14 @@ button:focus {
     padding: 10px 0;
 }
 
+.box_header_main .employeeLeave {
+    align-items: end !important;
+}
+#leave_days .form-check {
+        white-space: nowrap;
+    vertical-align: top;
+}
+
 
 .headerMenu,
 .headerClose{

@@ -2,10 +2,12 @@
 
 {% block main-content %}
 {{request.user.id}}
-    <div class="post d-flex flex-column-fluid">
-    <div class="container-xxl" style="margin-top:132px;margin-left:210px;">
-        <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-            <div class="post d-flex flex-column-fluid" id="kt_post">
+
+    <h2 class="main_heading">In-Out List</h2>
+    <div class="post">
+    <div class="container-xxl">
+        <div class="content" id="kt_content">
+            <div class="post" id="kt_post">
                 <div class="container-xxl">
                     <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light p-3">
                         <!-- Left Section: Add Button -->
@@ -22,8 +24,6 @@
                             </div>
                         </div>
 
-                        <!-- Right Section: In-Out List Text -->
-                        <h1 class="page-title d-flex align-items-center flex-wrap ms-4 mb-0">In-Out List</h1>
                     </div>
 
                     <!-- Table Body -->

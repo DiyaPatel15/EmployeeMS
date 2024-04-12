@@ -11,14 +11,11 @@
 <!--            <div class="row  mb-2 ml-1">-->
 <!--                <h3 class="page-title d-flex align-items-center flex-wrap me-20 mb-300 mb-lg-0" style="font-size:22px;">Employee Task list</h3>-->
 <!--            </div>-->
-            <div class="card">
+            <div class="card box_header_main">
                 <div class="card-header border-1 pt-6">
-                    <div class="label-container ml-1">
-                        <label for="priority_search" class="visually-hidden">Select a Priority:</label>
-                    </div>
                     <div class="employeeLeave bg-light box_header_main">
                     <div>
-<!--                        <label for="priority_search">Select a Priority:</label>-->
+<label for="priority_search" class="visually-hidden">Select a Priority:</label>
                         <select id="priority_search" >
                             <option value="">All</option>
                             <option value="Low">Low</option>
@@ -31,7 +28,7 @@
                     <button  class="button_mian" type="submit" >Search</button>
                 </div>
                 <form action="http://127.0.0.1:8000/employeetask/"
-                          class="d-flex align-items-center">
+                          class="d-flex align-items-center employeeLeave">
 
                         <div class="label-container ml-1">
                             <label for="month" class="visually-hidden">Search Employee date</label>
@@ -70,8 +67,11 @@
                                         <th class="min-w-125px sorting">Assign Date</th>
                                         <th class="min-w-125px sorting">Mentor</th>
                                         <th class="min-w-125px sorting">priority</th>
+                                        {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+
                                         <th class="text-end min-w-70px sorting_disabled">Actions
                                         </th>
+                                        {% endif %}
                                     </tr>
                                     </thead>
                                     <tbody class="fw-bold text-gray-600" id="tableBody">
@@ -110,7 +110,7 @@
                         <input type="hidden" id="taskId" name="taskId">
                         <div class="form-group">
                             <label for="updateName">Employee Name:</label>
-                            <input type="text" class="form-control" id="updateName" name="updateName">
+                            <input type="text" class="form-control" id="updateName" name="updateName" disabled>
                         </div>
                         <div class="form-group">
                             <label for="updateCardLink">Card Link:</label>
@@ -122,7 +122,20 @@
                         </div>
                         <div class="form-group">
                             <label for="updateMentor">Mentor:</label>
-                            <input type="text" class="form-control" id="updateMentor" name="updateMentor">
+<!--                            <input type="text" class="form-control" id="updateMentor" name="updateMentor">-->
+                             <select class="form-control" id="updateMentor" required>
+                            <option value="">Select Mentor</option>
+                            <option value="Harsh Modi">Harsh Modi</option>
+                            <option value="Kishan Patel">Kishan Patel</option>
+                            <option value="Rahul Patel">Rahul Patel</option>
+                            <option value="Harsh Sompura">Harsh Sompura</option>
+                            <option value="Dhaval Gajjar">Dhaval Gajjar</option>
+                            <option value="Vishal Tanna">Vishal Tanna</option>
+                            <option value="Aakanksha Neliwer">Aakanksha Neliwer</option>
+                            <option value="Bansari Goswami">Bansari Goswami</option>
+                            <option value="Sandeep Makvana">Sandeep Makvana</option>
+                            <!-- Add more options as needed -->
+                        </select>
                         </div>
                         <div class="form-group">
                             <label for="updatePriority">Priority:</label>
@@ -153,10 +166,7 @@
             </div>
             <div class="modal-body">
                 <form id="addTaskForm">
-                    <div class="form-group">
-                        <label for="taskName">Employee Name:</label>
-                        <input type="text" class="form-control" id="taskName" name="taskName" required>
-                    </div>
+
                     <div class="form-group">
                         <label for="cardLink">Card Link:</label>
                         <input type="text" class="form-control" id="cardLink" name="cardLink" required>
@@ -224,6 +234,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 
+    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
     <script>
 
 
@@ -292,6 +303,7 @@
                                 <td>${task.E_Assign_Date}</td>
                                 <td>${task.E_Mentor}</td>
                                 <td>${task.E_Priority}</td>
+                                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                                 <td class="editbtns">
                                     <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
                                     <div id="actionMenu_${task.id}" class="action-menu hidden mt-2" style="display: none;">
@@ -299,6 +311,7 @@
                                         <button  class="btn btn-danger text-danger bg-light"  onclick="displayDeleteConfirmationModal(${task.id})">Delete</button>
                                     </div>
                                 </td>
+                                {% endif %}
                             </tr>
                             `;
                         tableBody.append(row);
@@ -378,12 +391,23 @@
             const updatedMentor = $('#updateMentor').val();
             const updatedPriority = $('#updatePriority').val();
 
+            const token = localStorage.getItem('accessToken');
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            let data1 = JSON.parse(jsonPayload)
+
             fetch(`http://127.0.0.1:8000/emp-task/${taskId}/`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Authorization': 'Bearer '+ token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                 },
                 body: JSON.stringify({
+                    employee: data1.user_id,
                     E_name: updatedName,
                     E_Card_Link: updatedCardLink,
                     E_Assign_Date: updatedAssignDate,
@@ -407,6 +431,208 @@
 
 
 </script>
+    {% else %}
+    <script>
+
+
+        // Function to handle deleting a task
+    function deleteTask(id) {
+        $.ajax({
+            url: `http://127.0.0.1:8000/taskuser/${id}/`,
+            type: 'DELETE',
+            success: function(result) {
+                console.log(`Task with ID ${id} deleted successfully`);
+                // Remove the deleted task row from the table
+                $(`#task_${id}`).remove();
+                // Trigger custom event for task deletion (optional)
+                $(document).trigger('taskDeleted', id);
+            },
+            error: function(xhr, status, error) {
+                console.error(`Error deleting task: ${error}`);
+                // Optionally provide feedback to the user about the error
+                alert(`Error deleting task: ${error}`);
+            }
+        });
+    }
+
+    function displayDeleteConfirmationModal(requestId) {
+        // Store the request ID in a data attribute of the confirmation modal
+        $('#deleteConfirmationModal').data('request-id', requestId);
+        // Show the modal
+        $('#deleteConfirmationModal').modal('show');
+    }
+
+    // Event listener for delete button click
+    $('.deleteBtn').on('click', function() {
+        // Get the request ID from the delete button's data attribute
+        const requestId = $(this).data('request-id');
+        displayDeleteConfirmationModal(requestId);
+    });
+
+    // Event listener for confirm delete button click
+    $('#confirmDeleteBtn').on('click', function() {
+        // Get the request ID from the data attribute of the confirmation modal
+        const requestId = $('#deleteConfirmationModal').data('request-id');
+        // Call the deleteRecord function to perform the deletion
+        deleteTask(requestId);
+        // Close the modal
+        $('#deleteConfirmationModal').modal('hide');
+    });
+
+
+        // Function to fetch data from the API and populate the table
+        const token = localStorage.getItem('accessToken');
+
+        function fetchDataAndPopulateTable() {
+            // Fetch data and populate table
+
+            $.ajax({
+                url: 'http://127.0.0.1:8000/taskuser/',
+                type: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                success: function(data) {
+                    const tableBody = $('#kt_customers_table tbody');
+                    // Clear existing table <<rows></rows></rows>
+                    tableBody.empty();
+                    // Populate table rows with data
+                    data.forEach((task, index) => {
+                        const row = `
+                            <tr id="task_${task.id}">
+                                <td>${index + 1}</td>
+                                <td>${task.E_name}</td>
+                                <td>${task.E_Card_Link}</td>
+                                <td>${task.E_Assign_Date}</td>
+                                <td>${task.E_Mentor}</td>
+                                <td>${task.E_Priority}</td>
+                                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                                <td class="editbtns">
+                                    <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
+                                    <div id="actionMenu_${task.id}" class="action-menu hidden mt-2" style="display: none;">
+                                        <button class="btn btn-primary text-primary bg-light"  onclick="updateTask(${task.id})">Update</button>
+                                        <button  class="btn btn-danger text-danger bg-light"  onclick="displayDeleteConfirmationModal(${task.id})">Delete</button>
+                                    </div>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            `;
+                        tableBody.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching tasks:', error);
+                }
+            });
+        }
+
+        // Toggle action menu
+        function toggleActionMenu(taskId) {
+            const actionMenu = $(`#actionMenu_${taskId}`);
+            actionMenu.slideToggle(); // This will toggle the slide effect
+        }
+
+
+        // Click outside handler for action menu
+        function clickOutsideHandler(e) {
+            if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.btn-danger').length) {
+                $('.action-menu').addClass('hidden');
+                // Remove event listener after closing action menu
+                $(document).off('click', clickOutsideHandler);
+            }
+        }
+
+        // Listen for taskDeleted event and update table
+        $(document).on('taskDeleted', function(event, id) {
+            // Remove the deleted task row from the table
+            $(`#task_${id}`).remove();
+        });
+
+        // Call the function to fetch data and populate the table when the document is ready
+        $(document).ready(function() {
+            fetchDataAndPopulateTable();
+        });
+
+        // Add click outside handler when action menu is toggled
+        $(document).on('click', '.btn-danger', function() {
+            $(document).on('click', clickOutsideHandler);
+        });
+
+
+            function updateTask(taskId) {
+            if (!taskId) {
+                console.error('Task ID is undefined');
+                return;
+            }
+            // Fetch task details based on taskId and populate the update form fields
+            fetch(`http://127.0.0.1:8000/taskuser/${taskId}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('taskId').value = data.id;
+                    document.getElementById('updateName').value = data.E_name;
+                    document.getElementById('updateCardLink').value = data.E_Card_Link;
+                    document.getElementById('updateAssignDate').value = data.E_Assign_Date;
+                    document.getElementById('updateMentor').value = data.E_Mentor;
+                    document.getElementById('updatePriority').value = data.E_Priority;
+
+                    // Show the update modal
+                    $('#updateModal').modal('show');
+                })
+                .catch(error => console.error('Error fetching task details:', error));
+        }
+
+        function submitUpdateForm() {
+            const taskId = $('#taskId').val();
+            const updatedName = $('#updateName').val();
+            const updatedCardLink = $('#updateCardLink').val();
+            const updatedAssignDate = $('#updateAssignDate').val();
+            const updatedMentor = $('#updateMentor').val();
+            const updatedPriority = $('#updatePriority').val();
+
+            const token = localStorage.getItem('accessToken');
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            let data1 = JSON.parse(jsonPayload)
+
+            fetch(`http://127.0.0.1:8000/taskuser/${taskId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    employee: data1.user_id,
+                    E_name: updatedName,
+                    E_Card_Link: updatedCardLink,
+                    E_Assign_Date: updatedAssignDate,
+                    E_Mentor: updatedMentor,
+                    E_Priority: updatedPriority
+                    // Add other fields to update here
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update task');
+                }
+                console.log('Task updated successfully');
+                // Close the update modal
+                $('#updateModal').modal('hide');
+                // Refresh task data in the table
+                fetchDataAndPopulateTable(); // Call the function to repopulate the table
+            })
+            .catch(error => console.error('Error updating task:', error));
+        }
+
+
+</script>
+    {% endif %}
 
 <script>
     // Function to filter tasks based on priority
@@ -453,21 +679,30 @@ function displayAddTaskModal() {
 // Function to add a new employee task
 function addEmployeeTask() {
     // Get form data
-    const name = $('#taskName').val().trim();
+    //const name = $('#taskName').val().trim();
     const cardLink = $('#cardLink').val();
     const assignDate = $('#assignDate').val();
     const mentor = $('#mentor').val();
     const priority = $('#priority').val();
 
     // Validate input values (optional)
-    if (typeof name !== 'string' || name === '') {
-        alert('Task name must be provided.');
-        return;
-    }
+    //if (typeof name !== 'string' || name === '') {
+    //    alert('Task name must be provided.');
+    //    return;
+    //}
+
+    const token = localStorage.getItem('accessToken');
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    let data1 = JSON.parse(jsonPayload)
 
     // Create new task object
     const newTask = {
-        E_name: name,
+        employee: data1.user_id,
+        //E_name: name,
         E_Card_Link: cardLink,
         E_Assign_Date: assignDate,
         E_Mentor: mentor,
@@ -510,7 +745,7 @@ $('#addTaskForm').submit(function(event) {
 
 
 <script>
-            document.addEventListener('DOMContentLoaded', function () {
+         document.addEventListener('DOMContentLoaded', function () {
          // Function to display employee task data in the table
          function displayEmployeeTaskData(data) {
              var tableBody = document.getElementById('tableBody');
