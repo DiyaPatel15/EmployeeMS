@@ -1,9 +1,14 @@
 from django.shortcuts import render
-from .models import Employee, Issue_Ticket, Holiday, Employee_Task, In_Out,Events,SalaryStructure, EmployeeStatus, EmpContract, RulesCategory, Rule,EmployeePaySlip,EmployeePaySlipLines,Leave
-from .serializers import (EmployeeSerializer, EmployeeRegistrationSerializer, EmployeeLoginSerializer,In_Out_serializer,EmployeeProfileSerializer, EmployeeChangePasswordSerializer, UserPasswordResetSerializer,
-                          SendPasswordResetSerializer, IssueTicketSerializer, HolidaySerializer, EmployeeTaskSerializer,SalaryStructureSerializer,
+from .models import Employee, Issue_Ticket, Holiday, Employee_Task, In_Out, Events, SalaryStructure, EmployeeStatus, \
+    EmpContract, RulesCategory, Rule, EmployeePaySlip, EmployeePaySlipLines, EmployeeLeave
+from .serializers import (EmployeeSerializer, EmployeeRegistrationSerializer, EmployeeLoginSerializer,
+                          In_Out_serializer, EmployeeProfileSerializer, EmployeeChangePasswordSerializer,
+                          UserPasswordResetSerializer,
+                          SendPasswordResetSerializer, IssueTicketSerializer, HolidaySerializer, EmployeeTaskSerializer,
+                          SalaryStructureSerializer,
                           EmployeeStatusSerializer, EmpContractSerializer, RuleCategorySerializer, RuleSerializer,
-                          EmployeePaySlipSerializer, EmployeePaySlipLinesSerializer,LeaveSerializer)
+                          EmployeePaySlipSerializer, EmployeePaySlipLinesSerializer, EmployeeLeaveSerializer,
+                          )
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,6 +28,7 @@ import re
 import inflect
 from xhtml2pdf import pisa
 from django.template.loader import get_template
+from django.db.models import Q
 
 
 def get_tokens_for_user(user):
@@ -38,9 +44,6 @@ class EmployeeViewSet(ModelViewSet):
     # permission_classes = [IsAuthenticated]
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-
-
-
 
 
 class EmployeeTaskViewSet(ModelViewSet):
@@ -199,9 +202,8 @@ def generate_qr_code(request):
         return Response({"error": "Employee not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def scan_qr_code(request):
     try:
         qr_code_data = request.data.get('qr_code_data')
@@ -211,34 +213,65 @@ def scan_qr_code(request):
         employee = Employee.objects.get(id=employee_id)
 
         # Update time entry based on employee's current status
-        current_time = datetime.now()
+        current_time = datetime.now().time()
+        total_worked_hours = timedelta()
+        print("employee status", employee.status)
         if employee.status:
             # This is an out-time scan
-            employee.last_scan_out_time = current_time
+            if employee.last_scan_in_time:
+                if employee.last_scan_in_time > employee.last_scan_out_time:
+                    # Swap in and out times if out time is earlier than in time
+                    employee.last_scan_in_time, employee.last_scan_out_time = employee.last_scan_out_time, employee.last_scan_in_time
+
+                # Calculate time difference as timedelta
+                time_difference = datetime.combine(datetime.today(), employee.last_scan_out_time) - datetime.combine(
+                    datetime.today(), employee.last_scan_in_time)
+                # Update total worked hours
+                employee.total_worked_hours += time_difference
+                employee.last_scan_out_time = current_time
+            else:
+                # If there's no previous in-time, we can't calculate worked hours
+                return Response({"error": "Missing previous in-time scan"},
+                                status=status.HTTP_400_BAD_REQUEST)
         else:
             # This is an in-time scan
+            print("-----------", current_time, type(current_time))
             employee.last_scan_in_time = current_time
 
         # Toggle employee status
         employee.status = not employee.status
         employee.save()
+        # Format total worked hours
+        total_worked_hours_with_units = format_total_worked_hours(employee.total_worked_hours)
 
-        total_hours_worked = timedelta(0)
-        if employee.last_scan_in_time and employee.last_scan_out_time:
-            total_hours_worked = employee.last_scan_out_time - employee.last_scan_in_time
-
-        return Response(
-            {"message": "Time entry updated successfully", "id": employee_id, "total_hours_worked": total_hours_worked},
-            status=status.HTTP_200_OK)
+        # Update the response with the formatted total worked hours
+        return Response({"message": "Time entry updated successfully",
+                         "id": employee_id,
+                         "total_worked_hours": total_worked_hours_with_units},
+                        status=status.HTTP_200_OK)
 
     except (Employee.DoesNotExist, ValueError, IndexError):
         return Response({"error": "Invalid QR code data or Employee does not exist"},
                         status=status.HTTP_400_BAD_REQUEST)
 
+
+def format_total_worked_hours(total_worked_hours):
+    # Convert total worked hours to hours and minutes format
+    hours = total_worked_hours.seconds // 3600
+    minutes = (total_worked_hours.seconds // 60) % 60
+    return f"{hours} hours {minutes} minutes"
+
+
+class IssueTicketUserViewSet(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request):
+        instance = Issue_Ticket.objects.filter(ticket_email=request.user)
+        serializer = IssueTicketSerializer(instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class IssueTicketViewSet(ModelViewSet):
     serializer_class = IssueTicketSerializer
     queryset = Issue_Ticket.objects.all()
-
 
     def submit_ticket(request):
         if request.method == 'POST':
@@ -260,7 +293,6 @@ class IssueTicketViewSet(ModelViewSet):
             return JsonResponse({'message': 'Ticket submitted and email sent to admin'})
         else:
             return JsonResponse({'error': 'Invalid request method'}, status=405)
-
 
 
 class holidayViewSet(ModelViewSet):
@@ -308,9 +340,17 @@ def holidayView(request):
 def employee_task_View(request):
     return render(request, 'account/employee_task.html')
 
-def emp_leave(request):
-    return render(request, 'account/employee_leave.html')
 
+def leave(request):
+    return render(request, 'account/emp_leave.html')
+
+class EmployeeLeaveView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self, request):
+        print(request.user.id)
+        instance = EmployeeLeave.objects.filter(employee=request.user.id)
+        serializer = EmployeeLeaveSerializer(instance, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 def inout_view(request):
     form = In_Out.objects.all()
@@ -372,9 +412,6 @@ def remove(request):
     return JsonResponse(data)
 
 
-class LeaveViewSet(ModelViewSet):
-    queryset = Leave.objects.all()
-    serializer_class = LeaveSerializer
 class SalaryStructureViewSet(ModelViewSet):
     queryset = SalaryStructure.objects.all()
     serializer_class = SalaryStructureSerializer
@@ -505,13 +542,13 @@ def print_payslip(request, payslip_id):
     worked_days = payslip.total_payable_days()[1]
     lop = std_days - worked_days
 
-    print(payslip.emp.emp_contract.latest("id").ctc)
+    print(payslip.emp_id.emp_contract.latest("id").ctc)
     payslip_template = get_template('payslip.html')
     context = {
         'payslip': payslip,
-        "first_name": payslip.emp.emp_contract.latest("id").first_name,
-        "last_name": payslip.emp.emp_contract.latest("id").last_name,
-        "ctc": payslip.emp.emp_contract.latest("id").ctc,
+        "first_name": payslip.emp_id.emp_contract.latest("id").first_name,
+        "last_name": payslip.emp_id.emp_contract.latest("id").last_name,
+        "ctc": payslip.emp_id.emp_contract.latest("id").ctc,
         "month": payslip.get_month_name(),
         "data": {payslip_data.code: payslip_data.final for payslip_data in payslip.employee_pay_slip_lines.all()},
         "rate": {payslip_data.code: payslip_data.rate for payslip_data in payslip.employee_pay_slip_lines.all()},
@@ -549,6 +586,27 @@ def print_payslip(request, payslip_id):
     return response
 
 
+class EmployeeLeaveViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    serializer_class = EmployeeLeaveSerializer
+    queryset = EmployeeLeave.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['start_date']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        month = self.request.query_params.get('month')
+        if month:
+            try:
+                month = int(month)
+                queryset = queryset.filter(
+                    Q(start_date__month=month) | Q(end_date__month=month)
+                )
+            except ValueError:
+                # Handle invalid month value
+                queryset = EmployeeLeave.objects.none()  # Return an empty queryset
+        return queryset
 
 
-
+def in_out_list(request):
+    return render(request, 'account/in-out-list.html')

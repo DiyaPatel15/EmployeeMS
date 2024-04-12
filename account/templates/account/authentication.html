@@ -206,10 +206,13 @@
                 body: formData,
               });
 
-              if (response.ok) {
+              if (!response.ok) {
                 console.log("Registration successful!", response.status);
+                window.location.href = "{% url 'home' %}";
               } else {
                 console.log("Registration successful!", response.status);
+
+
                 //console.error("Registration failed:", response.statusText);
               }
             } catch (error) {

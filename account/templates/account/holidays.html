@@ -9,7 +9,9 @@
         <div class="card content d-flex flex-column flex-column-fluid" id="kt_content">
             <div id="kt_toolbar_container" class="container-fluid d-flex justify-content-between align-items-center bg-light box_header_main">
                 <!-- Left Section: Add Button -->
+                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                  <button type="button" class="button_mian" data-bs-toggle="modal" data-bs-target="#addModal" onclick="displayAddModal()"  fdprocessedid="hrjq6j"><a>Add Holiday</a></button>
+                {% endif %}
                 <!-- Center Section: Search Bar -->
                 <div class="search-bar-wrapper">
                     <div class="search-bar d-flex align-items-center position-relative">
@@ -35,7 +37,9 @@
                                 <th class="min-w-125px sorting">Holiday</th>
                                 <th class="min-w-125px sorting">Date</th>
                                 <th class="min-w-125px sorting">Day</th>
+                                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                                 <th class="min-w-125px sorting">Actions</th>
+                                {% endif %}
 
                             </tr>
                         </thead>
@@ -89,10 +93,10 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">Close</span>
         </button>
-        <button type="button" class="btn btn-primary" onclick="submitUpdateForm()">Save changes</button>
+        <button type="button" class="btn btn-success" onclick="submitUpdateForm()">Save</button>
       </div>
     </div>
   </div>
@@ -137,8 +141,8 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="addHoliday()">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" onclick="addHoliday()">Save</button>
             </div>
         </div>
     </div>
@@ -158,7 +162,7 @@
         Are you sure you want to delete this holiday?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
       </div>
     </div>
@@ -221,6 +225,7 @@
                     <td>${holiday.holiday_name}</td>
                     <td>${holiday.holiday_date}</td>
                     <td>${holiday.holiday_day}</td>
+                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                     <td class="editbtns">
                         <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${holiday.id})">...</button>
                         <div id="actionMenu_${holiday.id}" class="action-menu hidden mt-2" style="display: none;">
@@ -228,6 +233,7 @@
                             <button class="btn btn-danger text-danger . bg-light" onclick="displayConfirmationModal(${holiday.id})">Delete</button>
                         </div>
                     </td>
+                    {% endif %}
                 `;
                 return row;
             }

@@ -40,7 +40,9 @@
                                 <th class="min-w-125px sorting">Issue</th>
                                 <th class="min-w-125px sorting">Date</th>
                                 <th class="min-w-125px sorting">Status</th>
+                                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                                 <th class="min-w-125px sorting">Actions</th>
+                                {% endif %}
 
                             </tr>
                         </thead>
@@ -87,8 +89,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="addTicket()">Save Ticket</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" onclick="addTicket()">Save</button>
       </div>
     </div>
   </div>
@@ -180,7 +182,7 @@
 
 
 
-
+{% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
 <script>
      fetch('http://127.0.0.1:8000/issue-ticket/') // Replace 'http://your-api-url' with your actual API endpoint
     .then(response => response.json())
@@ -195,16 +197,52 @@
                 <td>${ticket.ticket_issue}</td>
                 <td>${ticket.ticket_date}</td>
                 <td>${ticket.ticket_status}</td>
+                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                 <td>
 
                     <button class="btn btn-danger deleteBtns" onclick="displayConfirmationModal(${ticket.id})">Delete</button>
                 </td>
+                {% endif %}
             `;
             tableBody.appendChild(row);
         });
     })
     .catch(error => console.error('Error fetching data:', error));
 </script>
+{% else %}
+<script>
+    const token = localStorage.getItem('accessToken');
+     fetch('http://127.0.0.1:8000/issueticketuser/', {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+    }) // Replace 'http://your-api-url' with your actual API endpoint
+    .then(response => response.json())
+    .then(data => {
+        const tableBody = document.getElementById('ticketTableBody');
+        data.forEach((ticket,index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index+1}</td>
+                <td>${ticket.ticket_name}</td>
+                <td>${ticket.ticket_email}</td>
+                <td>${ticket.ticket_issue}</td>
+                <td>${ticket.ticket_date}</td>
+                <td>${ticket.ticket_status}</td>
+                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                <td>
+
+                    <button class="btn btn-danger deleteBtns" onclick="displayConfirmationModal(${ticket.id})">Delete</button>
+                </td>
+                {% endif %}
+            `;
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(error => console.error('Error fetching data:', error));
+</script>
+{% endif %}
 
 
 

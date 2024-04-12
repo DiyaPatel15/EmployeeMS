@@ -48,16 +48,24 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'holidayView' %}"><i class="fas fa-calendar-day"></i> Holiday</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'inout' %}"><i class="fas fa-sign-in-alt"></i> In-Out Request</a>
                     </li>
+                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'employeetask' %}"><i class="fas fa-tasks"></i> Employee Task</a>
                     </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'employeetask' %}"><i class="fas fa-tasks"></i> My Task</a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'issueticket' %}"><i class="fas fa-ticket-alt"></i> Issue
                             Ticket</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'change_pass' %}"><i class="fas fa-lock"></i> Change Password</a>
                     </li>

@@ -1,5 +1,5 @@
 from django.db import models
-from .constants import (EMPLOYEE_DESIGNATION, EMPLOYEE_ROLE, EMPLOYEE_COMPANY, E_PRIORITY, E_MENTOR, IN_OUT,APPROVEL_STATUS,ISSUE_STATUS,TableName, Integers,AMOUNT_TYPE,ALLOWANCE_TYPE,LEAVE_STATUS,LEAVE_DAY,LEAVE_TYPE,EVENT_DAY )
+from .constants import (EMPLOYEE_DESIGNATION, EMPLOYEE_ROLE, EMPLOYEE_COMPANY, E_PRIORITY, E_MENTOR, IN_OUT,APPROVEL_STATUS,ISSUE_STATUS,TableName, Integers,AMOUNT_TYPE,ALLOWANCE_TYPE,LEAVE_HALF,LEAVE_DAYS,LEAVE_TYPE,EVENT_DAY )
 
 
 from django.contrib.auth.models import AbstractBaseUser,UserManager
@@ -9,6 +9,7 @@ import ast
 from django.core.exceptions import ValidationError
 import inflect
 from django.db.models import Sum
+import datetime
 from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
@@ -16,7 +17,7 @@ from dateutil.relativedelta import relativedelta
 # Create your models here.
 
 class Employee(AbstractBaseUser):
-    emp_id = models.CharField(max_length=10, help_text="Employee ID")
+    emp_id = models.CharField(max_length=10, help_text="Employee ID",null=True, blank=True)
     emp_name = models.CharField(max_length=30, help_text="Employee Name")
     emp_birthday = models.DateField(null=True)
     emp_email = models.EmailField(max_length=255, unique=True, verbose_name="email")
@@ -28,20 +29,24 @@ class Employee(AbstractBaseUser):
     emp_company = models.CharField(choices=EMPLOYEE_COMPANY, max_length=50, help_text="Employee Company")
     last_scan_in_time = models.DateTimeField(null=True, blank=True)
     last_scan_out_time = models.DateTimeField(null=True, blank=True)
-    total_worked_hours = models.FloatField(default=0)
+    total_worked_hours = models.DurationField(default=datetime.timedelta(hours=0))
     status = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    emp_joining_date = models.DateField(null=True, blank=True)
+    emp_leaving_date = models.DateField(null=True, blank=True)
+    casual_leave_balance = models.IntegerField(default=12)
+    sick_leave_balance = models.IntegerField(default=6)
 
 
 
     objects = UserBaseManager()
 
     USERNAME_FIELD = "emp_email"
-    REQUIRED_FIELDS = ["emp_id", "emp_name", "emp_contact", "emp_birthday", "emp_address", "emp_profile", "emp_company",
+    REQUIRED_FIELDS = ["emp_id", "emp_name", "emp_contact", "emp_birthday", "emp_address","emp_joining_date", "emp_leaving_date", "emp_profile", "emp_company",
                        "is_active",
                        "status", "emp_role",
                        "emp_designation"]
@@ -112,7 +117,7 @@ class Issue_Ticket(models.Model):
     def save(self, *args, **kwargs):
         self.ticket_name = self.ticket_emp_id.emp_name
         self.ticket_email = self.ticket_emp_id.emp_email
-        self.ticket_date = datetime.now().date()
+        self.ticket_date = datetime.datetime.now().date()
         super().save(*args, **kwargs)
 
 
@@ -257,7 +262,7 @@ class Rule(models.Model):
 
 
 class EmployeePaySlip(models.Model):
-    emp = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_pay_slip", null=True)
+    emp_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_pay_slip", null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     total_working_days = models.DecimalField(max_digits=3, decimal_places=1, null=True, blank=True)
@@ -289,16 +294,16 @@ class EmployeePaySlip(models.Model):
         return weekend_holiday_count
 
     def count_leaves(self):
-        total_leave_duration = Leave.objects.filter(emp_id=self.emp, from_date__gte=self.start_date,
-                                                    to_date__lte=self.end_date).aggregate(
-            total_duration=Sum(models.F('to_date') - models.F('from_date')))['total_duration']
+        total_leave_duration = EmployeeLeave.objects.filter(employee=self.emp_id, start_date__gte=self.start_date,
+                                                    end_date__lte=self.end_date).aggregate(
+            total_duration=Sum(models.F('end_date') - models.F('start_date')))['total_duration']
         if total_leave_duration is None:
             # print(type(total_leave_duration))
             total_leave_duration = 0
         if total_leave_duration:
             total_leave_duration = total_leave_duration.days + 1
-            if self.emp.leave_balance != 0:
-                leaves = self.emp.leave_balance - total_leave_duration
+            if self.emp_id.casual_leave_balance != 0:
+                leaves = self.emp_id.casual_leave_balance - total_leave_duration
                 if (leaves < 0):
                     unpaid_leaves = abs(leaves)
                     return unpaid_leaves
@@ -381,26 +386,44 @@ class EmployeePaySlipLines(models.Model):
     final = models.FloatField()
 
 
-class Leave(models.Model):
-    emp_id = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="leaves", null=True)
-    leave_type = models.CharField(choices=LEAVE_TYPE, max_length=20, default=1, help_text="leave_type")
-    leave_day = models.CharField(choices=LEAVE_DAY, max_length=15, default=1, help_text="leave_day")
-    from_date = models.DateField()
-    to_date = models.DateField()
-    status = models.CharField(choices=LEAVE_STATUS, max_length=15, default=1, help_text="leave_status")
 
-    class Meta:
-        db_table = TableName.LEAVES
-
-    def check_valid_date(self):
-        duration = self.to_date - self.from_date
-        if duration.days < 0:
-            raise ValidationError("To date should be greater than From date")
-        return duration.days + 1
+class EmployeeLeave(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_leaves")
+    leave_type = models.CharField(max_length=50, choices=LEAVE_TYPE)
+    start_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
+    leave_days = models.CharField(choices=LEAVE_DAYS, max_length=30)
+    leave_half = models.CharField(choices=LEAVE_HALF, max_length=30, null=True, blank=True)
+    no_leave_days = models.FloatField(null=True, blank=True)
+    leave_reason = models.TextField()
+    approval_status = models.CharField(max_length=50, choices=APPROVEL_STATUS, default='Pending')
 
     def __str__(self):
-        return self.emp_id.email
+        return str(self.employee)
 
     def save(self, *args, **kwargs):
-        self.check_valid_date()
+
+        if self.leave_days == "Full":
+            leave_duration = (self.end_date - self.start_date).days + 1
+            self.no_leave_days = leave_duration
+
+            if self.leave_type == "Casual Leave":
+                self.employee.casual_leave_balance -= leave_duration
+            elif self.leave_type == "Sick Leave":
+                if self.leave_days != "Half":
+                    self.employee.sick_leave_balance -= leave_duration
+                else:
+                    self.employee.sick_leave_balance -= 0.5
+        else:
+            self.end_date = self.start_date
+            if self.leave_type == "Casual Leave":
+                self.employee.casual_leave_balance -= 0.5
+            elif self.leave_type == "Sick Leave":
+                self.employee.sick_leave_balance -= 0.5
+            self.no_leave_days = 0.5
         super().save(*args, **kwargs)
+
+
+
+
+

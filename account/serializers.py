@@ -1,11 +1,13 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Employee,Issue_Ticket,Holiday,Employee_Task,In_Out,SalaryStructure, EmployeeStatus, EmpContract, RulesCategory, Rule,EmployeePaySlip, EmployeePaySlipLines,Leave
+from .models import Employee,Issue_Ticket,Holiday,Employee_Task,In_Out,SalaryStructure, EmployeeStatus, EmpContract, RulesCategory, Rule,EmployeePaySlip, EmployeePaySlipLines,EmployeeLeave
 from rest_framework import serializers
 from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from account.utils import Util
 import ast
+from datetime import datetime, time
+import pytz
 
 
 
@@ -52,19 +54,14 @@ class EmployeeProfileSerializer(ModelSerializer):
 
 
 class EmployeeChangePasswordSerializer(serializers.ModelSerializer):
-        old_password = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
         password = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
         password2 = serializers.CharField(max_length=50, style={'input_type': 'password'}, write_only=True)
 
         class Meta:
             model = Employee
-            fields = ['old_password', 'password', 'password2']
+            fields = [ 'password', 'password2']
 
-        def validate_old_password(self, value):
-            user = self.context['user']
-            if not user.check_password(value):
-                raise serializers.ValidationError("Invalid old password")
-            return value
+
 
         def validate(self, data):
             password = data.get('password')
@@ -146,6 +143,11 @@ class IssueTicketSerializer(ModelSerializer):
         model = Issue_Ticket
         fields = '__all__'
 
+
+# class IssueTicketUserSerializer(ModelSerializer):
+#     class Meta:
+#         model = Issue_Ticket
+#         fields = '__all__'
 
 
 class HolidaySerializer(ModelSerializer):
@@ -237,10 +239,40 @@ class EmployeePaySlipLinesSerializer(serializers.ModelSerializer):
         model = EmployeePaySlipLines
         fields = ["id", "slip_id", "name", "code", "category_id", "amount_type", "amount_value", "rate", "final"]
 
-class LeaveSerializer(serializers.ModelSerializer):
+
+
+class EmployeeLeaveSerializer(ModelSerializer):
+    emp_name = serializers.SerializerMethodField()
     class Meta:
-        model = Leave
-        fields = ['id', 'emp_id', "leave_type", "leave_day", "from_date", "to_date", "status"]
+        model = EmployeeLeave
+        fields = '__all__'
+
+
+    def get_emp_name(self, obj):
+        return obj.employee.emp_name
+    def validate(self, data):
+        end_date = data.get('end_date')
+        start_date = data.get('start_date')
+        leave_days = data.get('leave_days')
+        leave_half = data.get('leave_half')
+
+        ist_kolkata = pytz.timezone('Asia/Kolkata')
+        current_time = datetime.now(ist_kolkata).time()
+        if end_date:
+            if end_date < start_date:
+                raise serializers.ValidationError("End date must be less then Start Date")
+
+        total_leave_days = (end_date - start_date).days + 1 if end_date else 1
+        if leave_days == "Half":
+            total_leave_days *= 0.5
+
+        # # Check if total leave days exceed 12 and set leave as unpaid
+        # if total_leave_days > 18:
+        #     data['is_paid'] = False
+
+        if leave_days == "Half" and current_time > time(hour=14, minute=30) and leave_half == "First-Half":
+            raise serializers.ValidationError("You can only take second half after 2:30 PM")
+        return data
 
 
 

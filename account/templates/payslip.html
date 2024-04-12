@@ -6,8 +6,9 @@
         border-collapse:collapse;
         border:0px solid black;
         }
-        table td{line-height:20px;padding:2px;font-size:15px; font-family: Times New Roman; margin:0; text-align: center; vertical-align: bottom;}
-        table th{background-color:#eff1f5; color:#363636;line-height:20px;padding:2px;font-weight:bold;font-size:15px; font-family: Times New Roman;margin:0; text-align: left; vertical-align: bottom;}
+        table td{line-height:20px;padding:2px;font-size:15px; font-family: Times New Roman; margin:0; text-align: center; vertical-align:middle;border:1px solid black;}
+        table th{background-color:#eff1f5; color:#363636;line-height:20px;padding:2px;font-weight:bold;font-size:15px; font-family: Times New Roman;margin:0; text-align:center; vertical-align:middle;border:1px solid black;}
+
     </style>
 </head>
 <body>
@@ -57,92 +58,199 @@
         <td>Python Team Leader</td>
     </tr>
 </table>
-<tr></tr>
+
 <br/>
 
-<table style="border: 0.1% solid black;">
-    <tr>
-        <th style="text-align:center" colspan="2">Earnings</th>
-        <th style="text-align:center">Amount</th>
-        <th style="text-align:center">Gross</th>
-        <th style="text-align:center" colspan="2">Deductions</th>
-        <th style="text-align:center">Amount</th>
-        <th style="text-align:center">Gross</th>
-    </tr>
-    <tr>
-        <td style="text-align:left" colspan="2">Basic</td>
-        <td style="text-align:right">{{data.BASIC}}</td>
-        <td style="text-align:right">{{rate.BASIC}}</td>
-        {% if ctc > 12000 %}
-        <td style="text-align:left" colspan="2">Professional Tax</td>
-        <td style="text-align:right">{{data.PT}}</td>
-        <td style="text-align:right">{{rate.PT}}</td>
-        {% endif %}
+<!--<table style="border: 0.1% solid black;">-->
+<!--    <tr>-->
+<!--        <th style="text-align:center" colspan="1">Earnings</th>-->
+<!--        <th style="text-align:center" colspan="2">Amount</th>-->
+<!--        <th style="text-align:center" colspan="2">Gross</th>-->
+<!--        <th style="text-align:center" colspan="1">Deductions</th>-->
+<!--        <th style="text-align:center" colspan="1">Amount</th>-->
+<!--        <th style="text-align:center" colspan="1">Gross</th>-->
 
-    </tr>
-    <tr>
-        <td style="text-align:left" colspan="2">HRA</td>
-        <td style="text-align:right">{{data.HRA}}</td>
-        <td style="text-align:right">{{rate.HRA}}</td>
-        {% if PFEMP == 0 %}
-        <td style="text-align:left" colspan="2">PF</td>
-        <td style="text-align:right">{{data.PFEMP}}</td>
-        <td style="text-align:right">{{rate.PFEMP}}</td>
-        {% endif %}
-    </tr>
-    {% if PFEN1 == 0 and ctc < 21000 %}
-    <tr>
-        {% if PFEN1 == 0 %}
-        <td style="text-align:left" colspan="2">PF-Employer A/C No. 1</td>
-        <td style="text-align:right">{{data.PFEN1}}</td>
-        <td style="text-align:right">{{rate.PFEN1}}</td>
-        {% endif %}
-        {% if ctc < 21000 %}
-        <td style="text-align:left" colspan="2">ESIC Employee</td>
-        <td style="text-align:right">{{data.ESICD}}</td>
-        <td style="text-align:right">{{rate.ESICD}}</td>
-        {% endif %}
-    </tr>
-    {% endif %}
-    {% if PFEPS == 0 %}
-    <tr>
-        <td style="text-align:left" colspan="2">PF-Employer - EPS</td>
-        <td style="text-align:right">{{data.PFEPS}}</td>
-        <td style="text-align:right">{{rate.PFEPS}}</td>
-    </tr>
-    {% endif %}
-    {% if ctc < 21000 %}
-    <tr>
-        <td style="text-align:left" colspan="2">ESIC-Employer</td>
-        <td style="text-align:right">{{data.ESICE}}</td>
-        <td style="text-align:right">{{rate.ESICE}}</td>
-    </tr>
-    {% endif %}
-    <tr>
-        <td style="text-align:left" colspan="2">Other Allowance</td>
-        <td style="text-align:right">{{data.OA}}</td>
-        <td style="text-align:right">{{rate.OA}}</td>
-    </tr>
-    <tr>
-        <td style="text-align:left; font-weight:bold;" colspan="2">Total Earnings</td>
-        <td style="text-align:right; font-weight:bold;">{{gross_earnings}}</td>
-        <td style="text-align:right; font-weight:bold;">{{gross_earnings_total}}</td>
-        <td style="text-align:left; font-weight:bold;" colspan="2">Total Deductions</td>
-        <td style="text-align:right; font-weight:bold;">{{gross_deductions}}</td>
-        <td style="text-align:right; font-weight:bold;">{{gross_deductions_total}}</td>
-    </tr>
-    <tr>
-        <td colspan="2"> </td>
-        <td> </td>
-        <td> </td>
-        <td style="text-align:left; font-weight:bold;" colspan="2">Net Amount</td>
-        <td style="text-align:right; font-weight:bold;">{{net_amount}}</td>
-        <td style="text-align:right; font-weight:bold;">{{net_amount_total}}</td>
-    </tr>
-</table>
+
+<!--    </tr>-->
+
+
+<!--    <tr>-->
+<!--        <td style="text-align:left" colspan="1">Basic</td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        {% if ctc > 12000 %}-->
+<!--        <td style="text-align:left" colspan="2">Professional Tax</td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        {% endif %}-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td style="text-align:left" colspan="1">HRA</td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        {% if PFEMP == 0 %}-->
+<!--        <td style="text-align:left" colspan="2">PF</td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        {% endif %}-->
+<!--    </tr>-->
+<!--    {% if PFEN1 == 0 and ctc < 21000 %}-->
+<!--    <tr>-->
+<!--        {% if PFEN1 == 0 %}-->
+<!--        <td style="text-align:left" colspan="2">PF-Employer A/C No. 1</td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        <td style="text-align:right" colspan="1"></td>-->
+<!--        {% endif %}-->
+<!--        {% if ctc < 21000 %}-->
+<!--        <td style="text-align:left" colspan="2">ESIC Employee</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ data.ESICD }}</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ rate.ESICD }}</td>-->
+<!--        {% endif %}-->
+<!--    </tr>-->
+<!--    {% endif %}-->
+<!--    {% if PFEPS == 0 %}-->
+<!--    <tr>-->
+<!--        <td style="text-align:left" colspan="2">PF-Employer - EPS</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ data.PFEPS }}</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ rate.PFEPS }}</td>-->
+<!--    </tr>-->
+<!--    {% endif %}-->
+<!--    {% if ctc < 21000 %}-->
+<!--    <tr>-->
+<!--        <td style="text-align:left" colspan="1">ESIC-Employer</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ data.ESICE }}</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ rate.ESICE }}</td>-->
+<!--    </tr>-->
+<!--    {% endif %}-->
+<!--    <tr>-->
+<!--        <td style="text-align:left" colspan="1">Other Allowance</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ data.OA }}</td>-->
+<!--        <td style="text-align:right" colspan="1">{{ rate.OA }}</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td style="text-align:left; font-weight:bold;" colspan="2">Total Earnings</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ gross_earnings }}</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ gross_earnings_total }}</td>-->
+<!--        <td style="text-align:left; font-weight:bold;" colspan="2">Total Deductions</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ gross_deductions }}</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ gross_deductions_total }}</td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td colspan="2"></td>-->
+<!--        <td></td>-->
+<!--        <td></td>-->
+<!--        <td style="text-align:left; font-weight:bold;" colspan="2">Net Amount</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ net_amount }}</td>-->
+<!--        <td style="text-align:right; font-weight:bold;" colspan="1">{{ net_amount_total }}</td>-->
+<!--    </tr>-->
+
+<!--</table>-->
+
+<table>
+        <tr>
+            <th colspan="2">Earnings</th>
+            <th colspan="2">Amount</th>
+            <th colspan="2">Gross</th>
+            <th colspan="2">Deductions</th>
+            <th colspan="2">Amount</th>
+            <th colspan="2">Gross</th>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">Basic</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">PF(12% Employer Contribution)</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">HRA</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">PF(12% Employee Contribution)</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">ESIC-Employer</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">ESIC Employee</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">Tiffin Allowance</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">Professional Tax</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">City Complacentry Allowance</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">PF(1% Govt. Tax)</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">Assistance Allowance</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2">TDS</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">Medical Allowance</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+        <tr>
+            <td class="text-left" colspan="2">Leave Encashment</td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-left" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+            <td class="text-right" colspan="2"></td>
+        </tr>
+
+
+
+
+
+        <tr>
+            <td style="text-align:left; font-weight:bold;" colspan="2">Total Earnings</td>
+            <td style="text-align:right; font-weight:bold;" colspan="2">{{ gross_earnings }}</td>
+
+            <td style="text-align:right; font-weight:bold;" colspan="2">{{ gross_earnings_total }}</td>
+<!--            <td class="text-right" colspan="2"></td>-->
+            <td style="text-align:left; font-weight:bold;" colspan="2">Total Deductions</td>
+            <td style="text-align:right; font-weight:bold;" colspan="2">{{ gross_deductions }}</td>
+            <td style="text-align:right; font-weight:bold;" colspan="2">{{ gross_deductions_total }}</td>
+
+
+        </tr>
+        <!-- Add your remaining rows here -->
+        <tr>
+            <td colspan="6"></td>
+            <td class="text-left font-bold" colspan="2">Net Amount</td>
+            <td class="text-right font-bold" colspan="2">{{ net_amount }}</td>
+            <td class="text-right font-bold" colspan="2">{{ net_amount_total }}</td>
+        </tr>
+    </table>
 <br>
 Amount (in words):
 <br>
 INR {{net_amount_words}} Only
 </body>
 </html>
+
+
+

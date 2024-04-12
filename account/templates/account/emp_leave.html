@@ -1,0 +1,836 @@
+{% extends 'account/base.html' %}
+{% block main-content %}
+{% load static %}
+    <style>
+        .error {
+            color: #FF0000;
+        }
+        #div1 {
+            display: none;
+        }
+    .container-xxl{
+      margin-left:265px;
+      margin-top:120px;
+    }
+    .label-container {
+        display: flex;
+        align-items: center;
+        white-space:nowrap;
+        margin-left: 30px;
+        margin-bottom: 5px; / Adjust as needed /
+    }
+
+    .label-container label {
+        margin-right: 10px; / Adjust as needed /
+        margin-left: -28px;
+    }
+
+        .post{
+        margin-top:-40px;
+        }
+    </style>
+
+
+    <div class="post" id="kt_post">
+        <div id="kt_content_container" class="container-xxl">
+            <div class="row mb-2 ml-1">
+                <h3 class="main_heading">Employee Leave list</h3>
+            </div>
+            <div class="card">
+                <div class="card-header border-0 pt-6">
+    <div class="d-flex justify-content-between align-items-center">
+         <form action=""
+              class="d-flex align-items-center">
+
+            <div class="label-container ml-1">
+                <label for="month" class="visually-hidden">Search Employee date</label>
+<!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
+<!--                       placeholder="Search Employee date">-->
+                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"
+                   placeholder="Search Employee date" style="margin-right:120px ; margin-left:1px" >
+            </div>
+
+
+            <select class="form-select me-2"  id="leavetypesearch" name="leavetypesearch"
+                    aria-label="Select Leave type" style="height:39px;width:190px;border-radius:5px;">
+                <option value="">Select a Leave type...</option>
+                <option value="Casual Leave">Casual Leave</option>
+                <option value="Sick Leave">Sick Leave</option>
+            </select>
+            <button  class="button_mian" type="button" name="submit" id="searchButton" style="margin-left:2px;">Search</button>
+
+        </form>
+
+        <div class="card-toolbar">
+            <button type="button" class="button_mian" data-bs-toggle="modal"
+                   data-bs-target="#kt_modal_add_customer" id="addEmployeeLeaveBtn">Add Employee Leave
+            </button>
+        </div>
+    </div>
+                </div>
+
+                <div class="new" id="leavesearch">
+                    <div class="card-body pt-0">
+                        <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                            <div class="table-responsive">
+                                <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_customers_table">
+                                    <thead>
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="leaveSR">Sr no</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="Name">Name</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;" id="Leave-Type">Leave-Type</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Date-From">Date-From</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Date-To">Date-To</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Leave-Days">Leave-Days</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;"id="Leave-Reason">Leave-Reason</th>
+                                            <th class="min-w-125px sorting" style="width: 171.516px;">Approval-Status</th>
+                                            {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                                            <th class="text-end min-w-70px sorting_disabled" style="width: 133.062px;">Actions</th>
+                                            {% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody class="fw-bold text-gray-600" id="searchResults">
+                                        <tr id="searchResultsRow" style="display:none;">
+                                            <td colspan="10">There are no Record found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5 d-flex align-items-center justify-content-center justify-content-md-start"></div>
+                    <div class="col-sm-12 col-md-7 d-flex align-items-center justify-content-center justify-content-md-end">
+                        <div class="dataTables_paginate paging_simple_numbers" id="kt_customers_table_paginate">
+                            <ul class="pagination">
+                                <li></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal - Add Employee Leave -->
+    <div class="modal fade modal-md" id="kt_modal_add_customer" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content p-3" >
+                <form class="form fv-plugins-bootstrap5 fv-plugins-framework" id="form"  method="POST"  >
+                    {% csrf_token %}
+
+                    <input type="hidden" name="_token" value="3UBP1sotW7eOTSk2OUTBVMF8yPE1cHe3JQJoIVTg">
+                    <div class="modal-header" id="kt_modal_add_customer_header">
+                                                <!-- Modal title -->
+                        <h2 class="fw-bolder">Add Employee leave</h2>
+                        <!-- Close button -->
+                        <button id="kt_modal_add_customer_close" class="btn btn-icon btn-sm btn-active-icon-primary" data-bs-dismiss="modal">
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Modal body -->
+                    <div class="container-fluid modal-body py-10 px-lg-17">
+                        <!-- Scroll -->
+                        <div class="scroll-y me-n7 pe-7" id="kt_modal_add_customer_scroll" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_modal_add_customer_header" data-kt-scroll-wrappers="#kt_modal_add_customer_scroll" data-kt-scroll-offset="300px" style="max-height: 300px;">
+                            <!-- Input group -->
+
+                            <div class="d-flex flex-column mb-7 fv-row fv-plugins-icon-container" data-select2-id="select2-data-128-oqed">
+                                <!-- Label -->
+                                <label class="fs-6 fw-bold mb-2">
+                                    <span class="required">Leave type</span>
+                                </label>
+                                <!-- Input -->
+                                <select class="form-select" name="leave_type" aria-label="Select example"id="leave_type">
+                                    <option value="">Select a Leave type...</option>
+                                    <option value="Casual Leave">Casual Leave</option>
+                                    <option value="Sick Leave">Sick Leave</option>
+                                </select>
+                            </div>
+                            <div class="mt-4" id="leave_days">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="leave_duration" id="fullDay"
+                                           value="Full">
+                                    <label class="secondHalfform-check-label" for="fullDay">Full-day</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="leave_duration" id="halfDay"
+                                           value="Half">
+                                    <label class="form-check-label" for="halfDay">Half-day</label>
+                                </div>
+                            </div>
+                            <div id="leave_half"   style="display:none;">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="half_day_option" id="firstHalf"
+                                           value="First-Half">
+                                    <label class="form-check-label" for="firstHalf">First-half</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="half_day_option" id="secondHalf"
+                                           value="Second-Half">
+                                    <label class="form-check-label" for="secondHalf">Second-half</label>
+                                </div>
+                            </div>
+                            <!-- Radio buttons -->
+                            <div data-kt-buttons="true">
+                                <label class="btn btn-outline flex-stack text-start">
+                                    <!-- Radio option -->
+                                </label>
+                                <label class="btn btn-outline btn-border flex-stack text-start">
+                                    <!-- Radio option -->
+                                </label>
+                            </div>
+                            <!-- Date input -->
+                            <div class="fv-row mb-7" id="start">
+                                <label class="required fs-6 fw-bold mb-2"> Start Date</label>
+                                <input type="date" id="start_date" class="form-control form-control-solid" name="start_leave_date" value="">
+                            </div>
+                            <div class="fv-row mb-7" id="end">
+                                <label class="required fs-6 fw-bold mb-2"> End Date</label>
+                                <input type="date" id="end_date" class="form-control form-control-solid" name="leave_date" value="">
+                            </div>
+                            <!-- Reason input -->
+                            <div class="fv-row mb-7">
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Reason</span>
+                                    <i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" title="" data-bs-original-title="Enter any additional notes about the contact (optional)." aria-label="Enter any additional notes about the contact (optional)."></i>
+                                </label>
+                                <textarea class="form-control" id="leave_reason" onkeyup="validate()" maxlength="300" name="reason" placeholder="Enter Reason" data-kt-autosize="true"  style="overflow: hidden; overflow-wrap: break-word; resize: none;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal footer -->
+                    <div class="modal-footer mt-5 d-flex justify-content-center align-items-center" style="padding-top:30px;">
+                        <!-- Close button -->
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <!-- Submit button -->
+                        <button type="submit" id="submitBtn" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirmation</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this Leave?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="updateLeaveModal" tabindex="-1" role="dialog" aria-labelledby="updateLeaveModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateLeaveModalLabel">Update Leave</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Choose action:</p>
+        <button type="button" class="button_mian" id="acceptBtn" value="Accepted" data-id="${leave.id}">Accept</button>
+        <button type="button" class="btn btn-danger" id="rejectBtn" value="Rejected" data-id="${leave.id}">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+
+
+{% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+<script>
+    $(document).ready(function() {
+    // Fetch employee leave data from backend
+    fetchEmployeeLeaveData();
+
+    // Function to fetch employee leave data
+    function fetchEmployeeLeaveData() {
+        const token = localStorage.getItem('accessToken');
+        fetch('http://127.0.0.1:8000/employee-leave/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch employee leave data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched employee leave data:', data);
+            // Call function to display data in frontend
+            displayEmployeeLeaveData(data);
+        })
+        .catch(error => {
+            console.error('Error fetching employee leave data:', error);
+            // Handle the error, e.g., display an error message to the user
+        });
+    }
+
+    // Function to display employee leave data in frontend
+    function displayEmployeeLeaveData(data) {
+        const tableBody = $('#kt_customers_table tbody');
+        tableBody.empty(); // Clear existing table rows
+
+        data.forEach((leave, index) => {
+            const row = `
+                <tr data-id="${leave.id}">
+                    <td>${index + 1}</td>
+                    <td class="leave-name" onclick="redirectToEmployeeProfile('${leave.emp_name}')">${leave.emp_name}</td>
+                    <td>${leave.leave_type}</td>
+                    <td>${leave.start_date}</td>
+                    <td>${leave.end_date}</td>
+                    <td>${leave.leave_days}</td>
+                    <td>${leave.leave_reason}</td>
+                    <td>${leave.approval_status}</td>
+                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                    <td>
+                        <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                        <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                    </td>
+                    {% endif %}
+                </tr>
+            `;
+            tableBody.append(row);
+        });
+
+
+
+        const updateButtons = document.querySelectorAll('.btn-update');
+        updateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Open the update form or perform any other action here
+                // For demonstration purposes, let's assume you're showing a modal
+                $('#updateLeaveModal').modal('show');
+
+                // Retrieve the leave ID associated with this button
+                const leaveId = this.getAttribute('data-id');
+
+                // You can use this leave ID to fetch the leave data for pre-filling the update form
+                // and perform any other necessary operations
+            });
+        });
+
+
+
+        // Add event listeners for delete buttons
+        $('.btn-delete').on('click', function() {
+            const leaveId = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            $('#confirmDeleteBtn').data('leave-id', leaveId); // Store leave ID in the confirm delete button
+        });
+
+        // Event listener for confirm delete button click
+        $('#confirmDeleteBtn').on('click', function() {
+            const leaveId = $(this).data('leave-id');
+            deleteLeave(leaveId);
+            $('#deleteConfirmationModal').modal('hide');
+        });
+    }
+
+    // Function to delete leave
+    function deleteLeave(leaveId) {
+        const token = localStorage.getItem('accessToken');
+        fetch(`http://127.0.0.1:8000/employee-leave/${leaveId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete leave');
+            }
+            // Remove the row from the table if deletion is successful
+            $(`#kt_customers_table tbody tr[data-id="${leaveId}"]`).remove();
+            updateSerialNumbers();
+        })
+        .catch(error => {
+            console.error('Error deleting leave:', error);
+            // Handle the error, e.g., display an error message to the user
+        });
+    }
+
+    // Function to update serial numbers in the table
+    function updateSerialNumbers() {
+        $('#kt_customers_table tbody tr').each(function(index) {
+            $(this).find('td:first').text(index + 1);
+        });
+    }
+});
+
+</script>
+{% else %}
+<script>
+    $(document).ready(function() {
+    // Fetch employee leave data from backend
+    fetchEmployeeLeaveData();
+
+    // Function to fetch employee leave data
+    function fetchEmployeeLeaveData() {
+        const token = localStorage.getItem('accessToken');
+        fetch('http://127.0.0.1:8000/leaveuser/', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch employee leave data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Fetched employee leave data:', data);
+            // Call function to display data in frontend
+            displayEmployeeLeaveData(data);
+        })
+        .catch(error => {
+            console.error('Error fetching employee leave data:', error);
+            // Handle the error, e.g., display an error message to the user
+        });
+    }
+
+    // Function to display employee leave data in frontend
+    function displayEmployeeLeaveData(data) {
+        const tableBody = $('#kt_customers_table tbody');
+        tableBody.empty(); // Clear existing table rows
+
+        data.forEach((leave, index) => {
+            const row = `
+                <tr data-id="${leave.id}">
+                    <td>${index + 1}</td>
+                    <td class="leave-name" onclick="redirectToEmployeeProfile('${leave.emp_name}')">${leave.emp_name}</td>
+                    <td>${leave.leave_type}</td>
+                    <td>${leave.start_date}</td>
+                    <td>${leave.end_date}</td>
+                    <td>${leave.leave_days}</td>
+                    <td>${leave.leave_reason}</td>
+                    <td>${leave.approval_status}</td>
+                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                    <td>
+                        <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                        <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                    </td>
+                    {% endif %}
+                </tr>
+            `;
+            tableBody.append(row);
+        });
+
+
+
+        const updateButtons = document.querySelectorAll('.btn-update');
+        updateButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Open the update form or perform any other action here
+                // For demonstration purposes, let's assume you're showing a modal
+                $('#updateLeaveModal').modal('show');
+
+                // Retrieve the leave ID associated with this button
+                const leaveId = this.getAttribute('data-id');
+
+                // You can use this leave ID to fetch the leave data for pre-filling the update form
+                // and perform any other necessary operations
+            });
+        });
+
+
+
+        // Add event listeners for delete buttons
+        $('.btn-delete').on('click', function() {
+            const leaveId = $(this).data('id');
+            $('#deleteConfirmationModal').modal('show');
+            $('#confirmDeleteBtn').data('leave-id', leaveId); // Store leave ID in the confirm delete button
+        });
+
+        // Event listener for confirm delete button click
+        $('#confirmDeleteBtn').on('click', function() {
+            const leaveId = $(this).data('leave-id');
+            deleteLeave(leaveId);
+            $('#deleteConfirmationModal').modal('hide');
+        });
+    }
+
+    // Function to delete leave
+    function deleteLeave(leaveId) {
+        const token = localStorage.getItem('accessToken');
+        fetch(`http://127.0.0.1:8000/employee-leave/${leaveId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete leave');
+            }
+            // Remove the row from the table if deletion is successful
+            $(`#kt_customers_table tbody tr[data-id="${leaveId}"]`).remove();
+            updateSerialNumbers();
+        })
+        .catch(error => {
+            console.error('Error deleting leave:', error);
+            // Handle the error, e.g., display an error message to the user
+        });
+    }
+
+    // Function to update serial numbers in the table
+    function updateSerialNumbers() {
+        $('#kt_customers_table tbody tr').each(function(index) {
+            $(this).find('td:first').text(index + 1);
+        });
+    }
+});
+
+</script>
+{% endif %}
+
+
+
+<script>
+    var leave_id;
+    function updateFunction(leaveId) {
+    // Display the modal
+    $('#updateLeaveModal').modal('show');
+    // Here you can use leaveId as needed
+    console.log("Leave ID:", leaveId);
+    leave_id = leaveId
+    const url = `http://127.0.0.1:8000/employee-leave/${leaveId}/`;
+
+  }
+
+  // Use document ready to ensure jQuery code runs after the DOM is fully loaded
+  $(document).ready(function() {
+    // Function to display the modal and update approval status
+    function updateFunction(leaveId, newStatus) {
+      // Display the modal
+      $('#updateLeaveModal').modal('show');
+
+      // Log leave ID and URL
+      console.log("Leave ID:", leave_id);
+      const url = `http://127.0.0.1:8000/employee-leave/${leave_id}/`;
+      console.log("URL:", url);
+
+      // Prepare the data to be sent in the request body
+      const requestData = {
+        approval_status: newStatus
+      };
+
+      const token = localStorage.getItem('accessToken');
+
+      // Send a PATCH request to update the approval status
+      fetch(url, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify(requestData),
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Error updating approval status to "${newStatus}": ${response.statusText}`);
+          }
+          console.log(`Approval status updated to "${newStatus}" successfully.`);
+          window.location.href = "http://127.0.0.1:8000/emp-leave/";
+
+          // Refresh leave data in the frontend or perform any other necessary action
+          // For example, you can update the status displayed in the UI
+        })
+        .catch(error => {
+          console.error(`Error updating approval status to "${newStatus}":`, error);
+        });
+    }
+
+    // Event listener for the "Accept" button
+    $(document).on('click', '#acceptBtn', function() {
+      const leaveId = $(this).attr('data-id');
+      updateFunction(leaveId, 'Accepted');
+    });
+
+    // Event listener for the "Reject" button
+    $(document).on('click', '#rejectBtn', function() {
+      const leaveId = $(this).data('id');
+      updateFunction(leaveId, 'Rejected');
+    });
+  });
+</script>
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const submitBtn = document.getElementById("submitBtn");
+
+    const token = localStorage.getItem('accessToken');
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    let data1 = JSON.parse(jsonPayload)
+
+
+    submitBtn.addEventListener("click", function () {
+
+
+        const formData = {
+            employee :data1.user_id,
+            leave_type: document.getElementById("leave_type").value,
+            start_date: document.getElementById("start_date").value,
+            end_date: adjustStartDateForHalfDay(),
+            leave_days: getSelectedLeaveDays(), // Call function to get selected leave days
+            leave_half: document.getElementById("leave_half").value,
+            leave_reason: document.getElementById("leave_reason").value
+        };
+
+        // Retrieve access token from storage (e.g., cookies or local storage)
+        const accessToken = localStorage.getItem("accessToken");
+
+        if (!accessToken) {
+            console.error("Access token not found");
+            // Handle the case where the access token is not available
+            return;
+        }
+
+        // Send POST request to backend API with access token included in headers
+        fetch("http://127.0.0.1:8000/employee-leave/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + accessToken
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                // Handle successful response
+                console.log("Employee leave created successfully");
+                // Optionally, redirect or perform other actions
+                window.location.href = "http://127.0.0.1:8000/emp-leave/"
+            } else {
+                // Handle error response
+                console.error("Failed to create employee leave");
+                // Optionally, display error message to the user
+            }
+        })
+        .catch(error => {
+            // Handle network errors or other exceptions
+            console.error("Error:", error);
+        });
+    });
+     function getSelectedLeaveDays() {
+
+        const leaveDayRadios = document.getElementsByName('leave_duration');
+        for (const radio of leaveDayRadios) {
+            if (radio.checked) {
+                return radio.value;
+            }
+        }
+        return null; // Return null if no radio button is checked
+    }
+    function adjustStartDateForHalfDay() {
+        console.log("---------------------------------99999999999999999999999999")
+        const leaveDayRadios = document.getElementsByName('leave_duration');
+        const startDateInput = document.getElementById("start_date");
+        const endDateInput = document.getElementById("end_date");
+
+        for (const radio of leaveDayRadios) {
+            if (radio.checked) {
+                console.log("-------------->>>>>>>>>>", radio.value)
+                if (radio.value === 'Half') {
+                     endDateInput.value = startDateInput.value ;
+                     return endDateInput.value
+                }
+                else {
+                   return endDateInput.value
+                }
+
+
+            break;
+            }
+        }
+    }
+});
+</script>
+<script>
+const addEmployeeLeaveBtn = document.getElementById('addEmployeeLeaveBtn');
+
+        // Get the modal element
+        const modal = document.getElementById('kt_modal_add_customer');
+
+        // Add event listener to the button to toggle modal visibility
+        addEmployeeLeaveBtn.addEventListener('click', function () {
+            // Toggle modal visibility
+            const modalToggle = new bootstrap.Modal(modal);
+            modalToggle.toggle();
+        });
+
+        var leaveDurationRadios = document.querySelectorAll('input[name="leave_duration"]');
+leaveDurationRadios.forEach(function(radio) {
+    radio.addEventListener('change', function() {
+        if (this.value === 'Half') {
+            document.getElementById('start_date').value = document.getElementById('end_date').value;
+            document.getElementById('leave_half').style.display = 'block';
+            document.getElementById('end').style.display = 'none';
+
+        }
+        else if (this.value === 'Full') {
+            document.getElementById('leave_half').style.display = 'none';
+            document.getElementById('end').style.display = 'block';
+
+        }
+        else {
+            document.getElementById('leave_half').style.display = 'none';
+            document.getElementById('start').style.display = 'block';
+            document.getElementById('end').style.display = 'block';
+        }
+    });
+});
+</script>
+
+
+<script>
+    // Add event listener to the form submit button
+    document.getElementById('submitBtn').addEventListener('click', async function(event) {
+        event.preventDefault(); // Prevent the default form submission behavior
+
+        const form = document.getElementById('form');
+        const formData = new FormData(form);
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            const response = await fetch('http://127.0.0.1:8000/employee-leave/', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit data');
+            }
+
+            // Data submitted successfully
+            console.log('Data submitted successfully');
+            // Close the modal if needed
+            const modal = document.getElementById('kt_modal_add_customer');
+            const modalToggle = new bootstrap.Modal(modal);
+            modalToggle.hide();
+
+            // Refresh or update the employee leave data
+            fetchEmployeeLeaveData();
+
+            // You can also display a success message to the user if needed
+        } catch (error) {
+            console.error('Error submitting data:', error);
+            // Handle the error, e.g., display an error message to the user
+        }
+    });
+</script>
+
+<script>
+
+    document.getElementById('searchButton').addEventListener('click', function () {
+    // Get the selected month and leave type
+    var month = document.getElementById('month').value;
+    var leaveType = document.getElementById('leavetypesearch').value;
+
+    // Perform search only if both month and leave type are selected
+    if (month && leaveType) {
+        // Retrieve authentication token from wherever it's stored (e.g., local storage)
+        var token = localStorage.getItem('accessToken'); // Adjust this according to your token storage mechanism
+
+        // AJAX request to fetch search results
+        $.ajax({
+            url: 'http://127.0.0.1:8000/employee-leave/',
+            type: 'GET',
+            data: {
+                month: month,
+                leaveType: leaveType
+            },
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
+            success: function(data) {
+                // Check if there are any results
+                if (data.length > 0) {
+                    // Clear existing table rows
+                    $('#searchResults').empty();
+                    // Populate table with search results
+                    displayEmployeeLeaveData(data);
+                } else {
+                    // Display message indicating no records found
+                    $('#searchResults').html('<tr><td colspan="8">No records found</td></tr>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching data:', error);
+            }
+        });
+    }
+});
+
+function displayEmployeeLeaveData(data) {
+    const tableBody = $('#searchResults');
+    data.forEach((leave, index) => {
+        const row = `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${leave.leave_type}</td>
+                <td>${leave.start_date}</td>
+                <td>${leave.end_date}</td>
+                <td>${leave.leave_days}</td>
+                <td>${leave.leave_reason}</td>
+                <td>${leave.approval_status}</td>
+                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                <td>
+                    <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                    <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                </td>
+                {% endif %}
+            </tr>
+        `;
+        tableBody.append(row);
+    });
+}
+
+</script>
+
+
+
+
+{% endblock main-content %}

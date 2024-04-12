@@ -83,21 +83,19 @@ EVENT_DAY = (
 )
 
 LEAVE_TYPE = (
-    ("Planned", "Planned"),
-    ("Unplanned", "Unplanned"),
-    ("Compensation", "Compensation")
+    ("Casual Leave", "Casual Leave"),
+    ("Sick Leave", "Sick Leave")
+)
+LEAVE_DAYS = (
+    ("Full", "Full"),
+    ("Half", "Half")
 )
 
-LEAVE_DAY = (
-    ("Full Day", "Full Day"),
-    ("Half Day", "Half Day")
+LEAVE_HALF = (
+    ("First-Half", "First-Half"),
+    ("Second-Half", "Second-Half")
 )
 
-LEAVE_STATUS = (
-    ("Pending", "Pending"),
-    ("Approved", "Approved"),
-    ("Rejected", "Rejected")
-)
 
 ALLOWANCE_TYPE = (
     ("Basic", "Basic"),
@@ -114,7 +112,7 @@ AMOUNT_TYPE = (
 class TableName:
     USERS = 'user'
     HOLIDAYS = 'holiday'
-    LEAVES = 'leave'
+    EMPLOYEELEAVE = 'employeeleave'
     SALARY = 'salary'
     ALLOWANCE_PERCENTAGE_RULES = "allowance_percentage"
     SALARY_STRUCTURE = "salary_structure"
