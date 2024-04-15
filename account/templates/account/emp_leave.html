@@ -269,6 +269,45 @@
         });
     }
 
+
+    // Toggle action menu for employee leave
+    function toggleActionMenu(leaveId) {
+        const actionMenu = $(`#actionMenu_${leaveId}`);
+        // Close all other action menus
+        $('[id^=actionMenu_]').not(actionMenu).slideUp();
+        // Toggle the targeted action menu
+        actionMenu.slideToggle();
+
+        // Add click outside event listener
+        $(document).on('click', function(e) {
+            // Check if the clicked element is not part of the action menu or action button
+            if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+                // Hide all action menus
+                $('[id^=actionMenu_]').slideUp();
+                // Remove click outside event listener
+                $(document).off('click');
+            }
+        });
+    }
+
+    // Click outside handler function
+    function clickOutsideHandler(e) {
+        // Check if the clicked element is not part of the action menu or action button
+        if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+            // Hide all action menus
+            $('[id^=actionMenu_]').slideUp();
+            // Remove click outside event listener
+            $(document).off('click', clickOutsideHandler);
+        }
+    }
+
+    // Document ready function
+    $(document).ready(function() {
+        // Event listener for clicking outside the action menu
+        $(document).on('click', clickOutsideHandler);
+    });
+
+
     // Function to display employee leave data in frontend
     function displayEmployeeLeaveData(data) {
         const tableBody = $('#kt_customers_table tbody');
@@ -287,17 +326,20 @@
                     <td>${leave.approval_status}</td>
                     {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                     <td class="editbtns">
-                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${111})">...</button>
-                        <div id="actionMenu_${111}" class="action-menu hidden mt-2" style="display: none;">
-                            <button class="btn btn-primary">Update</button>
-                            <button class="btn btn-danger" >Delete</button>
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${leave.id})">...</button>
+                        <div id="actionMenu_${leave.id}" class="action-menu hidden mt-2" style="display: none;">
+                            <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                            <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
                         </div>
                     </td>
+
                     {% endif %}
                 </tr>
             `;
+
             tableBody.append(row);
         });
+
 
 
 
@@ -396,6 +438,45 @@
         });
     }
 
+
+    // Toggle action menu for employee leave
+    function toggleActionMenu(leaveId) {
+        const actionMenu = $(`#actionMenu_${leaveId}`);
+        // Close all other action menus
+        $('[id^=actionMenu_]').not(actionMenu).slideUp();
+        // Toggle the targeted action menu
+        actionMenu.slideToggle();
+
+        // Add click outside event listener
+        $(document).on('click', function(e) {
+            // Check if the clicked element is not part of the action menu or action button
+            if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+                // Hide all action menus
+                $('[id^=actionMenu_]').slideUp();
+                // Remove click outside event listener
+                $(document).off('click');
+            }
+        });
+    }
+
+    // Click outside handler function
+    function clickOutsideHandler(e) {
+        // Check if the clicked element is not part of the action menu or action button
+        if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+            // Hide all action menus
+            $('[id^=actionMenu_]').slideUp();
+            // Remove click outside event listener
+            $(document).off('click', clickOutsideHandler);
+        }
+    }
+
+    // Document ready function
+    $(document).ready(function() {
+        // Event listener for clicking outside the action menu
+        $(document).on('click', clickOutsideHandler);
+    });
+
+
     // Function to display employee leave data in frontend
     function displayEmployeeLeaveData(data) {
         const tableBody = $('#kt_customers_table tbody');
@@ -413,15 +494,19 @@
                     <td>${leave.leave_reason}</td>
                     <td>${leave.approval_status}</td>
                     {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                    <td>
-                        <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
-                        <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                    <td class="editbtns">
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${leave.id})">...</button>
+                        <div id="actionMenu_${leave.id}" class="action-menu hidden mt-2" style="display: none;">
+                            <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                            <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                        </div>
                     </td>
                     {% endif %}
                 </tr>
             `;
             tableBody.append(row);
         });
+
 
 
 
@@ -564,7 +649,6 @@
 
 
 
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const submitBtn = document.getElementById("submitBtn");
@@ -660,6 +744,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 </script>
+
 <script>
 const addEmployeeLeaveBtn = document.getElementById('addEmployeeLeaveBtn');
 
@@ -739,45 +824,103 @@ leaveDurationRadios.forEach(function(radio) {
 
 <script>
 
-    document.getElementById('searchButton').addEventListener('click', function () {
-    // Get the selected month and leave type
+   // Function to display employee leave data in frontend
+function displayEmployeeLeaveData(data, monthFilter, leaveTypeFilter) {
+    const tableBody = $('#kt_customers_table tbody');
+    tableBody.empty(); // Clear existing table rows
+
+    data.forEach((leave, index) => {
+        // Filter data based on month and leave type
+        if (monthFilter && leave.start_date.substring(0, 7) !== monthFilter) {
+            return; // Skip if month doesn't match
+        }
+        if (leaveTypeFilter && leave.leave_type !== leaveTypeFilter) {
+            return; // Skip if leave type doesn't match
+        }
+
+        const row = `
+            <tr data-id="${leave.id}">
+                <td>${index + 1}</td>
+
+                <td>${leave.leave_type}</td>
+                <td>${leave.start_date}</td>
+                <td>${leave.end_date}</td>
+                <td>${leave.leave_days}</td>
+                <td>${leave.leave_reason}</td>
+                <td>${leave.approval_status}</td>
+                <td>
+                    <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                    <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                </td>
+            </tr>
+        `;
+        tableBody.append(row);
+    });
+}
+
+document.getElementById('searchButton').addEventListener('click', function () {
     var month = document.getElementById('month').value;
     var leaveType = document.getElementById('leavetypesearch').value;
 
-    // Perform search only if both month and leave type are selected
-    if (month && leaveType) {
-        // Retrieve authentication token from wherever it's stored (e.g., local storage)
-        var token = localStorage.getItem('accessToken'); // Adjust this according to your token storage mechanism
+    // Retrieve authentication token from wherever it's stored (e.g., local storage)
+    var token = localStorage.getItem('accessToken'); // Adjust this according to your token storage mechanism
+    console.log(token);
+    $.ajax({
+        url: `http://127.0.0.1:8000/employee-leave/ `,
+        type: 'GET',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: function(data) {
+            // Display fetched data
+            console.log(data);
+            displayEmployeeLeaveData(data, month, leaveType);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+});
 
-        // AJAX request to fetch search results
-        $.ajax({
-            url: 'http://127.0.0.1:8000/employee-leave/',
-            type: 'GET',
-            data: {
-                month: month,
-                leaveType: leaveType
-            },
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-            },
-            success: function(data) {
-                // Check if there are any results
-                if (data.length > 0) {
-                    // Clear existing table rows
-                    $('#searchResults').empty();
-                    // Populate table with search results
-                    displayEmployeeLeaveData(data);
-                } else {
-                    // Display message indicating no records found
-                    $('#searchResults').html('<tr><td colspan="8">No records found</td></tr>');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching data:', error);
+
+
+// Toggle action menu for employee leave
+    function toggleActionMenu(leaveId) {
+        const actionMenu = $(`#actionMenu_${leaveId}`);
+        // Close all other action menus
+        $('[id^=actionMenu_]').not(actionMenu).slideUp();
+        // Toggle the targeted action menu
+        actionMenu.slideToggle();
+
+        // Add click outside event listener
+        $(document).on('click', function(e) {
+            // Check if the clicked element is not part of the action menu or action button
+            if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+                // Hide all action menus
+                $('[id^=actionMenu_]').slideUp();
+                // Remove click outside event listener
+                $(document).off('click');
             }
         });
     }
-});
+
+    // Click outside handler function
+    function clickOutsideHandler(e) {
+        // Check if the clicked element is not part of the action menu or action button
+        if (!$(e.target).closest('.action-menu').length && !$(e.target).closest('.editbtns').length) {
+            // Hide all action menus
+            $('[id^=actionMenu_]').slideUp();
+            // Remove click outside event listener
+            $(document).off('click', clickOutsideHandler);
+        }
+    }
+
+    // Document ready function
+    $(document).ready(function() {
+        // Event listener for clicking outside the action menu
+        $(document).on('click', clickOutsideHandler);
+    });
+
 
 function displayEmployeeLeaveData(data) {
     const tableBody = $('#searchResults');
@@ -794,13 +937,14 @@ function displayEmployeeLeaveData(data) {
                 {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                 <td>
                     <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
-                    <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                    <button class="btn btn-danger btn-delete " data-id="${leave.id}">Delete</button>
                 </td>
                 {% endif %}
             </tr>
         `;
         tableBody.append(row);
     });
+
 }
 
 </script>

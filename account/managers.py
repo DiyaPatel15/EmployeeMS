@@ -2,8 +2,7 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserBaseManager(BaseUserManager):
-    def create_user(self, emp_id, emp_name,emp_birthday, emp_email,emp_contact,emp_address, emp_profile, emp_designation, emp_role, emp_company,
-                    is_active,
+    def create_user(self, emp_id, emp_name,emp_birthday, emp_email,emp_contact,emp_address, emp_profile, emp_designation, emp_role, emp_company,bank_name=None, pf_number=None, bank_account_number=None, uan=None,
                     password=None, **extra_fields):
         if not emp_email:
             raise ValueError("Email is Required")

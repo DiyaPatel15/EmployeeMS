@@ -471,7 +471,7 @@ def compute_employee(request, payslip_id):
         payslip = EmployeePaySlip.objects.get(pk=payslip_id)
         payslip.employee_pay_slip_lines.all().delete()
         # variable that can be used in python code
-        employee = payslip.emp
+        employee = payslip.emp_id
         contract = employee.emp_contract.latest("id")
         contra = f"EmployeePaySlip.objects.get(pk={str(payslip_id)}).emp.emp_contract.latest('id')"
         ordered_rules = contract.salary_structure.rules.order_by("sequence")
@@ -497,8 +497,13 @@ def compute_employee(request, payslip_id):
                     if code:
                         temp_rule = temp_rule.replace('RULE_CODE', code)
                         python_code = python_code.replace(match, temp_rule)
+
                 exec(python_code, globals(), local_var)
-                res = local_var['result']
+                print(local_var)
+                if local_var == {}:
+                    res = eval(python_code)
+                else:
+                    res = local_var['result']
             else:
                 res = rule.amount_value
 
@@ -546,6 +551,7 @@ def print_payslip(request, payslip_id):
     # pdb.set_trace()
     try:
         payslip = EmployeePaySlip.objects.get(pk=payslip_id)
+        print(payslip.emp_id.emp_name)
     except EmployeePaySlip.DoesNotExist:
         return HttpResponse({"error": "Not Exist"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -564,6 +570,9 @@ def print_payslip(request, payslip_id):
     std_days = payslip.total_payable_days()[0]
     worked_days = payslip.total_payable_days()[1]
     lop = std_days - worked_days
+    emp_birth_day = payslip.emp_id.emp_birthday
+    emp_desig = payslip.emp_id.emp_designation
+    emp_personal_no = payslip.emp_id
 
     print(payslip.emp_id.emp_contract.latest("id").ctc)
     payslip_template = get_template('payslip.html')
@@ -593,6 +602,9 @@ def print_payslip(request, payslip_id):
         "std_days": std_days,
         "worked_days": worked_days,
         "lop": lop,
+        "emp_birth_day": emp_birth_day,
+        "emp_desig" : emp_desig,
+        "emp_personal_no" : emp_personal_no,
     }
 
     html = payslip_template.render(context)

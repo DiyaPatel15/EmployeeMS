@@ -43,6 +43,7 @@ class Employee(AbstractBaseUser):
 
 
 
+
     objects = UserBaseManager()
 
     USERNAME_FIELD = "emp_email"
@@ -92,7 +93,6 @@ class Working_hour(models.Model):
         if not self.date:
             self.date = date.today()
         super().save(*args, **kwargs)
-
 
 
 
