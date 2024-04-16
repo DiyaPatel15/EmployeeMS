@@ -11,6 +11,12 @@
     </style>
 </head>
 <body>
+
+<center>
+    <div class="brand_logo">
+        <img alt="Logo" style="height:100px;width:200px;" src="https://i.ibb.co/mcLscF0/pranshtech-2.jpg">
+     </div>
+</center>
 <center><font size="30px" style="font-family: Times New Roman">{{first_name}} {{last_name}} - {{month}} Payslip</font>
 </center>
 <table style="border: 0.1% solid black;">
@@ -19,14 +25,14 @@
         <th>Personel No:</th>
         <td>{{emp_personal_no}}</td>
         <th>UAN</th>
-        <td>123456789</td>
+        <td>{{emp_uan_no}}</td>
     </tr>
     <!-----2 row--->
     <tr>
         <th>Bank</th>
-        <td>x0x0x0</td>
+        <td>{{emp_bank_name}}</td>
         <th>Bank A/c No.</th>
-        <td>0x2x6x25x6</td>
+        <td>{{emp_bank_account_number}}</td>
     </tr>
     <!------3 row---->
     <tr>
@@ -38,7 +44,7 @@
     <!------4 row---->
     <tr>
         <th>PF No.</th>
-        <td>26123456</td>
+        <td>{{emp_pf_number}}</td>
         <th>STD days</th>
         <td>{{std_days}}</td>
     </tr>

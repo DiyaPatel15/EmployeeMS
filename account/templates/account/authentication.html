@@ -87,7 +87,6 @@
                         <i class="uil uil-image-upload icon" style="margin-top:-8px;"></i>
                     </div>
 
-
                     <div class="input-field">
                         <i class="uil uil-briefcase-alt icon" style="margin-left:2px;margin-top:11px;" ></i>
                         <select id="emp_designation" name="emp_designation"  required>
@@ -139,8 +138,25 @@
                         <i class="uil uil-building icon"></i>
                     </div>
                     <div class="input-field">
+                        <input type="text" id="bank_name" name="bank_name" placeholder="Enter your Bank Name" required>
+                        <i class="fas fa-university" style="margin-top:7px;"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="bank_account_number" name="bank_account_number" placeholder="Enter your Bank A/C No." required>
+                        <i class="fas fa-credit-card" style="margin-top:8px;"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="pf_number" name="pf_number" placeholder="Enter your PF No." required>
+                        <i class="fas fa-id-card" style="margin-top:9px;"></i>
+                    </div>
+                    <div class="input-field">
+                        <input type="text" id="emp_uan" name="emp_uan" placeholder="Enter your UAN No." required>
+                        <i class="fas fa-id-badge" style="margin-top:10px;"></i>
+                    </div>
+                    <div class="input-field">
                         <input type="password"id="emp_password" name="emp_password" class="password" placeholder="Create a password" required>
-                        <i class="uil uil-lock icon"></i>
+                        <i class="uil uil-lock icon" style="margin-top:2px;"></i>
+                        <i class="uil uil-eye-slash showHidePw" style="margin-top:-5px;"></i>
                     </div>
                     <div class="checkbox-text">
                         <div class="checkbox-content">
@@ -182,6 +198,10 @@
             const empDesignation = document.getElementById("emp_designation").value;
             const empRole = document.getElementById("emp_role").value;
             const empCompany = document.getElementById("emp_company").value;
+            const bankName = document.getElementById("bank_name").value;
+            const bankNumber = document.getElementById("bank_account_number").value;
+            const pfNumber = document.getElementById("pf_number").value;
+            const empUan = document.getElementById("emp_uan").value;
             const password = document.getElementById("emp_password").value;
 
 
@@ -198,6 +218,10 @@
             formData.append("emp_role", empRole);
             formData.append("is_active", true);
             formData.append("emp_company", empCompany);
+            formData.append("bank_name", bankName);
+            formData.append("bank_account_number", bankNumber);
+            formData.append("pf_number", pfNumber);
+            formData.append("emp_uan", empUan);
             formData.append("password", password);
 
             try {

@@ -40,6 +40,10 @@ class Employee(AbstractBaseUser):
     emp_leaving_date = models.DateField(null=True, blank=True)
     casual_leave_balance = models.IntegerField(default=12)
     sick_leave_balance = models.IntegerField(default=6)
+    bank_name = models.CharField(max_length=100, null=True, blank=True)
+    pf_number = models.CharField(max_length=20, null=True, blank=True)
+    bank_account_number = models.CharField(max_length=30, null=True, blank=True)
+    emp_uan = models.CharField(max_length=20, null=True, blank=True)
 
 
 

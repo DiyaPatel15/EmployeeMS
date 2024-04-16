@@ -29,7 +29,7 @@ import inflect
 from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.db.models import Q
-
+from django.core.mail import send_mail
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -299,8 +299,8 @@ class IssueTicketViewSet(ModelViewSet):
             # Send email to admin
             subject = 'New Ticket Submitted'
             message = f'A new ticket has been submitted.\n\nIssue: {ticket_issue}\nEmployee ID: {ticket_emp_id}\nDate: {ticket_date}'
-            from_email = 'mailto:foram.pranshtech@gmail.com'  # Sender's email address
-            recipient_list = 'mailto:rupesh@pranshtech.com'  # Admin's email address
+            from_email = 'yogeshgoswami0306@gmail.com'  # Sender's email address
+            recipient_list = 'yogesh.pranshtech@gmail.com'  # Admin's email address
 
             send_mail(subject, message, from_email, recipient_list)
 
@@ -573,6 +573,10 @@ def print_payslip(request, payslip_id):
     emp_birth_day = payslip.emp_id.emp_birthday
     emp_desig = payslip.emp_id.emp_designation
     emp_personal_no = payslip.emp_id
+    emp_bank_name = payslip.emp_id.bank_name
+    emp_pf_number = payslip.emp_id.pf_number
+    emp_bank_account_number = payslip.emp_id.bank_account_number
+    emp_uan_no = payslip.emp_id. emp_uan
 
     print(payslip.emp_id.emp_contract.latest("id").ctc)
     payslip_template = get_template('payslip.html')
@@ -605,6 +609,10 @@ def print_payslip(request, payslip_id):
         "emp_birth_day": emp_birth_day,
         "emp_desig" : emp_desig,
         "emp_personal_no" : emp_personal_no,
+        "emp_bank_name" : emp_bank_name,
+        "emp_pf_number" : emp_pf_number,
+        "emp_bank_account_number" : emp_bank_account_number,
+        "emp_uan_no" : emp_uan_no,
     }
 
     html = payslip_template.render(context)
