@@ -209,8 +209,7 @@ img {
     letter-spacing: 0.6px;
     font-weight: 500;
     background: -webkit-linear-gradient(45deg, #ff004c, #ff2470, #ff9a47, #ec6455);
-
-
+    white-space: nowrap;
 }
 
 
@@ -376,11 +375,42 @@ button:focus {
         white-space: nowrap;
     vertical-align: top;
 }
+.rightsideber .box_header_main.bg-light {
+    gap: 0 15px;
+}
+.box_header_task {
+    display: grid;
+    gap: 15px;
+    justify-content: center;
+    align-items: end;
+    grid-template-columns: 1fr 220px;
+}
+.table_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0 15px;
+}
+.table_box>div {
+    text-align: left;
+}
+
 
 
 .headerMenu,
 .headerClose{
     display: none;
+}
+
+
+@media only screen and ( min-width: 1200px ) and ( max-width: 1399px ) {
+
+    .rightsideber .box_header_main.bg-light.box_header_main11 {
+        display: grid !important;
+        gap: 15px;
+        grid-template-columns: 1fr 1fr;
+    }
+
 }
 
 
@@ -395,7 +425,33 @@ button:focus {
         font-size: 13px;
     }
 
+    .rightsideber .employeeLeaveList {
+        display: grid !important;
+        gap: 10px;
+        justify-content: space-between;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .rightsideber .box_header_main.bg-light.box_header_main11,
+     .rightsideber .box_header_main.bg-light.box_header_maintesk {
+        display: grid !important;
+        gap: 15px;
+        grid-template-columns: 1fr 1fr;
+    }
+    .box_header_task {
+        grid-template-columns: 1fr 80px;
+    }
+
 }
+
+@media only screen and ( max-width: 992px ) {
+
+    .navbar-light .navbar-toggler {
+        display: none !important;
+    }
+
+}
+
 
 @media only screen and ( max-width: 991px ) {
 
@@ -455,6 +511,7 @@ button:focus {
         margin: 15px 0;
     }
 
+
 }
 
 @media only screen and ( min-width: 768px ) and ( max-width: 991px ) {
@@ -462,6 +519,22 @@ button:focus {
     .rightsideber .box_header_main .button_mian {
         padding: 10px 20px 12px;
         font-size: 13px;
+    }
+    .rightsideber .employeeLeaveList {
+        display: grid !important;
+        gap: 10px;
+        justify-content: space-between;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .rightsideber .box_header_main.bg-light.box_header_main11,
+    .rightsideber .box_header_main.bg-light.box_header_maintesk {
+        display: grid !important;
+        gap: 15px;
+        grid-template-columns: 1fr 1fr;
+    }
+    .box_header_task {
+        grid-template-columns: 1fr 80px;
     }
 
 }
@@ -480,6 +553,26 @@ button:focus {
         margin-top: 15px;
     }
 
+    .rightsideber .employeeLeaveList {
+        display: grid !important;
+        gap: 10px;
+        justify-content: space-between;
+        grid-template-columns: 1fr;
+    }
+    .search-bar-wrapper .search-bar {
+        justify-content: space-between;
+        display: grid !important;
+        grid-template-columns: 2.5fr 1fr;
+    }
+    .search-bar-wrapper .search-bar button#searchButton {
+        width: 100%;
+    }
+    .rightsideber .box_header_main.bg-light.box_header_main11 {
+        display: grid !important;
+        gap: 15px;
+        grid-template-columns: 1fr;
+    }
+
 }
 
 
@@ -491,7 +584,18 @@ button:focus {
     .rightsideber .box_header_main.bg-light .card-toolbar {
         margin-top: 0px;
     }
-
+    .rightsideber .box_header_main.bg-light.box_header_maintesk {
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .box_header_task .button_mian {
+        width: 100%;
+    }
+    .box_header_main.box_header_maintesk .employeeLeave {
+        display: grid !important;
+        grid-template-columns: 1fr 220px;
+    }
 
 }
 
@@ -510,7 +614,7 @@ button:focus {
     .rightsideber .box_header_main .employeeLeave select#leavetypesearch {
         margin-bottom: 15px !important;
     }
-    .rightsideber .box_header_main .employeeLeave{
+    .rightsideber .box_header_main .employeeLeave {
         display: flow !important;
     }
     .leftsidebar {
@@ -531,6 +635,9 @@ button:focus {
     }
     .rightsideber .box_header_main select#priority_search {
         margin-bottom: 15px !important;
+    }
+    .box_header_task {
+        grid-template-columns: 1fr;
     }
 
 }

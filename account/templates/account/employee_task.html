@@ -13,8 +13,9 @@
 <!--            </div>-->
             <div class="card box_header_main">
                 <div class="card-header border-1 pt-6">
-                    <div class="employeeLeave bg-light box_header_main">
-                    <div>
+                    <div class="employeeLeave bg-light box_header_main box_header_maintesk">
+                    <div class="box_header_task">
+                        <div>
 <label for="priority_search" class="visually-hidden">Select a Priority:</label>
                         <select id="priority_search" >
                             <option value="">All</option>
@@ -27,11 +28,12 @@
                 <div>
                     <button  class="button_mian" type="submit" >Search</button>
                 </div>
+                    </div>
                 <form action="http://127.0.0.1:8000/employeetask/"
                           class="d-flex align-items-center employeeLeave">
 
                         <div class="label-container ml-1">
-                            <label for="month" class="visually-hidden">Search Employee date</label>
+                            <label for="month" class="visually-hidden">Search Assign date</label>
                             <!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
                             <!--                       placeholder="Search Employee date">-->
                             <input type="month" name="month" id="month" class="form-control form-control-solid me-2"
@@ -42,6 +44,21 @@
                         </button>
 
                 </form>
+
+                <form class="search-form d-flex align-items-center employeeLeave"
+                              onsubmit="searchEmployeeTasks(); return false;">
+                            <div class="input-group">
+                                <input type="text" id="searchInput" value="" name="searchInput"
+                                       class="form-control form-control-solid search-input"
+                                       placeholder="Search Employee">
+                            </div>
+                            <div>
+                                <button class="button_mian" type="submit" name="searchButton" id="searchButton">Search
+                                </button>
+                            </div>
+                </form>
+
+
                     <div class="card-toolbar ml-auto">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
                             <div class="menu menu-sub menu-sub-dropdown w-300px w-md-325px" data-kt-menu="true"
@@ -354,6 +371,58 @@
         $(document).on('click', '.btn-danger', function() {
             $(document).on('click', clickOutsideHandler);
         });
+
+
+        function searchEmployeeTasks() {
+                    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+                    const tableBody = document.getElementById('tableBody');
+
+                    // Fetch data from API
+                    fetch('http://127.0.0.1:8000/emp-task/')
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear existing table rows
+                            tableBody.innerHTML = '';
+
+                            // Filter data based on search term in employee name
+                            const filteredData = data.filter(task => task.E_name.toLowerCase().includes(searchTerm));
+
+                            // Populate table rows with filtered data
+                            filteredData.forEach((task, index) => {
+                                const row = document.createElement('tr');
+                                row.id = `employeeTaskRow${task.id}`;
+                                row.innerHTML = `
+                                <tr id="task_${task.id}">
+                                    <td>${index + 1}</td>
+                                    <td>${task.E_name}</td>
+                                    <td>${task.E_Card_Link}</td>
+                                    <td>${task.E_Assign_Date}</td>
+                                    <td>${task.E_Mentor}</td>
+                                    <td>${task.E_Priority}</td>
+                                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                                    <td class="editbtns">
+                                        <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
+                                        <div id="actionMenu_${task.id}" class="action-menu hidden mt-2">
+                                            <button class="btn btn-primary text-primary . bg-light"  onclick="updateTask(${task.id})">Update</button>
+                                            <button class="btn btn-danger text-danger . bg-light"  onclick="deleteTask(${task.id})">Delete</button>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching employee tasks:', error));
+                }
+
+             // Prevent default form submission behavior and call searchEmployeeTasks() function
+             document.querySelector('.search-form').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    searchEmployeeTasks();
+             });
+
+
 
 
             function updateTask(taskId) {

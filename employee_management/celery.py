@@ -15,6 +15,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'daily_task': {
         'task': 'payroll.tasks.send_email_before_end_date',
-        'schedule': crontab(hour=19, minute=44),  # Run daily at 12:00 PM
+        'schedule': crontab(hour=18, minute=59),  # Run daily at 12:00 PM
     },
 }

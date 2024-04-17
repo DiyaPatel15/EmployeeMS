@@ -6,7 +6,7 @@
 <h1 class="main_heading">Employee Request list</h1>
 <div class="container-xxl">
     <div class="card">
-       <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center bg-light box_header_main">
+       <div class="card-header border-0 pt-6 d-flex justify-content-between align-items-center bg-light box_header_main box_header_main11">
     <form class="search-form d-flex align-items-center employeeLeave" action="http://127.0.0.1:8000/in-out/" method="get">
 
              <div class="input-group">
@@ -22,7 +22,7 @@
      <form action="http://127.0.0.1:8000/in-out/" class="d-flex align-items-center employeeLeave">
 
             <div class="label-container ml-1">
-                <label for="month" class="visually-hidden">Search Employee date</label>
+                <label for="month" class="visually-hidden">Search Month</label>
 <!--                <input type="month" name="month" id="month" class="form-control form-control-solid me-2"-->
 <!--                       placeholder="Search Employee date">-->
                 <input type="month" name="month" id="month" class="form-control form-control-solid me-2"
@@ -30,9 +30,9 @@
             </div>
 
 
-            <select class="form-select me-2"  id="statustypesearch" name="statustypesearch"
+            <select class="form-control me-2"  id="statustypesearch" name="statustypesearch"
                     aria-label="Select Leave type" style="height:39px;width:190px;border-radius:5px;">
-                <option value="">Select a Leave type...</option>
+                <option value="">Select type...</option>
                 <option value="Accepted">Accepted</option>
                 <option value="Rejected">Rejected</option>
                 <option value="Pending">Pending</option>
@@ -141,7 +141,7 @@
                 <form id="addForm">
                     <div class="form-group">
                         <label for="addName">NAME:</label>
-                        <input type="text" class="form-control" id="addName" name="addName" disabled>
+                        <input type="text" class="form-control" id="addName" name="addName">
                     </div>
                     <div class="form-group">
                         <label for="addDate">DATE:</label>
@@ -274,14 +274,6 @@
         .catch(error => console.error('Error fetching records:', error));
 }
 
-             // function toggleActionMenu(recordId) {
-             //   const actionMenu = document.getElementById(`actionMenu_${recordId}`);
-             //    if (actionMenu.classList.contains('hidden')) {
-             //        actionMenu.classList.remove('hidden');
-             //    } else {
-             //        actionMenu.classList.add('hidden');
-             //    }
-             // }
 
              // Toggle action menu
             function toggleActionMenu(recordId) {
@@ -304,7 +296,7 @@
                     fetchDataAndPopulateTable();
              });
 
-     function deleteRecord(requestId) {
+   function deleteRecord(requestId) {
     // Send delete request using AJAX
     $.ajax({
         url: `http://127.0.0.1:8000/in-out/${requestId}/`,
@@ -318,36 +310,39 @@
             } else {
                 console.error(`Failed to find in-out request row with ID ${requestId}`);
             }
+            location.reload();
         },
         error: function(xhr, status, error) {
             console.error(`Failed to delete in-out request with ID ${requestId}: ${error}`);
+            // Optionally, display an error message to the user
+            $('#deleteConfirmationModal').find('.modal-body').text(`Failed to delete record: ${error}`);
         }
     });
 }
 
 function displayDeleteConfirmationModal(requestId) {
-        // Store the request ID in a data attribute of the confirmation modal
-        $('#deleteConfirmationModal').data('request-id', requestId);
-        // Show the modal
-        $('#deleteConfirmationModal').modal('show');
-    }
+    // Store the request ID in a data attribute of the confirmation modal
+    $('#deleteConfirmationModal').data('request-id', requestId);
+    // Show the modal
+    $('#deleteConfirmationModal').modal('show');
+}
 
-    // Event listener for delete button click
-    $('.deleteBtn').on('click', function() {
-        // Get the request ID from the delete button's data attribute
-        const requestId = $(this).data('request-id');
-        displayDeleteConfirmationModal(requestId);
-    });
+// Event listener for delete button click
+$('.deleteBtn').on('click', function() {
+    // Get the request ID from the delete button's data attribute
+    const requestId = $(this).data('request-id');
+    displayDeleteConfirmationModal(requestId);
+});
 
-    // Event listener for confirm delete button click
-    $('#confirmDeleteBtn').on('click', function() {
-        // Get the request ID from the data attribute of the confirmation modal
-        const requestId = $('#deleteConfirmationModal').data('request-id');
-        // Call the deleteRecord function to perform the deletion
-        deleteRecord(requestId);
-        // Close the modal
-        $('#deleteConfirmationModal').modal('hide');
-    });
+// Event listener for confirm delete button click
+$('#confirmDeleteBtn').on('click', function() {
+    // Get the request ID from the data attribute of the confirmation modal
+    const requestId = $('#deleteConfirmationModal').data('request-id');
+    // Close the modal
+    $('#deleteConfirmationModal').modal('hide');
+    // Call the deleteRecord function to perform the deletion
+    deleteRecord(requestId);
+});
 
 
 function searchInOut() {
@@ -379,7 +374,7 @@ function searchInOut() {
                             <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${record.id})">...</button>
                             <div id="actionMenu_${record.id}" class="action-menu hidden mt-2">
                                 <button class="btn btn-primary text-primary . bg-light"  onclick="updateRecord(${record.id})">Update</button>
-                                <button class="btn btn-danger text-danger . bg-light"  onclick="deleteRecord(${record.id})">Delete</button>
+                                <button class="btn btn-danger text-danger . bg-light"  onclick="displayDeleteConfirmationModal(${record.id})">Delete</button>
                             </div>
                         </td>
                         {% endif %}
@@ -445,6 +440,7 @@ function searchInOut() {
                     throw new Error('Failed to update record');
                 }
                 console.log('Record updated successfully');
+                location.reload();
                 // Close the update modal
                 $('#updateModal').modal('hide');
                 // Refresh record data in the table
@@ -563,14 +559,6 @@ $('#addForm').submit(function(event) {
         .catch(error => console.error('Error fetching records:', error));
 }
 
-             // function toggleActionMenu(recordId) {
-             //   const actionMenu = document.getElementById(`actionMenu_${recordId}`);
-             //    if (actionMenu.classList.contains('hidden')) {
-             //        actionMenu.classList.remove('hidden');
-             //    } else {
-             //        actionMenu.classList.add('hidden');
-             //    }
-             // }
 
              // Toggle action menu
             function toggleActionMenu(recordId) {
@@ -607,6 +595,7 @@ $('#addForm').submit(function(event) {
             } else {
                 console.error(`Failed to find in-out request row with ID ${requestId}`);
             }
+            location.reload();
         },
         error: function(xhr, status, error) {
             console.error(`Failed to delete in-out request with ID ${requestId}: ${error}`);
@@ -668,7 +657,7 @@ function searchInOut() {
                             <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${record.id})">...</button>
                             <div id="actionMenu_${record.id}" class="action-menu hidden mt-2">
                                 <button class="btn btn-primary text-primary . bg-light"  onclick="updateRecord(${record.id})">Update</button>
-                                <button class="btn btn-danger text-danger . bg-light"  onclick="deleteRecord(${record.id})">Delete</button>
+                                <button class="btn btn-danger text-danger . bg-light"  onclick="displayDeleteConfirmationModal(${record.id})">Delete</button>
                             </div>
                         </td>
                         {% endif %}

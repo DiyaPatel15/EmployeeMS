@@ -5,6 +5,21 @@
     .post{
         margin-top:30px;
         }
+    /* CSS for normal state */
+    a {
+        color: black; /* Default font color */
+    }
+
+    /* CSS for hover state */
+    a:hover {
+        color: blue; /* Font color when hovered over */
+    }
+
+    /* CSS for active state (when clicked) */
+    a:active {
+        color: blue; /* Font color when clicked */
+    }
+
 </style>
 <br>
 <h2 class="main_heading">Employee List</h2>
@@ -14,7 +29,7 @@
             <div class="" id="kt_post">
                 <div class="container-xxl">
                     <div id="kt_toolbar_container"
-                         class="container-fluid d-flex justify-content-between align-items-center bg-light p-3">
+                         class="container-fluid d-flex justify-content-between align-items-center bg-light p-3 employeeLeaveList">
                         <!-- Left Section: Add Button -->
 <!--                        <a href="#" class="button_mian" id="addEmployeeButton">Add Employee</a>-->
                         {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
@@ -84,8 +99,7 @@
                                    id="employeeTable">
                                 <thead>
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-
-                                    <th>Details</th>
+                                    <th style="width: 30%;">Details</th>
                                     <th>Joining Date</th>
                                     <th>Company</th>
                                     <th>Designation</th>
@@ -119,7 +133,10 @@
             </div>
             <div class="modal-body">
                 <form id="addEmployeeForm">
-
+                     <div class="form-group" style="display:none;">
+                        <label for="empId">Employee ID</label>
+                        <input type="text" class="form-control" id="empId" readonly>
+                    </div>
                     <div class="form-group">
                         <label for="empName">Employee Name</label>
                         <input type="text" class="form-control" id="empName" required>
@@ -216,7 +233,7 @@
             <div class="modal-body">
                 <form id="updateEmployeeForm">
                       <input type="hidden" id="Id" name="Id">
-                    <div class="form-group">
+                    <div class="form-group" style="display:none;">
                         <label for="updateEmpId">Employee ID</label>
                         <input type="text" class="form-control" id="updateEmpId" readonly>
                     </div>
@@ -374,12 +391,14 @@ function createEmployeeRow(employee) {
     const row = document.createElement('tr');
     row.innerHTML = `
 
-        <td style="display: flex; align-items: center;">
-            <img src="${employee.emp_profile ? employee.emp_profile : 'http://127.0.0.1:8000/media/profile_image/empty_profile.jpg'}" alt="Profile Picture" width="80" height="80" style="border-radius: 50%;">
-            <div style="margin-left: 10px;">
-                <div>${employee.emp_name}</div>
-                <div>${employee.emp_email}</div>
-                <div>${employee.emp_contact}</div>
+        <td>
+            <div class="table_box">
+                <img src="${employee.emp_profile ? employee.emp_profile : 'http://127.0.0.1:8000/media/profile_image/empty_profile.jpg'}" alt="Profile Picture" width="80" height="80" style="border-radius: 50%;">
+                <div style="margin-left: 10px;">
+                    <div>${employee.emp_name}</div>
+                    <a href="mailto:${employee.emp_email}">${employee.emp_email}</a>
+                    <a href="tel:${employee.emp_contact}">${employee.emp_contact}</a>
+                </div>
             </div>
         </td>
         <td>${employee.emp_joining_date}</td>
@@ -443,7 +462,6 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
         // Get the values from the input fields
         const empId = document.getElementById('empId').value;
         const empName = document.getElementById('empName').value.trim();
-        const empJoiningDate = document.getElementById('empJoiningDate').value;
         const empBirthday = document.getElementById('empBirthday').value;
         const empEmail = document.getElementById('empEmail').value;
         const empContact = document.getElementById('empContact').value;
@@ -465,7 +483,6 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
         const newEmployee = {
             emp_id: empId,
             emp_name: empName,
-            emp_joining_date: empJoiningDate,
             emp_birthday: empBirthday,
             emp_email: empEmail,
             password: empPassword,
@@ -713,11 +730,12 @@ document.addEventListener('DOMContentLoaded', fetchEmployeeData);
 </script>
 <script>
     function filterEmployeesByDesignation() {
+    console.log("hello");
     const selectedDesignation = document.getElementById('designationDropdown').value;
     const allRows = document.querySelectorAll('#employeeTableBody tr'); // Assuming the table body has the id 'employeeTableBody'
 
     allRows.forEach(row => {
-        const designationCell = row.querySelector('td:nth-child(5)'); // Assuming the designation is in the 5th cell
+        const designationCell = row.querySelector('td:nth-child(4)'); // Assuming the designation is in the 5th cell
         if (selectedDesignation === '' || designationCell.textContent.trim() === selectedDesignation) {
             row.style.display = ''; // Show row if designation matches or no designation selected
         } else {

@@ -184,7 +184,7 @@ class UserPasswordResetView(APIView):
 def generate_qr_code(request):
     try:
         # Assuming you have only one employee for simplicity
-        employee = Employee.objects.get(id=26)
+        employee = Employee.objects.get(id=1)
 
         # Generate QR code data based on employee ID
         qr_code_data = f"employee_id:{employee.id}"
@@ -220,19 +220,19 @@ def scan_qr_code(request):
         employee = Employee.objects.get(id=employee_id)
 
         # Update time entry based on employee's current status
-        current_time = datetime.now()
+        current_time = datetime.now().time()
         total_worked_hours = timedelta()
 
         if employee.status:
             # This is an out-time scan
             if employee.last_scan_in_time:
                 employee.last_scan_out_time = current_time
-                if employee.last_scan_in_time.time() > employee.last_scan_out_time.time():
+                if employee.last_scan_in_time > employee.last_scan_out_time:
                     # Swap in and out times if out time is earlier than in time
                     employee.last_scan_in_time, employee.last_scan_out_time = employee.last_scan_out_time, employee.last_scan_in_time
 
                 # Calculate time difference as timedelta
-                time_difference = datetime.combine(datetime.today(), employee.last_scan_out_time.time()) - datetime.combine(datetime.today(), employee.last_scan_in_time.time())
+                time_difference = datetime.combine(datetime.today(), employee.last_scan_out_time) - datetime.combine(datetime.today(), employee.last_scan_in_time)
 
                 # Update total worked hours
                 employee.total_worked_hours += time_difference
@@ -275,7 +275,6 @@ def format_total_worked_hours(total_worked_hours):
 
 
 
-
 class IssueTicketUserViewSet(APIView):
     permission_classes=[IsAuthenticated]
     def get(self, request):
@@ -287,27 +286,21 @@ class IssueTicketViewSet(ModelViewSet):
     serializer_class = IssueTicketSerializer
     queryset = Issue_Ticket.objects.all()
 
-    def submit_ticket(request):
-        if request.method == 'POST':
-            # Process the ticket submission here
+    def create(self, request, *args, **kwargs):
+        # Call the create method of the parent class
+        response = super().create(request, *args, **kwargs)
 
-            # Example ticket data
-            ticket_issue = request.POST.get('ticket_issue')
-            ticket_emp_id = request.POST.get('ticket_emp_id')
-            ticket_date = request.POST.get('ticket_date')
-
-            # Send email to admin
+        # Send email to admin
+        if response.status_code == 201:  # Only send email if the ticket was successfully created
+            ticket_data = response.data
             subject = 'New Ticket Submitted'
-            message = f'A new ticket has been submitted.\n\nIssue: {ticket_issue}\nEmployee ID: {ticket_emp_id}\nDate: {ticket_date}'
+            message = f'A new ticket has been submitted.\n\nIssue: {ticket_data["ticket_issue"]}\nEmployee ID: {ticket_data["ticket_emp_id"]}\nDate: {ticket_data["ticket_date"]}'
             from_email = 'yogeshgoswami0306@gmail.com'  # Sender's email address
-            recipient_list = 'yogesh.pranshtech@gmail.com'  # Admin's email address
+            recipient_list = ['yogesh.pranshtech@gmail.com']  # Admin's email address
 
-            send_mail(subject, message, from_email, recipient_list)
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
-            return JsonResponse({'message': 'Ticket submitted and email sent to admin'})
-        else:
-            return JsonResponse({'error': 'Invalid request method'}, status=405)
-
+        return response
 
 class holidayViewSet(ModelViewSet):
     # permission_classes = [IsAuthenticated]
@@ -635,6 +628,23 @@ class EmployeeLeaveViewSet(ModelViewSet):
     queryset = EmployeeLeave.objects.all()
     filter_backends = [filters.SearchFilter]
     search_fields = ['start_date']
+
+    def create(self, request, *args, **kwargs):
+        # Call the create method of the parent class
+        response = super().create(request, *args, **kwargs)
+
+        # Send email to admin
+        if response.status_code == 201:  # Only send email if the ticket was successfully created
+            ticket_data = response.data
+            subject = 'New Ticket Submitted'
+            message = f'A new Leave has been submitted.\n\nname: foram'
+            from_email = 'yogeshgoswami0306@gmail.com'  # Sender's email address
+            recipient_list = ['yogesh.pranshtech@gmail.com']  # Admin's email address
+
+            send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+        return response
+
 
     def get_queryset(self):
         queryset = super().get_queryset()

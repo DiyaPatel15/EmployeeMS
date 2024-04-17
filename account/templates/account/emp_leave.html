@@ -23,7 +23,7 @@
             </div>
 
 
-            <select class="form-select me-2"  id="leavetypesearch" name="leavetypesearch"
+            <select class="form-control me-2"  id="leavetypesearch" name="leavetypesearch"
                     aria-label="Select Leave type">
                 <option value="">Select a Leave type...</option>
                 <option value="Casual Leave">Casual Leave</option>
@@ -32,6 +32,24 @@
             <button  class="button_mian" type="button" name="submit" id="searchButton" style="margin-left:2px;">Search</button>
 
         </form>
+
+
+        <div class="search-bar-wrapper">
+            <div class="search-bar d-flex align-items-center position-relative">
+                <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                    <!-- Your SVG icon code -->
+                </span>
+                <div>
+                    <input type="text" id="searchInput" class="form-control form-control-solid"
+                            placeholder="Search Employee">
+                </div>
+                <div>
+                    <button class="button_mian" id="searchButton2" onclick="searchEmployees()" name="searchButton" type="submit">Search
+                    </button>
+                    </div>
+            </div>
+        </div>
+
 
         <div class="card-toolbar">
             <button type="button" class="button_mian" data-bs-toggle="modal"
@@ -61,6 +79,7 @@
                                             {% endif %}
                                         </tr>
                                     </thead>
+
                                     <tbody class="fw-bold text-gray-600" id="searchResults">
                                         <tr id="searchResultsRow">
                                             <td colspan="10">There are no Record found</td>
@@ -806,6 +825,7 @@ leaveDurationRadios.forEach(function(radio) {
 
             // Data submitted successfully
             console.log('Data submitted successfully');
+            window.location.href = "http://127.0.0.1:8000/emp-leave/";
             // Close the modal if needed
             const modal = document.getElementById('kt_modal_add_customer');
             const modalToggle = new bootstrap.Modal(modal);
@@ -841,17 +861,22 @@ function displayEmployeeLeaveData(data, monthFilter, leaveTypeFilter) {
         const row = `
             <tr data-id="${leave.id}">
                 <td>${index + 1}</td>
-
+                <td>${leave.emp_name}</td>
                 <td>${leave.leave_type}</td>
                 <td>${leave.start_date}</td>
                 <td>${leave.end_date}</td>
                 <td>${leave.leave_days}</td>
                 <td>${leave.leave_reason}</td>
                 <td>${leave.approval_status}</td>
-                <td>
-                    <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
-                    <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
-                </td>
+                 {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                 <td class="editbtns">
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${leave.id})">...</button>
+                        <div id="actionMenu_${leave.id}" class="action-menu hidden mt-2" style="display: none;">
+                            <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
+                            <button class="btn btn-danger btn-delete" data-id="${leave.id}">Delete</button>
+                        </div>
+                 </td>
+                {% endif %}
             </tr>
         `;
         tableBody.append(row);
@@ -921,32 +946,81 @@ document.getElementById('searchButton').addEventListener('click', function () {
         $(document).on('click', clickOutsideHandler);
     });
 
+</script>
 
-function displayEmployeeLeaveData(data) {
-    const tableBody = $('#searchResults');
-    data.forEach((leave, index) => {
-        const row = `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${leave.leave_type}</td>
-                <td>${leave.start_date}</td>
-                <td>${leave.end_date}</td>
-                <td>${leave.leave_days}</td>
-                <td>${leave.leave_reason}</td>
-                <td>${leave.approval_status}</td>
-                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                <td>
-                    <button class="btn btn-primary btn-update" onclick="updateFunction(${leave.id})">Update</button>
-                    <button class="btn btn-danger btn-delete " data-id="${leave.id}">Delete</button>
-                </td>
-                {% endif %}
-            </tr>
-        `;
-        tableBody.append(row);
-    });
+<script>
+// Function to create a table row for an employee
+function createEmployeeRow(employee,index) {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${index}</td>
+        <td>${employee.emp_name}</td>
+        <td>${employee.leave_type}</td>
+        <td>${employee.start_date}</td>
+        <td>${employee.end_date}</td>
+        <td>${employee.leave_days}</td>
+        <td>${employee.leave_reason}</td>
+        <td>${employee.approval_status}</td>
+         <td class="editbtns">
+                        <button class="btn btn-danger text-danger bg-light" onclick="toggleActionMenu(${employee.id})">...</button>
+                        <div id="actionMenu_${employee.id}" class="action-menu hidden mt-2" style="display: none;">
+                            <button class="btn btn-primary btn-update" onclick="updateFunction(${employee.id})">Update</button>
+                            <button class="btn btn-danger btn-delete" data-id="${employee.id}">Delete</button>
+                        </div>
+         </td>
 
+    `;
+    return row;
 }
 
+// Function to search employees by name
+function searchEmployees() {
+    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+    const searchResultsTableBody = document.getElementById('searchResults');
+
+    // Fetch data from API
+    const token = localStorage.getItem('accessToken');
+    fetch('http://127.0.0.1:8000/employee-leave/', {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to fetch employee leave data');
+        }
+        return response.json();
+    })
+    .then(data => {
+        // Check if the response data is an array
+        if (!Array.isArray(data)) {
+            throw new Error('Invalid data format received from the server');
+        }
+
+        // Clear existing table rows
+        searchResultsTableBody.innerHTML = '';
+
+        // Filter data based on search term
+        const filteredData = data.filter(employee => employee.emp_name.toLowerCase().includes(searchTerm));
+
+        // Populate table rows with filtered data
+        if (filteredData.length === 0) {
+            // If no matching records found, display a message
+            const row = document.createElement('tr');
+            row.innerHTML = `<td colspan="8">No records found</td>`;
+            searchResultsTableBody.appendChild(row);
+        } else {
+            filteredData.forEach((employee,index) => {
+                const row = createEmployeeRow(employee,index+1);
+                searchResultsTableBody.appendChild(row);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching employee data:', error);
+        // Display an error message to the user or handle the error appropriately
+    });
+}
 </script>
 
 

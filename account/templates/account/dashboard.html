@@ -210,8 +210,7 @@
     });
    </script>
    <script>
-
-       function displayTodayBirthdayDetails() {
+function displayTodayBirthdayDetails() {
     // URL to fetch today's birthday details from the JavaScript API
     const todayBirthdayURL = 'http://127.0.0.1:8000/emp-list/'; // Replace with your actual endpoint
 
@@ -219,7 +218,6 @@
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth() + 1; // Adding 1 because getMonth() returns zero-based month
     const currentDay = currentDate.getDate();
-    const currentYear = currentDate.getFullYear();
 
     // Make a request to fetch today's birthday details
     fetch(todayBirthdayURL)
@@ -235,12 +233,12 @@
             // Clear any existing rows
             tableBody.innerHTML = '';
 
-            // Check if there are any records found for today's birthday
+            // Check if there are any records found for today's birthday (day and month)
             const matchingBirthdays = data.filter(person => {
                 // Check if emp_birthday is not null or undefined
                 if (person.emp_birthday) {
-                    const [year, month, day] = person.emp_birthday.split('-');
-                    return parseInt(year) === currentYear && parseInt(month) === currentMonth && parseInt(day) === currentDay;
+                    const [, month, day] = person.emp_birthday.split('-'); // Ignore the year part
+                    return parseInt(month) === currentMonth && parseInt(day) === currentDay;
                 }
                 return false;
             });
@@ -285,9 +283,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     displayTodayBirthdayDetails();
 });
-
-
-
 
 
    </script>
