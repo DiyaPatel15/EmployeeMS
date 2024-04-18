@@ -27,6 +27,7 @@ router.register("rule", RuleViewSet, basename="rule")
 router.register('employee-pay-slip', EmployeePaySlipViewSet, basename="employee_pay_slip")
 router.register('employee-pay-slip-lines', EmployeePaySlipLinesViewSet, basename="employee_pay_slip_lines")
 
+
 urlpatterns = [
                   path('', include(router.urls)),
                   path('register/', EmployeeRegistrationView.as_view(), name="register"),

@@ -30,6 +30,12 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 from django.db.models import Q
 from django.core.mail import send_mail
+import math
+
+
+
+
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -152,11 +158,12 @@ class EmployeeChangePasswordView(APIView):
         try:
             serializer = EmployeeChangePasswordSerializer(data=request.data, context={'user': request.user})
             if serializer.is_valid():
+                # Call save() method of the serializer and pass the instance argument
+                serializer.save(instance=request.user)
                 return Response({'detail': "Password Updated Successfully"}, status=status.HTTP_200_OK)
-            return Response({"error": serializer.errors},
-                            status=status.HTTP_400_BAD_REQUEST)
-        except:
-            return Response({"error": "Unexpected Error"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SendPasswordResetEmailView(APIView):
@@ -548,17 +555,22 @@ def print_payslip(request, payslip_id):
     except EmployeePaySlip.DoesNotExist:
         return HttpResponse({"error": "Not Exist"}, status=status.HTTP_404_NOT_FOUND)
 
-    net_amount = sum(
+    net_amount = math.ceil(sum(
         payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list(
             'final', flat=True)) - sum(
         payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['DED']).values_list('final',
-                                                                                                        flat=True))
+                                                                                                        flat=True)))
+    net_amount_data = '{:.2f}'.format(math.ceil(sum(
+        payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list(
+            'final', flat=True)) - sum(
+        payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['DED']).values_list('final',
+                                                                                                        flat=True))))
 
-    net_amount_total = sum(
+    net_amount_total = '{:.2f}'.format(math.ceil(sum(
         payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list('rate',
                                                                                                                  flat=True)) - sum(
         payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['DED']).values_list('rate',
-                                                                                                        flat=True))
+                                                                                                        flat=True))))
 
     std_days = payslip.total_payable_days()[0]
     worked_days = payslip.total_payable_days()[1]
@@ -571,7 +583,14 @@ def print_payslip(request, payslip_id):
     emp_bank_account_number = payslip.emp_id.bank_account_number
     emp_uan_no = payslip.emp_id. emp_uan
 
-    print(payslip.emp_id.emp_contract.latest("id").ctc)
+    ctc = payslip.emp_id.emp_contract.latest("id").ctc
+    print(ctc)
+    total_val = math.floor(sum(
+            payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list(
+                'rate', flat=True)))
+    if ctc < total_val:
+        total_val = ctc
+
     payslip_template = get_template('payslip.html')
     context = {
         'payslip': payslip,
@@ -579,21 +598,19 @@ def print_payslip(request, payslip_id):
         "last_name": payslip.emp_id.emp_contract.latest("id").last_name,
         "ctc": payslip.emp_id.emp_contract.latest("id").ctc,
         "month": payslip.get_month_name(),
-        "data": {payslip_data.code: payslip_data.final for payslip_data in payslip.employee_pay_slip_lines.all()},
-        "rate": {payslip_data.code: payslip_data.rate for payslip_data in payslip.employee_pay_slip_lines.all()},
-        "gross_earnings": sum(
+        "data": {payslip_data.code: '{:.2f}'.format(round(payslip_data.final)) for payslip_data in payslip.employee_pay_slip_lines.all()},
+        "rate": {payslip_data.code: '{:.2f}'.format(round(payslip_data.rate)) for payslip_data in payslip.employee_pay_slip_lines.all()},
+        "gross_earnings": '{:.2f}'.format(math.floor(sum(
             payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list(
-                'final', flat=True)),
-        "gross_deductions": sum(
+                'final', flat=True)))),
+        "gross_deductions": '{:.2f}'.format(math.ceil(sum(
             payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['DED']).values_list('final',
-                                                                                                            flat=True)),
-        "net_amount": net_amount,
-        "gross_earnings_total": sum(
-            payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['BASIC', 'ALW']).values_list(
-                'rate', flat=True)),
-        "gross_deductions_total": sum(
+                                                                                                            flat=True)))),
+        "net_amount": net_amount_data,
+        "gross_earnings_total": total_val,
+        "gross_deductions_total": '{:.2f}'.format(math.ceil(sum(
             payslip.employee_pay_slip_lines.filter(category_id__rule_category_code__in=['DED']).values_list('rate',
-                                                                                                            flat=True)),
+                                                                                                            flat=True)))),
         "net_amount_total": net_amount_total,
         "net_amount_words": payslip.number_to_words(net_amount),
         "std_days": std_days,
@@ -620,6 +637,7 @@ def print_payslip(request, payslip_id):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
     return response
+
 
 
 class EmployeeLeaveViewSet(ModelViewSet):

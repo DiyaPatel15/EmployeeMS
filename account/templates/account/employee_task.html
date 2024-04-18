@@ -45,6 +45,7 @@
 
                 </form>
 
+                {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                 <form class="search-form d-flex align-items-center employeeLeave"
                               onsubmit="searchEmployeeTasks(); return false;">
                             <div class="input-group">
@@ -57,7 +58,7 @@
                                 </button>
                             </div>
                 </form>
-
+                {% endif %}
 
                     <div class="card-toolbar ml-auto">
                         <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
@@ -255,6 +256,59 @@
     <script>
 
 
+     function searchEmployeeTasks() {
+                    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+                    const tableBody = document.getElementById('tableBody');
+
+                    // Fetch data from API
+                    fetch('http://127.0.0.1:8000/emp-task/')
+                        .then(response => response.json())
+                        .then(data => {
+                            // Clear existing table rows
+                            tableBody.innerHTML = '';
+
+                            // Filter data based on search term in employee name
+                            const filteredData = data.filter(task => task.E_name.toLowerCase().includes(searchTerm));
+
+                            // Populate table rows with filtered data
+                            filteredData.forEach((task, index) => {
+                                const row = document.createElement('tr');
+                                row.id = `employeeTaskRow${task.id}`;
+                                row.innerHTML = `
+                                <tr id="task_${task.id}">
+                                    <td>${index + 1}</td>
+                                    <td>${task.E_name}</td>
+                                    <td>${task.E_Card_Link}</td>
+                                    <td>${task.E_Assign_Date}</td>
+                                    <td>${task.E_Mentor}</td>
+                                    <td>${task.E_Priority}</td>
+                                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+                                    <td class="editbtns">
+                                        <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
+                                        <div id="actionMenu_${task.id}" class="action-menu hidden mt-2">
+                                            <button class="btn btn-primary text-primary . bg-light"  onclick="updateTask(${task.id})">Update</button>
+                                            <button class="btn btn-danger text-danger . bg-light"  onclick="displayDeleteConfirmationModal(${task.id})">Delete</button>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                                `;
+                                tableBody.appendChild(row);
+                            });
+                        })
+                        .catch(error => console.error('Error fetching employee tasks:', error));
+                }
+
+
+             // Prevent default form submission behavior and call searchEmployeeTasks() function
+             document.querySelector('.search-form').addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    searchEmployeeTasks();
+             });
+
+
+
+
         // Function to handle deleting a task
     function deleteTask(id) {
         $.ajax({
@@ -373,59 +427,7 @@
         });
 
 
-        function searchEmployeeTasks() {
-                    const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-                    const tableBody = document.getElementById('tableBody');
-
-                    // Fetch data from API
-                    fetch('http://127.0.0.1:8000/emp-task/')
-                        .then(response => response.json())
-                        .then(data => {
-                            // Clear existing table rows
-                            tableBody.innerHTML = '';
-
-                            // Filter data based on search term in employee name
-                            const filteredData = data.filter(task => task.E_name.toLowerCase().includes(searchTerm));
-
-                            // Populate table rows with filtered data
-                            filteredData.forEach((task, index) => {
-                                const row = document.createElement('tr');
-                                row.id = `employeeTaskRow${task.id}`;
-                                row.innerHTML = `
-                                <tr id="task_${task.id}">
-                                    <td>${index + 1}</td>
-                                    <td>${task.E_name}</td>
-                                    <td>${task.E_Card_Link}</td>
-                                    <td>${task.E_Assign_Date}</td>
-                                    <td>${task.E_Mentor}</td>
-                                    <td>${task.E_Priority}</td>
-                                    {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                                    <td class="editbtns">
-                                        <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
-                                        <div id="actionMenu_${task.id}" class="action-menu hidden mt-2">
-                                            <button class="btn btn-primary text-primary . bg-light"  onclick="updateTask(${task.id})">Update</button>
-                                            <button class="btn btn-danger text-danger . bg-light"  onclick="deleteTask(${task.id})">Delete</button>
-                                        </div>
-                                    </td>
-                                    {% endif %}
-                                </tr>
-                                `;
-                                tableBody.appendChild(row);
-                            });
-                        })
-                        .catch(error => console.error('Error fetching employee tasks:', error));
-                }
-
-             // Prevent default form submission behavior and call searchEmployeeTasks() function
-             document.querySelector('.search-form').addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    searchEmployeeTasks();
-             });
-
-
-
-
-            function updateTask(taskId) {
+           function updateTask(taskId) {
             if (!taskId) {
                 console.error('Task ID is undefined');
                 return;
@@ -577,8 +579,8 @@
                                 <td>${task.E_Priority}</td>
                                 {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
                                 <td class="editbtns">
-                                    <button class="btn btn-danger text-danger . bg-light" onclick="toggleActionMenu(${task.id})">...</button>
-                                    <div id="actionMenu_${task.id}" class="action-menu hidden mt-2" style="display: none;">
+                                    <button class="btn btn-danger text-danger  bg-light" onclick="toggleActionMenu(${task.id})">...</button>
+                                    <div id="actionMenu_${task.id}" class="action-menu hidden mt-2" style="display: none !important;">
                                         <button class="btn btn-primary text-primary bg-light"  onclick="updateTask(${task.id})">Update</button>
                                         <button  class="btn btn-danger text-danger bg-light"  onclick="displayDeleteConfirmationModal(${task.id})">Delete</button>
                                     </div>

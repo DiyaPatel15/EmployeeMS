@@ -360,6 +360,7 @@ button:focus {
     left: 0;
     top: 101%;
     z-index: 9;
+    display: none;
 }
 .table_main td.editbtns .action-menu button {
     font-size: 14px;
@@ -387,12 +388,16 @@ button:focus {
 }
 .table_box {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 0 15px;
 }
 .table_box>div {
     text-align: left;
+}
+.table_box>div div, .table_box>div a {
+    width: 100%;
+    display: inline-block;
 }
 
 

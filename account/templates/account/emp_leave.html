@@ -30,11 +30,11 @@
                 <option value="Sick Leave">Sick Leave</option>
             </select>
             <button  class="button_mian" type="button" name="submit" id="searchButton" style="margin-left:2px;">Search</button>
+         </form>
 
-        </form>
 
-
-        <div class="search-bar-wrapper">
+        {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
+        <div class="search-bar-wrapper" style="padding-top:40px;">
             <div class="search-bar d-flex align-items-center position-relative">
                 <span class="svg-icon svg-icon-1 position-absolute ms-6">
                     <!-- Your SVG icon code -->
@@ -49,8 +49,7 @@
                     </div>
             </div>
         </div>
-
-
+        {% endif %}
         <div class="card-toolbar">
             <button type="button" class="button_mian" data-bs-toggle="modal"
                    data-bs-target="#kt_modal_add_customer" id="addEmployeeLeaveBtn">Add Employee Leave
@@ -948,6 +947,7 @@ document.getElementById('searchButton').addEventListener('click', function () {
 
 </script>
 
+
 <script>
 // Function to create a table row for an employee
 function createEmployeeRow(employee,index) {
@@ -1022,7 +1022,6 @@ function searchEmployees() {
     });
 }
 </script>
-
 
 
 

@@ -33,7 +33,7 @@
                         <!-- Left Section: Add Button -->
 <!--                        <a href="#" class="button_mian" id="addEmployeeButton">Add Employee</a>-->
                         {% if request.user.emp_role == "Admin" or request.user.emp_role == "HR" %}
-                        <button type="button" class="button_mian" data-bs-toggle="modal" data-bs-target="#addModal" id="addEmployeeButton" onclick="displayAddModal()"  fdprocessedid="hrjq6j"><a>Add Employee</a></button>
+                        <button type="button" class="button_mian" data-bs-toggle="modal" data-bs-target="#addModal" id="addEmployeeButton"  fdprocessedid="hrjq6j"><a>Add Employee</a></button>
                         {% endif %}
                         <!-- Center Section: Search Bar -->
                         <div class="search-bar-wrapper">
@@ -99,7 +99,7 @@
                                    id="employeeTable">
                                 <thead>
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th style="width: 30%;">Details</th>
+                                    <th style="width:30%;">Details</th>
                                     <th>Joining Date</th>
                                     <th>Company</th>
                                     <th>Designation</th>
@@ -396,7 +396,9 @@ function createEmployeeRow(employee) {
                 <img src="${employee.emp_profile ? employee.emp_profile : 'http://127.0.0.1:8000/media/profile_image/empty_profile.jpg'}" alt="Profile Picture" width="80" height="80" style="border-radius: 50%;">
                 <div style="margin-left: 10px;">
                     <div>${employee.emp_name}</div>
-                    <a href="mailto:${employee.emp_email}">${employee.emp_email}</a>
+<!--                    <div>${employee.emp_email}</div>-->
+<!--                    <div>${employee.emp_contact}</div>-->
+                    <a href="mailto:${employee.emp_email}">${employee.emp_email}</a><br>
                     <a href="tel:${employee.emp_contact}">${employee.emp_contact}</a>
                 </div>
             </div>

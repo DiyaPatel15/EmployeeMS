@@ -59,9 +59,7 @@ class EmployeeChangePasswordSerializer(serializers.ModelSerializer):
 
         class Meta:
             model = Employee
-            fields = [ 'password', 'password2']
-
-
+            fields = ['password', 'password2']
 
         def validate(self, data):
             password = data.get('password')
@@ -70,11 +68,12 @@ class EmployeeChangePasswordSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("New password and confirm password must match")
             return data
 
-        def save(self):
+        def save(self, **kwargs):
             user = self.context['user']
             new_password = self.validated_data['password']
             user.set_password(new_password)
             user.save()
+            return user
 
 
 class SendPasswordResetSerializer(ModelSerializer):

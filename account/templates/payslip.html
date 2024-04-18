@@ -38,29 +38,35 @@
     <tr>
         <th>DOB</th>
         <td>{{emp_birth_day}}</td>
-        <th>Lop Days</th>
-        <td>{{lop}}</td>
+        <th>PF No.</th>
+        <td>{{emp_pf_number}}</td>
     </tr>
     <!------4 row---->
     <tr>
-        <th>PF No.</th>
-        <td>{{emp_pf_number}}</td>
-        <th>STD days</th>
-        <td>{{std_days}}</td>
+        <th>Location</th>
+        <td>India</td>
+        <th>Lop Days</th>
+        <td>{{lop}}</td>
+
     </tr>
     <!------5 row---->
     <tr>
-        <th>Location</th>
-        <td>India</td>
-        <th>Working Days</th>
-        <td>{{worked_days}}</td>
+
+        <th>Designation</th>
+        <td>{{emp_desig}}</td>
+        <th>STD days</th>
+        <td>{{std_days}}</td>
+
     </tr>
     <!------6 row---->
     <tr>
         <th>Department</th>
         <td>IT</td>
-        <th>Designation</th>
-        <td>{{emp_desig}}</td>
+        <th>Working Days</th>
+        <td>{{worked_days}}</td>
+
+
+
     </tr>
 </table>
 <tr></tr>
@@ -85,8 +91,8 @@
         <td style="text-align:right">{{rate.PT}}</td>
         {% else %}
         <td style="text-align:left" colspan="2">Professional Tax</td>
-        <td style="text-align:right">0</td>
-        <td style="text-align:right">0</td>
+        <td style="text-align:right">0.00</td>
+        <td style="text-align:right">0.00</td>
         {% endif %}
 
     </tr>
@@ -102,7 +108,7 @@
 
     {% if ctc < 21000 %}
     <tr>
-        {{data.ESICE}}
+
         {% if data.ESICE %}
         <td style="text-align:left" colspan="2">ESIC-Employer</td>
         <td style="text-align:right">{{data.ESICE}}</td>
@@ -123,32 +129,38 @@
         <td style="text-align:right">{{data.TA}}</td>
         <td style="text-align:right">{{rate.TA}}</td>
 
-        <td style="text-align:left" colspan="2">PF (12% Employer) </td>
-        <td style="text-align:right">{{data.PFEN1}}</td>
-        <td style="text-align:right">{{rate.PFEN1}}</td>
+        <td style="text-align:left" colspan="2">TDS </td>
+        <td style="text-align:right">0.00</td>
+        <td style="text-align:right">0.00</td>
     </tr>
     <tr>
         <td style="text-align:left" colspan="2">CC Allowance</td>
         <td style="text-align:right">{{data.CCA}}</td>
         <td style="text-align:right">{{rate.CCA}}</td>
 
-        <td style="text-align:left" colspan="2">PF (1% GOVT TAX) </td>
-        <td style="text-align:right">{{data.PFGOVT}}</td>
-        <td style="text-align:right">{{rate.PFGOVT}}</td>
+<!--        <td style="text-align:left" colspan="2">PF (12% Employer) </td>-->
+<!--        <td style="text-align:right">{{data.PFEN1}}</td>-->
+<!--        <td style="text-align:right">{{rate.PFEN1}}</td>-->
     </tr>
     <tr>
         <td style="text-align:left" colspan="2">Assistant Allowance</td>
         <td style="text-align:right">{{data.AA}}</td>
         <td style="text-align:right">{{rate.AA}}</td>
-
-        <td style="text-align:left" colspan="2">TDS </td>
-        <td style="text-align:right">0</td>
-        <td style="text-align:right">0</td>
+<!--        <td style="text-align:left" colspan="2">PF (1% GOVT TAX) </td>-->
+<!--        <td style="text-align:right">{{data.PFGOVT}}</td>-->
+<!--        <td style="text-align:right">{{rate.PFGOVT}}</td>-->
     </tr>
     <tr>
         <td style="text-align:left" colspan="2">Medical Allowance</td>
         <td style="text-align:right">{{data.MA}}</td>
         <td style="text-align:right">{{rate.MA}}</td>
+
+
+    </tr>
+    <tr>
+        <td style="text-align:left" colspan="2">Total PF (Employer)</td>
+        <td style="text-align:right">{{data.TPFER}}</td>
+        <td style="text-align:right">{{rate.TPFER}}</td>
     </tr>
     <tr>
         <td style="text-align:left" colspan="2">Leave Encasement</td>

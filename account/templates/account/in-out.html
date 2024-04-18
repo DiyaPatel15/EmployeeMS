@@ -349,6 +349,10 @@ function searchInOut() {
         const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
         const inOutTableBody = document.getElementById('inOutTableBody');
 
+         if(!searchTerm) {
+         return;
+        }
+
         // Fetch data from API
         fetch('http://127.0.0.1:8000/in-out/')
             .then(response => response.json())
@@ -632,6 +636,9 @@ function searchInOut() {
         const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
         const inOutTableBody = document.getElementById('inOutTableBody');
 
+        if(!searchTerm){
+         return;
+        }
         // Fetch data from API
         fetch('http://127.0.0.1:8000/in-out/')
             .then(response => response.json())
@@ -874,7 +881,9 @@ $('#addForm').submit(function(event) {
     document.getElementById('searchButton1').addEventListener('click', function () {
         var month = document.getElementById('month').value;
         var status = document.getElementById('statustypesearch').value;
-
+         if(!month && !status) {
+         return;
+        }
         // Fetch all employee in-out records
         fetch('http://127.0.0.1:8000/in-out/')
             .then(response => response.json())
